@@ -1,8 +1,14 @@
 import datetime
+import os
+import re
+
 from flask import Blueprint, request, jsonify
 from sqlalchemy.orm import Session
 from werkzeug.security import generate_password_hash
-import re
+
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
+from cryptography.fernet import Fernet
 
 from app.db.config import SessionLocal
 from app.db.models import User
@@ -40,7 +46,27 @@ def register_user():
         existing_user = db.query(User).filter(User.email == email).first()
         if existing_user:
             return jsonify({"detail": "Ya existe un usuario con este email."}), 400
-        
+
+        # Generar claves pública y privada
+        key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        private_key_bytes = key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        public_key_bytes = key.public_key().public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+
+        # Cifrar la clave privada usando Fernet
+        secret = os.getenv("SIGNATURE_SECRET_KEY")
+        if not secret:
+            return jsonify({"detail": "SIGNATURE_SECRET_KEY no configurada en .env"}), 500
+
+        fernet = Fernet(secret.encode())
+        encrypted_private_key = fernet.encrypt(private_key_bytes)
+
         # Crear el nuevo usuario
         hashed_password = generate_password_hash(password)
         new_user = User(
@@ -48,7 +74,11 @@ def register_user():
             password_hash=hashed_password,
             first_name=first_name,
             last_name=last_name,
+            role="user",  # por defecto
             is_active=True,
+            can_upload=False,  # el admin lo habilita después
+            public_key=public_key_bytes,
+            encrypted_private_key=encrypted_private_key,
             created_at=datetime.datetime.utcnow()
         )
         
