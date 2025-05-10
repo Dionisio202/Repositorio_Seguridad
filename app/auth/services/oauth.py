@@ -83,7 +83,18 @@ def verify_2fa():
             user.otp_code = None
             user.otp_expires = None
             db.commit()
-            return jsonify({"message": "Código verificado correctamente. Autenticación completa."}), 200
+            return jsonify({
+    "message": "Código verificado correctamente. Autenticación completa.",
+    "user": {
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "role": user.role,
+        "is_active": user.is_active,
+        "can_upload": user.can_upload,
+    }
+}), 200
+
         else:
             return jsonify({"detail": "Código inválido"}), 400
     except Exception as e:
