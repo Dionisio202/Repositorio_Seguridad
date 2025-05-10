@@ -25,3 +25,14 @@ class User(Base):
     updated_at = Column(DateTime, nullable=True)
     public_key = Column(LargeBinary, nullable=True)
     encrypted_private_key = Column(LargeBinary, nullable=True)  # ← firma cifrada
+
+    
+   class File(Base):
+    __tablename__ = "files"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, nullable=False)
+    file_name = Column(String(255), nullable=False)
+    file_data = Column(LargeBinary, nullable=False) # Almacena el archivo binario
+    created_at = Column(DateTime, nullable=True)
+    updated_at = Column(DateTime, nullable=True)
