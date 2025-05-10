@@ -27,7 +27,7 @@ class User(Base):
     encrypted_private_key = Column(LargeBinary, nullable=True)  # ← firma cifrada
 
     
-   class File(Base):
+class File(Base):
     __tablename__ = "files"
     
     id = Column(Integer, primary_key=True, index=True)
