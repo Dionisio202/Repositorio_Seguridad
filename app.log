@@ -1,0 +1,149 @@
+2025-05-09 21:37:04,104 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-09 21:37:04,104 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-09 21:37:04,105 - INFO -  * Restarting with stat
+2025-05-09 21:37:04,882 - WARNING -  * Debugger is active!
+2025-05-09 21:37:04,887 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 21:37:17,381 - INFO - 127.0.0.1 - - [09/May/2025 21:37:17] "[33mGET / HTTP/1.1[0m" 404 -
+2025-05-09 21:37:17,479 - INFO - 127.0.0.1 - - [09/May/2025 21:37:17] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-09 21:37:29,705 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-09 21:37:29,705 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-09 21:37:29,706 - INFO -  * Restarting with stat
+2025-05-09 21:37:30,447 - WARNING -  * Debugger is active!
+2025-05-09 21:37:30,452 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 21:38:11,270 - INFO - 127.0.0.1 - - [09/May/2025 21:38:11] "[33mGET / HTTP/1.1[0m" 404 -
+2025-05-09 21:38:11,401 - INFO - 127.0.0.1 - - [09/May/2025 21:38:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-09 21:39:06,387 - INFO - 127.0.0.1 - - [09/May/2025 21:39:06] "[33mGET /auth/register HTTP/1.1[0m" 404 -
+2025-05-09 21:39:36,316 - INFO - 127.0.0.1 - - [09/May/2025 21:39:36] "[31m[1mPOST /register HTTP/1.1[0m" 400 -
+2025-05-09 21:39:58,342 - INFO - 127.0.0.1 - - [09/May/2025 21:39:58] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2025-05-09 21:41:48,371 - INFO - 127.0.0.1 - - [09/May/2025 21:41:48] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-09 21:43:17,681 - INFO - 127.0.0.1 - - [09/May/2025 21:43:17] "POST /auth/two-factor/verify-2fa HTTP/1.1" 200 -
+2025-05-09 21:56:12,050 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\oauth.py', reloading
+2025-05-09 21:56:12,149 - INFO -  * Restarting with stat
+2025-05-09 21:56:13,066 - WARNING -  * Debugger is active!
+2025-05-09 21:56:13,072 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 21:58:55,492 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\oauth.py', reloading
+2025-05-09 21:58:55,575 - INFO -  * Restarting with stat
+2025-05-09 21:58:56,357 - WARNING -  * Debugger is active!
+2025-05-09 21:58:56,361 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:00:30,343 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\jwt_utils.py', reloading
+2025-05-09 22:00:30,427 - INFO -  * Restarting with stat
+2025-05-09 22:00:31,070 - WARNING -  * Debugger is active!
+2025-05-09 22:00:31,075 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:01:16,716 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\oauth.py', reloading
+2025-05-09 22:01:16,808 - INFO -  * Restarting with stat
+2025-05-09 22:01:17,556 - WARNING -  * Debugger is active!
+2025-05-09 22:01:17,560 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:03:47,231 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\oauth.py', reloading
+2025-05-09 22:03:47,411 - INFO -  * Restarting with stat
+2025-05-09 22:03:48,088 - WARNING -  * Debugger is active!
+2025-05-09 22:03:48,092 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:04:49,474 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\db\\models.py', reloading
+2025-05-09 22:04:49,556 - INFO -  * Restarting with stat
+2025-05-09 22:04:50,257 - WARNING -  * Debugger is active!
+2025-05-09 22:04:50,262 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:05:17,339 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-09 22:05:17,339 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-09 22:05:17,340 - INFO -  * Restarting with stat
+2025-05-09 22:05:17,931 - WARNING -  * Debugger is active!
+2025-05-09 22:05:17,934 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:14:26,006 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:14:26,098 - INFO -  * Restarting with stat
+2025-05-09 22:14:26,929 - WARNING -  * Debugger is active!
+2025-05-09 22:14:26,934 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:14:59,835 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:15:00,000 - INFO -  * Restarting with stat
+2025-05-09 22:15:00,735 - WARNING -  * Debugger is active!
+2025-05-09 22:15:00,738 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:15:41,467 - INFO - 127.0.0.1 - - [09/May/2025 22:15:41] "[33mPOST /auth/two-factor/request-2fa HTTP/1.1[0m" 404 -
+2025-05-09 22:15:47,082 - INFO - 127.0.0.1 - - [09/May/2025 22:15:47] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2025-05-09 22:15:55,681 - INFO - 127.0.0.1 - - [09/May/2025 22:15:55] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-09 22:16:19,199 - INFO - 127.0.0.1 - - [09/May/2025 22:16:19] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InNvbGlzZWRpc29uQG91dGxvb2suY29tIiwicHVycG9zZSI6IjJmYV92ZXJpZmljYXRpb24iLCJleHAiOjE3NDY4NDcxMzB9.cN2i-g_qlrdPb6gu_yhSWhE7Xdln70NzRvEhvIyxK3o HTTP/1.1[0m" 302 -
+2025-05-09 22:18:57,968 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:18:58,046 - INFO -  * Restarting with stat
+2025-05-09 22:18:58,822 - WARNING -  * Debugger is active!
+2025-05-09 22:18:58,826 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:19:04,636 - INFO - 127.0.0.1 - - [09/May/2025 22:19:04] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-09 22:19:21,626 - INFO - 127.0.0.1 - - [09/May/2025 22:19:21] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InNvbGlzZWRpc29uQG91dGxvb2suY29tIiwicHVycG9zZSI6IjJmYV92ZXJpZmljYXRpb24iLCJleHAiOjE3NDY4NDczMjJ9.jf72Z-eREZX5k4Owa5_YYG30DKmqjtwqbSvvJ87Ewl8 HTTP/1.1[0m" 302 -
+2025-05-09 22:19:50,037 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:19:50,127 - INFO -  * Restarting with stat
+2025-05-09 22:19:50,819 - WARNING -  * Debugger is active!
+2025-05-09 22:19:50,827 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:20:42,914 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:20:43,011 - INFO -  * Restarting with stat
+2025-05-09 22:20:43,681 - WARNING -  * Debugger is active!
+2025-05-09 22:20:43,686 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:21:11,086 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:21:11,181 - INFO -  * Restarting with stat
+2025-05-09 22:21:11,873 - WARNING -  * Debugger is active!
+2025-05-09 22:21:11,876 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:21:32,526 - INFO - 127.0.0.1 - - [09/May/2025 22:21:32] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-09 22:22:30,031 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:22:30,111 - INFO -  * Restarting with stat
+2025-05-09 22:22:30,803 - WARNING -  * Debugger is active!
+2025-05-09 22:22:30,808 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:22:44,051 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:22:44,129 - INFO -  * Restarting with stat
+2025-05-09 22:22:44,794 - WARNING -  * Debugger is active!
+2025-05-09 22:22:44,798 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:23:39,844 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\utils\\email_utils.py', reloading
+2025-05-09 22:23:39,924 - INFO -  * Restarting with stat
+2025-05-09 22:23:40,606 - WARNING -  * Debugger is active!
+2025-05-09 22:23:40,610 - INFO -  * Debugger PIN: 355-806-526
+2025-05-09 22:23:48,672 - INFO - 127.0.0.1 - - [09/May/2025 22:23:48] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-09 22:24:15,856 - INFO - 127.0.0.1 - - [09/May/2025 22:24:15] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InNvbGlzZWRpc29uQG91dGxvb2suY29tIiwicHVycG9zZSI6IjJmYV92ZXJpZmljYXRpb24iLCJleHAiOjE3NDY4NDc2MDZ9.KC_QiG7vr_rrtrSDwLwIHC2aqjKKc-sjM31SmSx0smY HTTP/1.1[0m" 302 -
+2025-05-10 00:24:20,192 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-10 00:24:20,192 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-10 00:24:20,193 - INFO -  * Restarting with stat
+2025-05-10 00:24:20,870 - WARNING -  * Debugger is active!
+2025-05-10 00:24:20,875 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 00:34:01,923 - INFO - 127.0.0.1 - - [10/May/2025 00:34:01] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2025-05-10 00:34:13,993 - INFO - 127.0.0.1 - - [10/May/2025 00:34:13] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-10 00:37:02,844 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\register.py', reloading
+2025-05-10 00:37:02,935 - INFO -  * Restarting with stat
+2025-05-10 00:37:03,591 - WARNING -  * Debugger is active!
+2025-05-10 00:37:03,595 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 00:39:09,277 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\register.py', reloading
+2025-05-10 00:39:09,347 - INFO -  * Restarting with stat
+2025-05-10 00:39:09,977 - WARNING -  * Debugger is active!
+2025-05-10 00:39:09,981 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 00:39:19,552 - INFO - 127.0.0.1 - - [10/May/2025 00:39:19] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2025-05-10 00:40:03,120 - INFO - 127.0.0.1 - - [10/May/2025 00:40:03] "[31m[1mPOST /auth/two-factor/request-2fa HTTP/1.1[0m" 403 -
+2025-05-10 00:54:48,619 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-10 00:54:48,619 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-10 00:54:48,620 - INFO -  * Restarting with stat
+2025-05-10 00:54:49,187 - WARNING -  * Debugger is active!
+2025-05-10 00:54:49,191 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 00:54:54,447 - INFO - 127.0.0.1 - - [10/May/2025 00:54:54] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-10 00:56:15,719 - INFO - 127.0.0.1 - - [10/May/2025 00:56:15] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ2ODU2NjcxfQ.CQMTOaNC1cnC8Mffm7fzlXKYwDfLxZjoqOQQUwUnN70 HTTP/1.1[0m" 302 -
+2025-05-10 00:56:20,966 - INFO - 127.0.0.1 - - [10/May/2025 00:56:20] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ2ODU2NjcxfQ.CQMTOaNC1cnC8Mffm7fzlXKYwDfLxZjoqOQQUwUnN70 HTTP/1.1[0m" 302 -
+2025-05-10 01:01:00,985 - INFO - 127.0.0.1 - - [10/May/2025 01:01:00] "GET /auth/admin/users HTTP/1.1" 200 -
+2025-05-10 01:04:54,321 - INFO - 127.0.0.1 - - [10/May/2025 01:04:54] "PUT /auth/admin/update-user HTTP/1.1" 200 -
+2025-05-10 01:05:33,824 - INFO - 127.0.0.1 - - [10/May/2025 01:05:33] "[31m[1mPUT /auth/two-factor/request-2fa HTTP/1.1[0m" 405 -
+2025-05-10 01:05:45,436 - INFO - 127.0.0.1 - - [10/May/2025 01:05:45] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-10 01:05:55,290 - INFO - 127.0.0.1 - - [10/May/2025 01:05:55] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InNvbGlzZWRpc29uQG91dGxvb2suY29tIiwicHVycG9zZSI6IjJmYV92ZXJpZmljYXRpb24iLCJleHAiOjE3NDY4NTczMTh9.dR8LMlNi2IQf-VXZjUU-bTn2psq4ZYYFfyrKuleZTbo HTTP/1.1[0m" 302 -
+2025-05-10 01:06:40,584 - INFO - 127.0.0.1 - - [10/May/2025 01:06:40] "[31m[1mGET /auth/admin/users HTTP/1.1[0m" 403 -
+2025-05-10 01:08:36,866 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\admin.py', reloading
+2025-05-10 01:08:36,950 - INFO -  * Restarting with stat
+2025-05-10 01:08:37,682 - WARNING -  * Debugger is active!
+2025-05-10 01:08:37,685 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 01:09:46,703 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\admin.py', reloading
+2025-05-10 01:09:46,841 - INFO -  * Restarting with stat
+2025-05-10 01:09:47,488 - WARNING -  * Debugger is active!
+2025-05-10 01:09:47,493 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 01:11:59,287 - INFO - 127.0.0.1 - - [10/May/2025 01:11:59] "[35m[1mPOST /files/ HTTP/1.1[0m" 500 -
+2025-05-10 01:13:56,126 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\db\\models.py', reloading
+2025-05-10 01:13:56,232 - INFO -  * Restarting with stat
+2025-05-10 01:13:56,979 - WARNING -  * Debugger is active!
+2025-05-10 01:13:56,986 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 01:14:26,044 - INFO - 127.0.0.1 - - [10/May/2025 01:14:26] "[35m[1mPOST /files/ HTTP/1.1[0m" 201 -
+2025-05-10 01:15:50,723 - INFO - 127.0.0.1 - - [10/May/2025 01:15:50] "[31m[1mPOST /files/1 HTTP/1.1[0m" 405 -
+2025-05-10 01:15:54,879 - INFO - 127.0.0.1 - - [10/May/2025 01:15:54] "GET /files/1 HTTP/1.1" 200 -
+2025-05-10 01:21:56,452 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\repositorio_seguro\\app\\auth\\services\\admin.py', reloading
+2025-05-10 01:21:56,542 - INFO -  * Restarting with stat
+2025-05-10 01:21:57,270 - WARNING -  * Debugger is active!
+2025-05-10 01:21:57,274 - INFO -  * Debugger PIN: 355-806-526

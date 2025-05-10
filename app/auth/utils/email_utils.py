@@ -4,7 +4,8 @@ from email.mime.multipart import MIMEMultipart
 from email.header import Header
 import ssl
 from app.core.config import settings
-def send_otp_email(to_email: str, code: str):
+
+def send_otp_email(to_email, link=None):
     """
     Envía un correo con un código OTP de verificación.
     """
@@ -14,20 +15,114 @@ def send_otp_email(to_email: str, code: str):
     smtp_server = settings.OUTLOOK_HOST
     smtp_port = settings.OUTLOOK_PORT
 
-    subject = "Tu código de verificación (2FA)"
-    body = f"Hola,\n\nTu código de verificación es: {code}\n\nSi no lo solicitaste tú, ignora este correo."
-    print(f"Enviando código de verificación a {to_email}")
-    print(f"Código: {code}")
+    subject = "FortiDocs"
+    
+    # Crear mensaje HTML atractivo
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333333;
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+            }}
+            .container {{
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                padding: 25px;
+                background-color: #f9f9f9;
+            }}
+            .header {{
+                text-align: center;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #4a90e2;
+                padding-bottom: 10px;
+            }}
+            .title {{
+                color: #2c3e50;
+                font-size: 24px;
+                margin: 0;
+            }}
+            .btn {{
+                display: inline-block;
+                background-color: #4a90e2;
+                color: white;
+                text-decoration: none;
+                padding: 12px 24px;
+                border-radius: 5px;
+                font-weight: bold;
+                margin: 20px 0;
+                text-align: center;
+            }}
+            .btn:hover {{
+                background-color: #3a7bc8;
+            }}
+            .warning {{
+                background-color: #fff8e1;
+                border-left: 4px solid #ffc107;
+                padding: 12px;
+                margin: 20px 0;
+            }}
+            .footer {{
+                margin-top: 30px;
+                text-align: center;
+                font-size: 12px;
+                color: #777;
+                border-top: 1px solid #e0e0e0;
+                padding-top: 15px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1 class="title">🔐 Verificacion de cuenta </h1>
+            </div>
+            
+            <p>¡Hola!</p>
+            
+            <p>Has solicitado verificar tu acceso a tu cuenta. Para completar este proceso de seguridad, por favor:</p>
+            
+            <div style="text-align: center;">
+                <a href="{link}" class="btn">VERIFICAR MI ACCESO ➡️</a>
+            </div>
+            
+            <div class="warning">
+                <strong>¿No reconoces esta actividad?</strong>
+                <p>Si no solicitaste este código de verificación, ignora este correo y considera cambiar tu contraseña por seguridad.</p>
+            </div>
+            
+            <div class="footer">
+                <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    # Versión en texto plano como respaldo
+    text_body = f"Hola,\n\nHaz clic en el siguiente enlace para verificar tu acceso: {link}\n\nSi no lo solicitaste tú, ignora este correo."
+    
     print(f"Correo: {sender_email}")
     print(f"Servidor SMTP: {smtp_server}")
     print(f"Puerto SMTP: {smtp_port}")
     
-    message = MIMEMultipart()
+    message = MIMEMultipart("alternative")
     message["From"] = sender_email
     message["To"] = to_email
     message["Subject"] = Header(subject, "utf-8")
     
-    message.attach(MIMEText(body, "plain", "utf-8"))
+    # Adjuntar ambas versiones - primero texto plano y luego HTML
+    # El cliente de correo usará la última versión que pueda mostrar
+    message.attach(MIMEText(text_body, "plain", "utf-8"))
+    message.attach(MIMEText(html_body, "html", "utf-8"))
 
     try:
         # Configurar el contexto SSL personalizado similar a tu código JS

@@ -1,0 +1,244 @@
+
+Crear usuario administrador 
+Abre tu terminal en la raíz del proyecto y ejecuta:
+
+python
+
+luego pega todo este codigo 
+
+from app.db.config import SessionLocal
+from app.db.models import User
+from werkzeug.security import generate_password_hash
+import os
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
+from cryptography.fernet import Fernet
+import datetime
+
+# 1. Configuración de la base de datos
+db = SessionLocal()
+
+# 2. Generar claves pública y privada
+key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+private_key_bytes = key.private_bytes(
+    encoding=serialization.Encoding.PEM,
+    format=serialization.PrivateFormat.PKCS8,
+    encryption_algorithm=serialization.NoEncryption()
+)
+public_key_bytes = key.public_key().public_bytes(
+    encoding=serialization.Encoding.PEM,
+    format=serialization.PublicFormat.SubjectPublicKeyInfo
+)
+
+# 3. Cifrar la clave privada con la SECRET_KEY de tu .env
+secret = os.getenv("SIGNATURE_SECRET_KEY")
+fernet = Fernet(secret.encode())
+encrypted_private_key = fernet.encrypt(private_key_bytes)
+
+# 4. Crear el usuario administrador
+admin_user = User(
+    email="m5954852@gmail.com",
+    password_hash=generate_password_hash("Admin123!"),
+    first_name="Admin",
+    last_name="User",
+    role="admin",
+    is_active=True,
+    can_upload=True,
+    public_key=public_key_bytes,
+    encrypted_private_key=encrypted_private_key,
+    created_at=datetime.datetime.utcnow()
+)
+
+db.add(admin_user)
+db.commit()
+db.close()
+
+print("✅ Usuario administrador creado exitosamente.")
+
+----
+
+dale enter y luego pon exit() para salir 
+-----------------------------------------------
+http://localhost:5000/register
+
+{
+  "email": "solisedison@outlook.com",
+  "password": "Admin1234567@",
+  "first_name": "Juan",
+  "last_name": "Pérez"
+
+}
+
+
+-----------------------------------------------------------
+
+Login 
+
+http://localhost:5000/auth/two-factor/request-2fa
+
+
+{
+  "email": "solisedison@outlook.com",
+  "password": "Admin1234567@"
+}
+
+
+{
+  "email": "m5954852@gmail.com",
+  "password": "Admin123!"
+}
+-----------------------------------------------------------
+
+Dar click al enlace del correo y te redirijira a una pagina que tiene el token en la url 
+ejemplo : 
+http://tu-frontend.com/verify-success?session_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc0Njg2MDE3NX0.mRDMA6Lib_JNFu-l-ZXFymv7HaO4PEWmePaFMqobkx8
+
+ahi se encuentra el token tratar de obtenerlo desde la url y alamacenarlo 
+-----------------------
+
+Adminitrador 
+
+Obtener todos los usuarios :
+
+http://localhost:5000/auth/admin/users
+
+en Header poner Authorization: Bearer token 
+
+----------------------------------------------------------------
+
+Actualizar usuarios :
+
+
+http://localhost:5000/auth/admin/update-user
+
+{
+   "id": 2,
+    "role": "user",
+    "is_active": true,
+    "can_upload": true
+}
+
+--------------------------------------------------------------------------
+
+Subir Archivo
+
+URL: http://localhost:5000/files/
+
+Method: POST
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+Body (form-data):
+
+file: (Selecciona un archivo)
+
+---------------------------------------------------------------
+Descargar Archivo
+URL: http://localhost:5000/files/<file_id>
+
+Method: GET
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+--------------------
+
+Listar Archivos
+URL: http://localhost:5000/files/?page=1&per_page=10
+
+Method: GET
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+--------------------------------------
+Eliminar Archivo
+URL: http://localhost:5000/files/<file_id>
+
+Method: DELETE
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+-----------------------------------------------------------
+
+ Compartir Archivo con Otro Usuario
+
+ URL: http://localhost:5000/files/<file_id>/share
+
+Method: POST
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+Body (JSON):
+
+{
+  "target_user_id": 5
+}
+-------------------------------------------------------------------
+
+Actualizar Archivo
+URL: http://localhost:5000/files/<file_id>
+
+Method: PUT
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+Body (form-data):
+
+file: (Nuevo archivo, opcional)
+
+file_name: (Nuevo nombre, opcional)
+
+------------------------------------------
+Consultar Perfil del Usuario
+URL: http://localhost:5000/users/profile
+
+Método: GET
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+🔹 ¿Qué devuelve?
+
+{
+    "email": "user@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "role": "user",
+    "is_active": true,
+    "can_upload": false
+}
+
+--------------------------------------
+
+Actualizar Perfil del Usuario
+URL: http://localhost:5000/users/profile
+
+Método: PUT
+
+Headers:
+
+Authorization: Bearer <session_token>
+
+Content-Type: application/json
+
+Body (JSON):
+{
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "email": "new_email@example.com"
+}
+
+-----------------------------------------
+
