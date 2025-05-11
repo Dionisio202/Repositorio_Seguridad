@@ -108,9 +108,11 @@ def list_files():
             "file_id": f.id,
             "file_name": f.file_name,
             "user_id": f.user_id,
-            "created_at": f.created_at
+            "created_at": f.created_at,
+            "access_type": "own" if f.user_id == user_id else "shared"
         } for f in files_query
     ]
+
 
     return jsonify({
         "total": total_files,

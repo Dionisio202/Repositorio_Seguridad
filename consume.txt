@@ -242,3 +242,8 @@ Body (JSON):
 
 -----------------------------------------
 
+api cerrar sesion :
+
+POST http://localhost:5000/auth/two-factor/logout
+
+Authorization: Bearer <TU_TOKEN_JWT>

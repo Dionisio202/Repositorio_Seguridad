@@ -4,9 +4,10 @@ from werkzeug.security import check_password_hash
 from datetime import datetime, timedelta
 
 from app.db.config import SessionLocal
-from app.db.models import User, LoginAttempt
+from app.db.models import ActiveSession, User, LoginAttempt
 from app.auth.utils.email_utils import send_otp_email
-from app.auth.utils.jwt_utils import generate_jwt, verify_jwt
+from app.auth.utils.jwt_utils import generate_jwt, hash_token, verify_jwt
+from app.auth.services.midelwares import require_active_user, require_auth
 
 oauth_bp = Blueprint('oauth', __name__)
 
@@ -101,6 +102,17 @@ def verify_link():
             "email": user.email,
             "role": user.role
         })
+        # Registrar sesión activa
+        token_hashed = hash_token(session_token)
+        new_session = ActiveSession(
+            user_id=user.id,
+            token_hash=token_hashed,
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent')
+        )
+        db.add(new_session)
+        db.commit()
+
 
         # ✅ Mejor práctica: Redirigir al frontend sin exponer token en URL (se maneja en frontend)
         return redirect(f"http://localhost:5173?session_token={session_token}")
@@ -110,3 +122,35 @@ def verify_link():
         return jsonify({"detail": str(e)}), 500
     finally:
         db.close()
+        
+
+@oauth_bp.route('/logout', methods=['POST'])
+@require_auth
+@require_active_user  
+def logout():
+    # El token ya fue validado, simplemente lo recuperas
+    auth_header = request.headers.get('Authorization')
+    token = auth_header.split(' ')[1] if auth_header else None
+    token_hashed = hash_token(token)
+
+    db = SessionLocal()
+    try:
+        session_record = db.query(ActiveSession).filter(
+            ActiveSession.token_hash == token_hashed,
+            ActiveSession.is_active == True
+        ).first()
+
+        if not session_record:
+            return jsonify({"detail": "Sesión no encontrada o ya cerrada."}), 404
+
+        session_record.is_active = False
+        session_record.last_activity_at = datetime.utcnow()
+        db.commit()
+
+        return jsonify({"message": "Sesión cerrada exitosamente."}), 200
+    except Exception as e:
+        db.rollback()
+        return jsonify({"detail": str(e)}), 500
+    finally:
+        db.close()
+

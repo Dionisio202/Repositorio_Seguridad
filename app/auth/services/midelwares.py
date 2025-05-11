@@ -1,8 +1,8 @@
 from flask import request, jsonify
 from functools import wraps
-from app.auth.utils.jwt_utils import verify_jwt
+from app.auth.utils.jwt_utils import hash_token, verify_jwt
 from app.db.config import SessionLocal
-from app.db.models import User
+from app.db.models import ActiveSession, User
 
 def require_auth(f):
     @wraps(f)
@@ -16,7 +16,20 @@ def require_auth(f):
         if not payload:
             return jsonify({"error": "Token inválido o expirado."}), 401
 
-        request.user = payload  # Solo valida autenticación, no estado del usuario
+        # ✅ Verificar que la sesión esté activa en la base de datos
+        token_hashed = hash_token(token)
+        db = SessionLocal()
+        try:
+            session_record = db.query(ActiveSession).filter(
+                ActiveSession.token_hash == token_hashed,
+                ActiveSession.is_active == True
+            ).first()
+            if not session_record:
+                return jsonify({"error": "Sesión no activa. Por favor inicia sesión nuevamente."}), 401
+        finally:
+            db.close()
+
+        request.user = payload  # Agregar el payload a la solicitud si todo está OK
         return f(*args, **kwargs)
     return decorated
 

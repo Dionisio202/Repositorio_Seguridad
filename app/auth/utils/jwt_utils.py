@@ -1,3 +1,4 @@
+import hashlib
 import os
 import jwt
 import datetime
@@ -23,3 +24,7 @@ def verify_jwt(token: str):
         return None
     except jwt.InvalidTokenError:
         return None
+
+def hash_token(token: str) -> str:
+    """Genera un hash seguro del token JWT para almacenamiento seguro."""
+    return hashlib.sha256(token.encode()).hexdigest()

@@ -1,5 +1,6 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, LargeBinary, String, DateTime, Boolean
+import uuid
+from sqlalchemy import Column, ForeignKey, Integer, LargeBinary, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -32,7 +33,7 @@ class File(Base):
     __tablename__ = "files"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     file_name = Column(String(255), nullable=False)
     file_data = Column(LargeBinary(length=4294967295), nullable=False)
     created_at = Column(DateTime, nullable=True)
@@ -43,6 +44,18 @@ class FilePermission(Base):
     __tablename__ = "file_permissions"
     
     id = Column(Integer, primary_key=True, index=True)
-    file_id = Column(Integer, nullable=False)   # Archivo compartido
-    granted_user_id = Column(Integer, nullable=False)  # Usuario con permiso
+    file_id = Column(Integer, ForeignKey('files.id'), nullable=False)
+    granted_user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     granted_at = Column(DateTime, default=datetime.utcnow)
+
+
+class ActiveSession(Base):
+    __tablename__ = 'active_sessions'
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    token_hash = Column(String(255), nullable=False)  # Guarda solo hash del token
+    ip_address = Column(String(45))
+    user_agent = Column(String(255))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_activity_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # ✅ Se actualiza automáticamente
+    is_active = Column(Boolean, default=True)
