@@ -147,3 +147,32 @@
 2025-05-10 01:21:56,542 - INFO -  * Restarting with stat
 2025-05-10 01:21:57,270 - WARNING -  * Debugger is active!
 2025-05-10 01:21:57,274 - INFO -  * Debugger PIN: 355-806-526
+2025-05-10 22:48:29,926 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-10 22:48:29,926 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-10 22:48:29,934 - INFO -  * Restarting with stat
+2025-05-10 22:48:30,512 - WARNING -  * Debugger is active!
+2025-05-10 22:48:30,516 - INFO -  * Debugger PIN: 110-221-048
+2025-05-10 22:49:05,193 - INFO - 127.0.0.1 - - [10/May/2025 22:49:05] "[31m[1mGET /files/1 HTTP/1.1[0m" 401 -
+2025-05-10 23:03:03,078 - INFO - 127.0.0.1 - - [10/May/2025 23:03:03] "[33mPOST /auth/two-factor/verify-2fa HTTP/1.1[0m" 404 -
+2025-05-10 23:03:33,149 - INFO - 127.0.0.1 - - [10/May/2025 23:03:33] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-10 23:08:03,845 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-10 23:08:03,846 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-10 23:08:03,846 - INFO -  * Restarting with stat
+2025-05-10 23:08:04,446 - WARNING -  * Debugger is active!
+2025-05-10 23:08:04,451 - INFO -  * Debugger PIN: 110-221-048
+2025-05-10 23:10:00,476 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-10 23:10:00,476 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-10 23:10:00,478 - INFO -  * Restarting with stat
+2025-05-10 23:10:01,321 - WARNING -  * Debugger is active!
+2025-05-10 23:10:01,327 - INFO -  * Debugger PIN: 110-221-048
+2025-05-10 23:10:11,332 - INFO - 127.0.0.1 - - [10/May/2025 23:10:11] "POST /auth/two-factor/request-2fa HTTP/1.1" 200 -
+2025-05-10 23:25:59,993 - INFO - 127.0.0.1 - - [10/May/2025 23:25:59] "OPTIONS /register HTTP/1.1" 200 -
+2025-05-10 23:28:06,412 - INFO -  * Detected change in 'c:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\main.py', reloading
+2025-05-10 23:28:06,499 - INFO -  * Restarting with stat
+2025-05-10 23:28:07,139 - WARNING -  * Debugger is active!
+2025-05-10 23:28:07,143 - INFO -  * Debugger PIN: 110-221-048
+2025-05-10 23:28:53,618 - INFO - 127.0.0.1 - - [10/May/2025 23:28:53] "OPTIONS /register HTTP/1.1" 200 -
+2025-05-10 23:28:54,233 - INFO - 127.0.0.1 - - [10/May/2025 23:28:54] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
