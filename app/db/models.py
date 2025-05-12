@@ -59,3 +59,13 @@ class ActiveSession(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     last_activity_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # ✅ Se actualiza automáticamente
     is_active = Column(Boolean, default=True)
+
+class DownloadHistory(Base):
+    __tablename__ = "download_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    file_id = Column(Integer, ForeignKey('files.id'), nullable=False)
+    download_time = Column(DateTime, default=datetime.utcnow)
+    ip_address = Column(String(45), nullable=True)
+    user_agent = Column(String(255), nullable=True)

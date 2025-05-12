@@ -115,7 +115,7 @@ def verify_link():
 
 
         # ✅ Mejor práctica: Redirigir al frontend sin exponer token en URL (se maneja en frontend)
-        return redirect(f"http://localhost:5173?session_token={session_token}")
+        return redirect(f"http://localhost:5173?session_token={session_token}&role={user.role}")
 
     except Exception as e:
         db.rollback()

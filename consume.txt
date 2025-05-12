@@ -155,6 +155,28 @@ Headers:
 
 Authorization: Bearer <session_token>
 
+{
+    "total": 2,
+    "page": 1,
+    "per_page": 10,
+    "files": [
+        {
+            "file_id": 1,
+            "file_name": "documento1.pdf",
+            "user_id": 5,
+            "created_at": "2025-05-11T10:00:00",
+            "access_type": "own"
+        },
+        {
+            "file_id": 2,
+            "file_name": "informe_compartido.docx",
+            "user_id": 8,
+            "created_at": "2025-05-10T15:30:00",
+            "access_type": "shared"
+        }
+    ]
+}
+
 --------------------------------------
 Eliminar Archivo
 URL: http://localhost:5000/files/<file_id>
@@ -247,3 +269,47 @@ api cerrar sesion :
 POST http://localhost:5000/auth/two-factor/logout
 
 Authorization: Bearer <TU_TOKEN_JWT>
+
+-----------------------------------------------------
+
+api quitar permisos de archivos : 
+
+POST http://localhost:5000/files/<file_id>/revoke
+Authorization	Bearer <tu_token>
+
+Body (JSON):
+
+{
+    "target_user_id": 5
+}
+
+------------------------------------------------------------------
+Obtener datos de descargas 
+
+Método: GET http://localhost:5000/files/10/download-history
+Authorization: Bearer <TOKEN>
+
+asi se obtiene la infromacion 
+
+{
+    "file_id": 10,
+    "history": [
+        {
+            "user_id": 5,
+            "email": "juan@example.com",
+            "first_name": "Juan",
+            "last_name": "Pérez",
+            "download_count": 3,
+            "last_download": "2025-05-11T23:15:00"
+        },
+        {
+            "user_id": 8,
+            "email": "ana@example.com",
+            "first_name": "Ana",
+            "last_name": "García",
+            "download_count": 1,
+            "last_download": "2025-05-10T18:22:00"
+        }
+    ]
+}
+

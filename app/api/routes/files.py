@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, send_file
 from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload
 from app.db.config import get_db
-from app.db.models import File, FilePermission, User
+from app.db.models import DownloadHistory, File, FilePermission, User
 from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -44,14 +44,12 @@ def upload_file():
 @require_active_user  
 def download_file(file_id):
     db = next(get_db())
-    user_id = request.user.get('user_id')  # Obtenido de JWT
-
-    # Buscar el archivo
+    user_id = request.user.get('user_id')
     file_record = db.query(File).filter(File.id == file_id).first()
+
     if not file_record:
         return jsonify({"error": "Archivo no encontrado."}), 404
 
-    # Verificar permisos: dueño o permiso explícito
     has_permission = (file_record.user_id == user_id) or db.query(FilePermission).filter(
         FilePermission.file_id == file_id,
         FilePermission.granted_user_id == user_id
@@ -60,7 +58,16 @@ def download_file(file_id):
     if not has_permission:
         return jsonify({"error": "No tienes permisos para acceder a este archivo."}), 403
 
-    # Detectar MIME type
+    # ✅ Registrar historial de descarga
+    download_log = DownloadHistory(
+        user_id=user_id,
+        file_id=file_id,
+        ip_address=request.remote_addr,
+        user_agent=request.headers.get('User-Agent')
+    )
+    db.add(download_log)
+    db.commit()
+
     mime_type, _ = mimetypes.guess_type(file_record.file_name)
     if not mime_type:
         mime_type = "application/octet-stream"
@@ -71,6 +78,7 @@ def download_file(file_id):
         mimetype=mime_type,
         as_attachment=True
     )
+
 
 
 
@@ -222,3 +230,79 @@ def update_file(file_id):
     db.commit()
 
     return jsonify({"message": "Archivo actualizado correctamente.", "file_id": file.id}), 200
+
+
+@files_bp.route('/<int:file_id>/revoke', methods=['POST'])
+@require_auth
+@require_active_user
+def revoke_file_permission(file_id):
+    db = next(get_db())
+    data = request.get_json() or {}
+    user_id = request.user.get('user_id')
+    target_user_id = data.get('target_user_id')
+
+    # Validar target_user_id
+    if not target_user_id:
+        return jsonify({"error": "target_user_id es requerido."}), 400
+
+    try:
+        target_user_id = int(target_user_id)
+    except (ValueError, TypeError):
+        return jsonify({"error": "target_user_id debe ser un número entero válido."}), 400
+
+    # Verificar que el archivo pertenece al usuario actual
+    file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
+    if not file:
+        return jsonify({"error": "Archivo no encontrado o no tienes permisos para revocar permisos."}), 404
+
+    # Buscar el permiso existente
+    permission = db.query(FilePermission).filter(
+        FilePermission.file_id == file_id,
+        FilePermission.granted_user_id == target_user_id
+    ).first()
+
+    if not permission:
+        return jsonify({"error": "No existe un permiso concedido a este usuario para este archivo."}), 404
+
+    # Eliminar el permiso
+    db.delete(permission)
+    db.commit()
+
+    return jsonify({"message": "Permiso revocado correctamente."}), 200
+
+
+@files_bp.route('/<int:file_id>/download-history', methods=['GET'])
+@require_auth
+@require_active_user
+def get_download_history(file_id):
+    db = next(get_db())
+    user_id = request.user.get('user_id')
+
+    # Verificar que el archivo le pertenece al usuario actual
+    file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
+    if not file:
+        return jsonify({"error": "Archivo no encontrado o no tienes permisos para ver el historial."}), 404
+
+    # Consultar historial de descargas agrupado por usuario
+    results = db.query(
+        DownloadHistory.user_id,
+        func.count(DownloadHistory.id).label('download_count'),
+        func.max(DownloadHistory.download_time).label('last_download')
+    ).filter(DownloadHistory.file_id == file_id).group_by(DownloadHistory.user_id).all()
+
+    history = []
+    for r in results:
+        user = db.query(User).filter(User.id == r.user_id).first()
+        history.append({
+            "user_id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "download_count": r.download_count,
+            "last_download": r.last_download
+        })
+
+    return jsonify({
+        "file_id": file_id,
+        "history": history
+    }), 200
