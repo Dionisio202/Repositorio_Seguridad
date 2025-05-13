@@ -202,8 +202,10 @@ Authorization: Bearer <session_token>
 Body (JSON):
 
 {
-  "target_user_id": 5
+    "target_user_id": 5,
+    "permission_type": "download" puede ser view o both 
 }
+
 -------------------------------------------------------------------
 
 Actualizar Archivo
@@ -272,15 +274,16 @@ Authorization: Bearer <TU_TOKEN_JWT>
 
 -----------------------------------------------------
 
-api quitar permisos de archivos : 
+api editar permisos de archivos : 
 
-POST http://localhost:5000/files/<file_id>/revoke
+POST http://localhost:5000/files/<file_id>/permissions
 Authorization	Bearer <tu_token>
 
 Body (JSON):
 
 {
-    "target_user_id": 5
+    "target_user_id": 5,
+    "permission_type": "both"  // view | download | both | none
 }
 
 ------------------------------------------------------------------
@@ -313,3 +316,10 @@ asi se obtiene la infromacion
     ]
 }
 
+-----------------------------
+
+Ver archivo 
+
+http://localhost:5000/files/id del archivo/view
+
+| Authorization | Bearer TU_TOKEN_JWT_AQUI |

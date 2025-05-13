@@ -2,7 +2,7 @@ from flask import request, jsonify
 from functools import wraps
 from app.auth.utils.jwt_utils import hash_token, verify_jwt
 from app.db.config import SessionLocal
-from app.db.models import ActiveSession, User
+from app.db.models import ActiveSession, File, FilePermission, User
 
 def require_auth(f):
     @wraps(f)
@@ -85,3 +85,50 @@ def require_can_upload(f):
 
         return f(*args, **kwargs)
     return decorated
+
+
+def require_file_permission(permission_required):
+    """
+    Middleware para validar permisos de archivos.
+    :param permission_required: 'view' | 'download'
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated(file_id, *args, **kwargs):
+            payload = getattr(request, 'user', None)
+            if not payload:
+                return jsonify({"error": "Autenticación requerida."}), 401
+
+            user_id = payload.get("user_id")
+            db = SessionLocal()
+            try:
+                file = db.query(File).filter(File.id == file_id).first()
+                if not file:
+                    return jsonify({"error": "Archivo no encontrado."}), 404
+
+                # ✅ Si el usuario es propietario, permitir acceso total
+                if file.user_id == user_id:
+                    return f(file_id, *args, **kwargs)
+
+                # ✅ Verificar permisos concedidos
+                permission = db.query(FilePermission).filter(
+                    FilePermission.file_id == file_id,
+                    FilePermission.granted_user_id == user_id
+                ).first()
+
+                if not permission:
+                    return jsonify({"error": "No tienes permisos para acceder a este archivo."}), 403
+
+                # ✅ Validar tipo de permiso
+                if permission_required == "view" and permission.permission_type not in ["view", "both"]:
+                    return jsonify({"error": "Permiso de visualización requerido."}), 403
+
+                if permission_required == "download" and permission.permission_type not in ["download", "both"]:
+                    return jsonify({"error": "Permiso de descarga requerido."}), 403
+
+            finally:
+                db.close()
+
+            return f(file_id, *args, **kwargs)
+        return decorated
+    return decorator

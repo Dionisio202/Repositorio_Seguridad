@@ -40,13 +40,6 @@ class File(Base):
     updated_at = Column(DateTime, nullable=True)
 
 
-class FilePermission(Base):
-    __tablename__ = "file_permissions"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    file_id = Column(Integer, ForeignKey('files.id'), nullable=False)
-    granted_user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    granted_at = Column(DateTime, default=datetime.utcnow)
 
 
 class ActiveSession(Base):
@@ -69,3 +62,12 @@ class DownloadHistory(Base):
     download_time = Column(DateTime, default=datetime.utcnow)
     ip_address = Column(String(45), nullable=True)
     user_agent = Column(String(255), nullable=True)
+
+class FilePermission(Base):
+    __tablename__ = "file_permissions"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    file_id = Column(Integer, ForeignKey('files.id'), nullable=False)
+    granted_user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    granted_at = Column(DateTime, default=datetime.utcnow)
+    permission_type = Column(String(20), nullable=False, default="view")  # "view", "download", "both"

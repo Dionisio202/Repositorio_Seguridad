@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, send_file
-from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload
+from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload, require_file_permission
 from app.db.config import get_db
 from app.db.models import DownloadHistory, File, FilePermission, User
 from datetime import datetime
@@ -38,25 +38,16 @@ def upload_file():
 
 
 
-# 📥 Descargar archivo real con MIME correcto
 @files_bp.route('/<int:file_id>', methods=['GET'])
 @require_auth
-@require_active_user  
+@require_active_user
+@require_file_permission('download')  # 👈 Middleware que valida si puede descargar
 def download_file(file_id):
     db = next(get_db())
     user_id = request.user.get('user_id')
+
+    # ✅ Buscar el archivo (ya se validó la existencia y permisos en el middleware)
     file_record = db.query(File).filter(File.id == file_id).first()
-
-    if not file_record:
-        return jsonify({"error": "Archivo no encontrado."}), 404
-
-    has_permission = (file_record.user_id == user_id) or db.query(FilePermission).filter(
-        FilePermission.file_id == file_id,
-        FilePermission.granted_user_id == user_id
-    ).count() > 0
-
-    if not has_permission:
-        return jsonify({"error": "No tienes permisos para acceder a este archivo."}), 403
 
     # ✅ Registrar historial de descarga
     download_log = DownloadHistory(
@@ -81,8 +72,6 @@ def download_file(file_id):
 
 
 
-
-
 @files_bp.route('/', methods=['GET'])
 @require_auth
 @require_active_user
@@ -95,59 +84,85 @@ def list_files():
     per_page = int(request.args.get('per_page', 10))
     offset = (page - 1) * per_page
 
-    # Archivos propios
-    own_files_query = db.query(File).filter(File.user_id == user_id)
-    # Archivos compartidos
-    shared_files_query = db.query(File).join(FilePermission).filter(
+    # ✅ Consulta de archivos propios
+    own_files = db.query(
+        File.id, File.file_name, File.user_id, File.created_at
+    ).filter(File.user_id == user_id).all()
+
+    # ✅ Consulta de archivos compartidos, incluyendo el tipo de permiso
+    shared_files = db.query(
+        File.id, File.file_name, File.user_id, File.created_at, FilePermission.permission_type
+    ).join(FilePermission).filter(
         FilePermission.granted_user_id == user_id
-    )
+    ).all()
 
-    # Unir ambos conjuntos
-    combined_query = own_files_query.union(shared_files_query).order_by(File.id)
+    # ✅ Unificar resultados
+    files_list = []
 
-    # Obtener total de archivos antes de paginar
-    total_files = combined_query.count()
-
-    # Aplicar paginación
-    files_query = combined_query.offset(offset).limit(per_page).all()
-
-    files_list = [
-        {
+    # Archivos propios
+    for f in own_files:
+        files_list.append({
             "file_id": f.id,
             "file_name": f.file_name,
             "user_id": f.user_id,
             "created_at": f.created_at,
-            "access_type": "own" if f.user_id == user_id else "shared"
-        } for f in files_query
-    ]
+            "access_type": "own",
+            "permission_type": "full"  # Tiene control total
+        })
 
+    # Archivos compartidos
+    for f in shared_files:
+        files_list.append({
+            "file_id": f.id,
+            "file_name": f.file_name,
+            "user_id": f.user_id,
+            "created_at": f.created_at,
+            "access_type": "shared",
+            "permission_type": f.permission_type  # view, download, both
+        })
+
+    # ✅ Ordenar y aplicar paginación manual
+    files_list.sort(key=lambda x: x["file_id"])
+    total_files = len(files_list)
+    paginated_files = files_list[offset:offset + per_page]
 
     return jsonify({
         "total": total_files,
         "page": page,
         "per_page": per_page,
-        "files": files_list
+        "files": paginated_files
     })
 
 
-# DELETE /files/<id> — Eliminar archivo por ID (solo del propio usuario)
+
 @files_bp.route('/<int:file_id>', methods=['DELETE'])
 @require_auth
 @require_active_user
 def delete_file(file_id):
     db: Session = next(get_db())
-    user_id = request.user.get('user_id')  # ✅ Obtenido desde el JWT
+    payload = request.user
+    user_id = payload.get('user_id')
+    user_role = payload.get('role')
 
-    # Solo permitir eliminar archivos propios
-    file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
+    # ✅ Permitir que el dueño o un admin elimine el archivo
+    file = db.query(File).filter(File.id == file_id).first()
     if not file:
-        return jsonify({"error": "Archivo no encontrado o sin permisos para eliminarlo."}), 404
+        return jsonify({"error": "Archivo no encontrado."}), 404
 
+    if file.user_id != user_id and user_role != "admin":
+        return jsonify({"error": "No tienes permisos para eliminar este archivo."}), 403
+
+    # ✅ Eliminar permisos asociados
+    db.query(FilePermission).filter(FilePermission.file_id == file_id).delete()
+
+    # ✅ Eliminar historial de descargas asociado
+    db.query(DownloadHistory).filter(DownloadHistory.file_id == file_id).delete()
+
+    # ✅ Eliminar el archivo
     db.delete(file)
     db.commit()
 
-    return jsonify({"message": "Archivo eliminado correctamente."}), 200
-
+    return jsonify({"message": "Archivo y registros relacionados eliminados correctamente."}), 200
 
 
 
@@ -159,6 +174,7 @@ def share_file(file_id):
     data = request.get_json() or {}
     user_id = request.user.get('user_id')
     target_user_id = data.get('target_user_id')
+    permission_type = data.get('permission_type', 'view')  # Valor por defecto: 'view'
 
     # ✅ Validar que target_user_id esté presente y sea entero
     if not target_user_id:
@@ -168,6 +184,13 @@ def share_file(file_id):
         target_user_id = int(target_user_id)
     except (ValueError, TypeError):
         return jsonify({"error": "target_user_id debe ser un número entero válido."}), 400
+
+    # ✅ Validar permission_type
+    valid_permissions = ['view', 'download', 'both']
+    if permission_type not in valid_permissions:
+        return jsonify({
+            "error": f"Tipo de permiso inválido. Debe ser uno de: {', '.join(valid_permissions)}."
+        }), 400
 
     # ✅ Prevenir que el usuario comparta el archivo consigo mismo
     if target_user_id == user_id:
@@ -192,12 +215,16 @@ def share_file(file_id):
     if existing_permission:
         return jsonify({"error": "El permiso ya fue concedido a este usuario."}), 400
 
-    # ✅ Registrar nuevo permiso
-    permission = FilePermission(file_id=file_id, granted_user_id=target_user_id)
+    # ✅ Registrar nuevo permiso con tipo definido
+    permission = FilePermission(
+        file_id=file_id,
+        granted_user_id=target_user_id,
+        permission_type=permission_type
+    )
     db.add(permission)
     db.commit()
 
-    return jsonify({"message": "Permiso concedido correctamente."}), 200
+    return jsonify({"message": f"Permiso '{permission_type}' concedido correctamente."}), 200
 
 
 @files_bp.route('/<int:file_id>', methods=['PUT'])
@@ -232,30 +259,30 @@ def update_file(file_id):
     return jsonify({"message": "Archivo actualizado correctamente.", "file_id": file.id}), 200
 
 
-@files_bp.route('/<int:file_id>/revoke', methods=['POST'])
+@files_bp.route('/<int:file_id>/permissions', methods=['PUT'])
 @require_auth
 @require_active_user
-def revoke_file_permission(file_id):
+def update_file_permission(file_id):
     db = next(get_db())
     data = request.get_json() or {}
     user_id = request.user.get('user_id')
     target_user_id = data.get('target_user_id')
+    new_permission_type = data.get('permission_type')  # 'view', 'download', 'both', 'none'
 
-    # Validar target_user_id
+    # ✅ Validar target_user_id
     if not target_user_id:
         return jsonify({"error": "target_user_id es requerido."}), 400
-
     try:
         target_user_id = int(target_user_id)
     except (ValueError, TypeError):
         return jsonify({"error": "target_user_id debe ser un número entero válido."}), 400
 
-    # Verificar que el archivo pertenece al usuario actual
+    # ✅ Verificar que el archivo pertenece al usuario actual
     file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
     if not file:
-        return jsonify({"error": "Archivo no encontrado o no tienes permisos para revocar permisos."}), 404
+        return jsonify({"error": "Archivo no encontrado o no tienes permisos para modificar permisos."}), 404
 
-    # Buscar el permiso existente
+    # ✅ Verificar que existe un permiso previo
     permission = db.query(FilePermission).filter(
         FilePermission.file_id == file_id,
         FilePermission.granted_user_id == target_user_id
@@ -264,11 +291,21 @@ def revoke_file_permission(file_id):
     if not permission:
         return jsonify({"error": "No existe un permiso concedido a este usuario para este archivo."}), 404
 
-    # Eliminar el permiso
-    db.delete(permission)
-    db.commit()
+    valid_permissions = ['view', 'download', 'both', 'none']
+    if new_permission_type not in valid_permissions:
+        return jsonify({"error": f"Tipo de permiso inválido. Usa: {', '.join(valid_permissions)}."}), 400
 
-    return jsonify({"message": "Permiso revocado correctamente."}), 200
+    if new_permission_type == 'none':
+        # ✅ Eliminar completamente el permiso
+        db.delete(permission)
+        db.commit()
+        return jsonify({"message": "Permisos eliminados correctamente."}), 200
+    else:
+        # ✅ Actualizar el tipo de permiso
+        permission.permission_type = new_permission_type
+        db.commit()
+        return jsonify({"message": f"Permiso actualizado a '{new_permission_type}' correctamente."}), 200
+
 
 
 @files_bp.route('/<int:file_id>/download-history', methods=['GET'])
@@ -306,3 +343,28 @@ def get_download_history(file_id):
         "file_id": file_id,
         "history": history
     }), 200
+
+
+@files_bp.route('/<int:file_id>/view', methods=['GET'])
+@require_auth
+@require_active_user
+@require_file_permission('view')  # 👈 Valida que tenga permiso 'view' o 'both'
+def view_file(file_id):
+    db = next(get_db())
+    user_id = request.user.get('user_id')
+
+    # ✅ Buscar el archivo (la existencia ya se validó en el middleware, pero incluimos por seguridad)
+    file_record = db.query(File).filter(File.id == file_id).first()
+    if not file_record:
+        return jsonify({"error": "Archivo no encontrado."}), 404
+
+    mime_type, _ = mimetypes.guess_type(file_record.file_name)
+    if not mime_type:
+        mime_type = "application/octet-stream"
+
+    return send_file(
+        io.BytesIO(file_record.file_data),
+        download_name=file_record.file_name,
+        mimetype=mime_type,
+        as_attachment=False  # 👈 Importante: Esto permite mostrar en navegador
+    )
