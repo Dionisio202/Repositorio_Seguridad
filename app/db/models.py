@@ -36,6 +36,8 @@ class File(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     file_name = Column(String(255), nullable=False)
     file_data = Column(LargeBinary(length=4294967295), nullable=False)
+    signature = Column(LargeBinary, nullable=True) 
+    file_hash = Column(String(64), nullable=True)  
     created_at = Column(DateTime, nullable=True)
     updated_at = Column(DateTime, nullable=True)
 

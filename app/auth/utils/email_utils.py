@@ -144,3 +144,63 @@ def send_otp_email(to_email, link=None):
     except Exception as e:
         print(f"❌ Error al enviar correo a {to_email}: {str(e)}")
         raise e
+    
+
+def send_password_email(to_email, password, filename):
+    """
+    Envía un correo al usuario con la contraseña para abrir un archivo PDF.
+    """
+    sender_email = settings.OUTLOOK_USER
+    sender_password = settings.OUTLOOK_PASS
+    smtp_server = settings.OUTLOOK_HOST
+    smtp_port = settings.OUTLOOK_PORT
+
+    subject = f"🔐 Contraseña para abrir el archivo '{filename}'"
+
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <body style="font-family: Arial, sans-serif;">
+        <h2>🔐 Tu archivo ha sido protegido</h2>
+        <p>Has descargado el archivo: <strong>{filename}</strong></p>
+        <p>Para abrirlo, necesitas la siguiente contraseña:</p>
+        <p style="font-size: 20px; font-weight: bold; color: #2c3e50;">{password}</p>
+        <p>⚠️ Guarda esta contraseña en un lugar seguro.</p>
+        <hr>
+        <p style="font-size: 12px; color: #888;">Este es un mensaje automático. No respondas a este correo.</p>
+    </body>
+    </html>
+    """
+
+    text_body = f"""
+    Has descargado el archivo: {filename}
+    Contraseña para abrir el PDF: {password}
+    Guarda esta contraseña en un lugar seguro.
+    """
+
+    message = MIMEMultipart("alternative")
+    message["From"] = sender_email
+    message["To"] = to_email
+    message["Subject"] = Header(subject, "utf-8")
+
+    message.attach(MIMEText(text_body, "plain", "utf-8"))
+    message.attach(MIMEText(html_body, "html", "utf-8"))
+
+    try:
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.ehlo()
+        server.starttls(context=context)
+        server.ehlo()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, to_email, message.as_string())
+        server.quit()
+
+        print(f"✅ Contraseña enviada a {to_email}")
+        return True
+    except Exception as e:
+        print(f"❌ Error al enviar contraseña a {to_email}: {str(e)}")
+        raise e

@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, request, jsonify, send_file
 from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload, require_file_permission
 from app.db.config import get_db
@@ -7,47 +8,138 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 import mimetypes
 import io
-
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.fernet import Fernet
+from werkzeug.utils import secure_filename
 files_bp = Blueprint('files', __name__, url_prefix='/files')
+from app.auth.utils.file_utils import generate_secure_password, protect_pdf
+from app.auth.utils.email_utils import send_password_email  
+
+import hashlib
 
 # 📤 Subir archivo
 @files_bp.route('/', methods=['POST'])
 @require_auth
-@require_can_upload  
+@require_can_upload
 def upload_file():
     db = next(get_db())
-    user_id = request.user.get('user_id')  # Obtenido desde JWT
+    user_id = request.user.get('user_id')
+    user = db.query(User).filter(User.id == user_id).first()
 
     file = request.files.get('file')
     if not file:
         return jsonify({"error": "No se ha enviado ningún archivo."}), 400
 
-    # ✅ Registrar el archivo (la validación de permisos ya fue realizada por el decorador)
-    new_file = File(
-        user_id=user_id,
-        file_name=file.filename,
-        file_data=file.read(),
-        created_at=datetime.now(),
-        updated_at=datetime.now()
-    )
+    file_data = file.read()
 
-    db.add(new_file)
-    db.commit()
+    try:
+        # 1️⃣ Calcular hash del archivo
+        file_hash = hashlib.sha256(file_data).hexdigest()
 
-    return jsonify({"message": "Archivo subido correctamente.", "file_id": new_file.id}), 201
+        # 2️⃣ Verificar si ya existe un archivo con el mismo hash (evitar duplicados)
+        existing_file = db.query(File).filter(File.file_hash == file_hash).first()
+        if existing_file:
+            return jsonify({
+                "message": "El archivo ya existe en el sistema.",
+                "file_id": existing_file.id
+            }), 200
+
+        # 3️⃣ Desencriptar la clave privada del usuario
+        secret_key = os.getenv("SIGNATURE_SECRET_KEY")
+        if not secret_key:
+            return jsonify({"error": "Configuración de clave secreta no encontrada."}), 500
+
+        fernet = Fernet(secret_key.encode())
+        private_key_bytes = fernet.decrypt(user.encrypted_private_key)
+
+        private_key = serialization.load_pem_private_key(
+            private_key_bytes,
+            password=None,
+        )
+
+        # 4️⃣ Firmar el archivo
+        signature = private_key.sign(
+            file_data,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+
+        # 5️⃣ Guardar archivo, firma y hash
+        new_file = File(
+            user_id=user_id,
+            file_name=secure_filename(file.filename),
+            file_data=file_data,
+            signature=signature,
+            file_hash=file_hash,  # ✅ Guarda el hash calculado
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+
+        db.add(new_file)
+        db.commit()
+
+        return jsonify({
+            "message": "Archivo subido y firmado correctamente.",
+            "file_id": new_file.id
+        }), 201
+
+    except Exception as e:
+        db.rollback()
+        return jsonify({"error": f"Error al procesar la firma: {str(e)}"}), 500
 
 
 
 @files_bp.route('/<int:file_id>', methods=['GET'])
 @require_auth
 @require_active_user
-@require_file_permission('download')  # 👈 Middleware que valida si puede descargar
+@require_file_permission('download')  # 👈 Valida si puede descargar
 def download_file(file_id):
     db = next(get_db())
     user_id = request.user.get('user_id')
 
-    # ✅ Buscar el archivo (ya se validó la existencia y permisos en el middleware)
+    # ✅ Buscar el archivo
     file_record = db.query(File).filter(File.id == file_id).first()
+    if not file_record:
+        return jsonify({"error": "Archivo no encontrado."}), 404
+
+    # ✅ Recuperar la clave pública del usuario que subió el archivo
+    uploader = db.query(User).filter(User.id == file_record.user_id).first()
+    if not uploader or not uploader.public_key:
+        return jsonify({"error": "No se puede verificar la firma del archivo. Clave pública no disponible."}), 400
+
+    # ✅ Verificar la firma antes de permitir la descarga
+    try:
+        public_key = serialization.load_pem_public_key(uploader.public_key)
+        public_key.verify(
+            file_record.signature,
+            file_record.file_data,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+    except Exception:
+        return jsonify({"error": "La firma del archivo no es válida. Posible alteración de datos."}), 400
+
+    # ✅ Generar contraseña y proteger el PDF
+    password = generate_secure_password()
+    protected_pdf_data = protect_pdf(file_record.file_data, password)
+
+    # ✅ Obtener el correo del usuario que descarga
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user or not user.email:
+        return jsonify({"error": "No se pudo obtener el correo del usuario."}), 500
+
+    # ✅ Enviar contraseña por correo
+    try:
+        send_password_email(user.email, password, file_record.file_name)
+    except Exception as e:
+        return jsonify({"error": f"No se pudo enviar la contraseña por correo: {str(e)}"}), 500
 
     # ✅ Registrar historial de descarga
     download_log = DownloadHistory(
@@ -59,17 +151,17 @@ def download_file(file_id):
     db.add(download_log)
     db.commit()
 
+    # ✅ Enviar archivo protegido
     mime_type, _ = mimetypes.guess_type(file_record.file_name)
     if not mime_type:
-        mime_type = "application/octet-stream"
+        mime_type = "application/pdf"
 
     return send_file(
-        io.BytesIO(file_record.file_data),
+        io.BytesIO(protected_pdf_data),
         download_name=file_record.file_name,
         mimetype=mime_type,
         as_attachment=True
     )
-
 
 
 @files_bp.route('/', methods=['GET'])
@@ -233,6 +325,7 @@ def share_file(file_id):
 def update_file(file_id):
     db = next(get_db())
     user_id = request.user.get('user_id')
+    user = db.query(User).filter(User.id == user_id).first()
     file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
 
     if not file:
@@ -245,20 +338,48 @@ def update_file(file_id):
     if not new_file and not new_file_name:
         return jsonify({"error": "Debes enviar al menos un archivo o un nuevo nombre."}), 400
 
-    # ✅ Actualizar archivo si se envió uno nuevo
-    if new_file:
-        file.file_data = new_file.read()
+    try:
+        # ✅ Actualizar archivo si se envió uno nuevo
+        if new_file:
+            file_data = new_file.read()
 
-    # ✅ Actualizar nombre si se envió uno nuevo
-    if new_file_name:
-        file.file_name = new_file_name
+            # 1️⃣ Recalcular hash
+            file_hash = hashlib.sha256(file_data).hexdigest()
+            file.file_hash = file_hash
+            file.file_data = file_data
 
-    file.updated_at = datetime.now()
-    db.commit()
+            # 2️⃣ Regenerar firma digital
+            secret_key = os.getenv("SIGNATURE_SECRET_KEY")
+            if not secret_key:
+                return jsonify({"error": "Configuración de clave secreta no encontrada."}), 500
 
-    return jsonify({"message": "Archivo actualizado correctamente.", "file_id": file.id}), 200
+            fernet = Fernet(secret_key.encode())
+            private_key_bytes = fernet.decrypt(user.encrypted_private_key)
+            private_key = serialization.load_pem_private_key(private_key_bytes, password=None)
 
+            signature = private_key.sign(
+                file_data,
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            )
+            file.signature = signature
 
+        # ✅ Actualizar nombre si se envió uno nuevo
+        if new_file_name:
+            file.file_name = new_file_name
+
+        file.updated_at = datetime.now()
+        db.commit()
+
+        return jsonify({"message": "Archivo actualizado correctamente.", "file_id": file.id}), 200
+
+    except Exception as e:
+        db.rollback()
+        return jsonify({"error": f"Error al actualizar la firma: {str(e)}"}), 500
+    
 @files_bp.route('/<int:file_id>/permissions', methods=['PUT'])
 @require_auth
 @require_active_user
