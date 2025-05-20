@@ -55,7 +55,7 @@ def update_user_role_or_status():
 
 @admin_bp.route('/users', methods=['GET'])
 @require_auth
-@require_admin
+
 def list_users():
     db = SessionLocal()
     current_user_id = request.user.get('user_id')
