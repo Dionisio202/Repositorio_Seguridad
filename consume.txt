@@ -323,3 +323,46 @@ Ver archivo
 http://localhost:5000/files/id del archivo/view
 
 | Authorization | Bearer TU_TOKEN_JWT_AQUI |
+
+
+
+---------------------------------------
+
+PUT http://localhost:5000/files/<file_id>/permissions
+
+Authorization: Bearer <tu_token>
+Content-Type: application/json
+
+{
+  "target_user_id": 5,
+  "permission_type": "both"  // Opciones: view | download | both | none
+}
+{
+  "message": "Permiso actualizado a 'both' correctamente."
+}
+
+--------------------------------------------------------------
+
+GET /files/<file_id>/permissions/users
+
+Authorization	Bearer <tu_token_jwt>
+ Ejemplo de Respuesta
+{
+  "file_id": 12,
+  "users": [
+    {
+      "user_id": 2,
+      "email": "ana@example.com",
+      "first_name": "Ana",
+      "last_name": "López",
+      "permission_type": "download"
+    },
+    {
+      "user_id": 3,
+      "email": "juan@example.com",
+      "first_name": "Juan",
+      "last_name": "Pérez",
+      "permission_type": "none"
+    }
+  ]
+}

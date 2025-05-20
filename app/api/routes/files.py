@@ -489,3 +489,38 @@ def view_file(file_id):
         mimetype=mime_type,
         as_attachment=False  # 👈 Importante: Esto permite mostrar en navegador
     )
+
+@files_bp.route('/<int:file_id>/permissions/users', methods=['GET'])
+@require_auth
+@require_active_user
+def get_users_permissions_for_file(file_id):
+    db = next(get_db())
+    current_user_id = request.user.get('user_id')
+
+    # Verificar que el archivo le pertenezca al usuario actual
+    file = db.query(File).filter(File.id == file_id, File.user_id == current_user_id).first()
+    if not file:
+        return jsonify({"error": "No tienes acceso a este archivo o no existe."}), 403
+
+    # Obtener todos los usuarios del sistema (excepto el dueño del archivo)
+    all_users = db.query(User).filter(User.id != current_user_id).all()
+
+    # Obtener permisos existentes sobre este archivo
+    permissions = db.query(FilePermission).filter(FilePermission.file_id == file_id).all()
+    permissions_map = {perm.granted_user_id: perm.permission_type for perm in permissions}
+
+    # Armar respuesta
+    users_permissions = []
+    for user in all_users:
+        users_permissions.append({
+            "user_id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "permission_type": permissions_map.get(user.id, "none")
+        })
+
+    return jsonify({
+        "file_id": file_id,
+        "users": users_permissions
+    }), 200
