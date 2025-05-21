@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 files_bp = Blueprint('files', __name__, url_prefix='/files')
 from app.auth.utils.file_utils import generate_secure_password, protect_pdf
 from app.auth.utils.email_utils import send_password_email  
+from app.db.models import FileAuditLog
 
 import hashlib
 
@@ -226,7 +227,6 @@ def list_files():
     })
 
 
-
 @files_bp.route('/<int:file_id>', methods=['DELETE'])
 @require_auth
 @require_active_user
@@ -244,6 +244,18 @@ def delete_file(file_id):
     if file.user_id != user_id and user_role != "admin":
         return jsonify({"error": "No tienes permisos para eliminar este archivo."}), 403
 
+    # ✅ Registrar auditoría de eliminación antes de borrar
+    from app.db.models import FileAuditLog  # Asegúrate de importar si no lo tienes
+    audit = FileAuditLog(
+        user_id=user_id,
+        file_id=file.id,
+        action='delete',
+        ip_address=request.remote_addr,
+        timestamp=datetime.utcnow(),
+        details=f"Archivo eliminado. Nombre: {file.file_name}"
+    )
+    db.add(audit)
+
     # ✅ Eliminar permisos asociados
     db.query(FilePermission).filter(FilePermission.file_id == file_id).delete()
 
@@ -255,7 +267,6 @@ def delete_file(file_id):
     db.commit()
 
     return jsonify({"message": "Archivo y registros relacionados eliminados correctamente."}), 200
-
 
 
 @files_bp.route('/<int:file_id>/share', methods=['POST'])
@@ -331,7 +342,6 @@ def update_file(file_id):
     if not file:
         return jsonify({"error": "Archivo no encontrado o sin permisos para actualizarlo."}), 404
 
-    # ✅ Obtener datos del request
     new_file = request.files.get('file')
     new_file_name = request.form.get('file_name')
 
@@ -342,13 +352,10 @@ def update_file(file_id):
         # ✅ Actualizar archivo si se envió uno nuevo
         if new_file:
             file_data = new_file.read()
-
-            # 1️⃣ Recalcular hash
             file_hash = hashlib.sha256(file_data).hexdigest()
             file.file_hash = file_hash
             file.file_data = file_data
 
-            # 2️⃣ Regenerar firma digital
             secret_key = os.getenv("SIGNATURE_SECRET_KEY")
             if not secret_key:
                 return jsonify({"error": "Configuración de clave secreta no encontrada."}), 500
@@ -367,11 +374,23 @@ def update_file(file_id):
             )
             file.signature = signature
 
-        # ✅ Actualizar nombre si se envió uno nuevo
         if new_file_name:
             file.file_name = new_file_name
 
         file.updated_at = datetime.now()
+        db.commit()
+
+        # 🔐 Registrar auditoría de actualización
+        from app.db.models import FileAuditLog  # Asegúrate de importar
+        audit = FileAuditLog(
+            user_id=user_id,
+            file_id=file.id,
+            action='update',
+            ip_address=request.remote_addr,
+            timestamp=datetime.utcnow(),
+            details=f"Archivo actualizado. Nombre: {file.file_name}"
+        )
+        db.add(audit)
         db.commit()
 
         return jsonify({"message": "Archivo actualizado correctamente.", "file_id": file.id}), 200
@@ -379,6 +398,7 @@ def update_file(file_id):
     except Exception as e:
         db.rollback()
         return jsonify({"error": f"Error al actualizar la firma: {str(e)}"}), 500
+
     
 @files_bp.route('/<int:file_id>/permissions', methods=['PUT'])
 @require_auth

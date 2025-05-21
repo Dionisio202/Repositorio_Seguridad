@@ -366,3 +366,144 @@ Authorization	Bearer <tu_token_jwt>
     }
   ]
 }
+
+
+------------------------------------------------
+Auditoria 
+ojo que no necesariamente se tiene que enviar una fech asi nos e envia una fech atrae todo 
+---------------------------------------------------------------------------------
+📥 Ver Historial de Descargas
+http://localhost:5000/audit/downloads?user_id=5&start_date=2025-05-01&end_date=2025-05-20
+Headers:
+Authorization: Bearer <tu_token_JWT>
+{
+  "logs": [
+    "[2025-05-11T10:00:00] Usuario juan@example.com descargó archivo 12 desde IP 192.168.1.10"
+  ],
+  "data": [
+    {
+      "id": 1,
+      "user_id": 5,
+      "email": "juan@example.com",
+      "file_id": 12,
+      "download_time": "2025-05-11T10:00:00",
+      "ip_address": "192.168.1.10",
+      "user_agent": "Mozilla/5.0"
+    }
+  ]
+}
+
+
+------------------------------------------------------------------------
+
+👁 Ver Auditoría de Acciones en Archivos (update/delete)
+GET http://localhost:5000/audit/file-actions?file_id=12
+
+Headers:
+Authorization: Bearer <tu_token_JWT>
+{
+  "logs": [
+    "[2025-05-11T10:30:00] Usuario juan@example.com ejecutó 'update' sobre archivo 12 desde IP 192.168.1.10 (Archivo actualizado. Nombre: documento_v2.pdf)",
+    "[2025-05-12T12:00:00] Usuario juan@example.com ejecutó 'delete' sobre archivo 12 desde IP 192.168.1.10 (Archivo eliminado. Nombre: documento_v2.pdf)"
+  ],
+  "data": [
+    {
+      "id": 1,
+      "user_id": 5,
+      "email": "juan@example.com",
+      "file_id": 12,
+      "action": "update",
+      "timestamp": "2025-05-11T10:30:00",
+      "ip_address": "192.168.1.10",
+      "details": "Archivo actualizado. Nombre: documento_v2.pdf"
+    }
+  ]
+}
+
+
+------------------------------------------------------------------------------------
+
+🛂 Ver Permisos Otorgados
+GET http://localhost:5000/audit/permissions?user_id=3
+
+Authorization: Bearer <tu_token_JWT>
+{
+  "logs": [
+    "[2025-05-10T15:00:00] Usuario ana@example.com recibió permiso 'download' sobre archivo 8"
+  ],
+  "data": [
+    {
+      "id": 1,
+      "file_id": 8,
+      "granted_user_id": 3,
+      "email": "ana@example.com",
+      "permission_type": "download",
+      "granted_at": "2025-05-10T15:00:00"
+    }
+  ]
+}
+
+-----------------------------------------------------------------------------------------------
+👤 Ver Sesiones Activas
+
+GET http://localhost:5000/audit/sessions?user_id=5
+
+Authorization: Bearer <tu_token_JWT>
+
+{
+  "logs": [
+    "[2025-05-20T14:32:10] Usuario juan@example.com activo desde IP 192.168.0.5 con agente Mozilla/5.0"
+  ],
+  "data": [
+    {
+      "id": "abc123",
+      "user_id": 5,
+      "email": "juan@example.com",
+      "ip_address": "192.168.0.5",
+      "user_agent": "Mozilla/5.0",
+      "created_at": "2025-05-20T13:00:00",
+      "last_activity_at": "2025-05-20T14:32:10"
+    }
+  ]
+}
+
+
+--------------------------------------------------------------------------------
+🗂 Ver Archivos Subidos
+GET http://localhost:5000/audit/files?user_id=5
+
+Authorization: Bearer <tu_token_JWT>
+{
+  "logs": [
+    "[2025-05-10T09:30:00] Usuario juan@example.com subió archivo 'reporte_final.pdf'"
+  ],
+  "data": [
+    {
+      "id": 10,
+      "user_id": 5,
+      "email": "juan@example.com",
+      "file_name": "reporte_final.pdf",
+      "created_at": "2025-05-10T09:30:00"
+    }
+  ]
+}
+
+
+---------------------------------------------------
+🕵️ Ver Intentos de Login
+
+GET http://localhost:5000/audit/logins?email=admin@example.com
+
+Authorization: Bearer <tu_token_JWT>
+{
+  "logs": [
+    "[2025-05-19T10:00:00] Intento de login con email admin@example.com"
+  ],
+  "data": [
+    {
+      "id": 1,
+      "email": "admin@example.com",
+      "attempt_time": "2025-05-19T10:00:00"
+    }
+  ]
+}

@@ -73,3 +73,14 @@ class FilePermission(Base):
     granted_user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     granted_at = Column(DateTime, default=datetime.utcnow)
     permission_type = Column(String(20), nullable=False, default="view")  # "view", "download", "both"
+
+class FileAuditLog(Base):
+    __tablename__ = "file_audit_log"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    file_id = Column(Integer, nullable=False)
+    action = Column(String(20), nullable=False)  # 'update', 'delete'
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    ip_address = Column(String(45), nullable=True)
+    details = Column(String(500))  # Texto libre para cambios específicos
