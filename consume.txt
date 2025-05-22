@@ -367,10 +367,13 @@ Authorization	Bearer <tu_token_jwt>
   ]
 }
 
+total de descargas , utlimo de descarga , fecha de descarga
 
 ------------------------------------------------
 Auditoria 
 ojo que no necesariamente se tiene que enviar una fech asi nos e envia una fech atrae todo 
+
+parsearle los nombres de los archivos , y que si no mando usuario me traiga todo 
 ---------------------------------------------------------------------------------
 📥 Ver Historial de Descargas
 http://localhost:5000/audit/downloads?user_id=5&start_date=2025-05-01&end_date=2025-05-20

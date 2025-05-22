@@ -44,7 +44,7 @@ def upload_file():
             return jsonify({
                 "message": "El archivo ya existe en el sistema.",
                 "file_id": existing_file.id
-            }), 200
+            }), 400
 
         # 3️⃣ Desencriptar la clave privada del usuario
         secret_key = os.getenv("SIGNATURE_SECRET_KEY")
