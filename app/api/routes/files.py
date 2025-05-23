@@ -5,7 +5,7 @@ from app.db.config import get_db
 from app.db.models import DownloadHistory, File, FilePermission, User
 from datetime import datetime
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import desc, func
 import mimetypes
 import io
 from cryptography.hazmat.primitives import hashes, serialization
@@ -192,7 +192,7 @@ def list_files():
     # ✅ Unificar resultados
     files_list = []
 
-    # Archivos propios
+    # Archivos propios (control total)
     for f in own_files:
         files_list.append({
             "file_id": f.id,
@@ -200,7 +200,9 @@ def list_files():
             "user_id": f.user_id,
             "created_at": f.created_at,
             "access_type": "own",
-            "permission_type": "full"  # Tiene control total
+            "permission_type": "full",
+            "can_view": True,
+            "can_download": True
         })
 
     # Archivos compartidos
@@ -211,7 +213,9 @@ def list_files():
             "user_id": f.user_id,
             "created_at": f.created_at,
             "access_type": "shared",
-            "permission_type": f.permission_type  # view, download, both
+            "permission_type": f.permission_type,
+            "can_view": f.permission_type in ["view", "both"],
+            "can_download": f.permission_type in ["download", "both"]
         })
 
     # ✅ Ordenar y aplicar paginación manual
@@ -225,6 +229,7 @@ def list_files():
         "per_page": per_page,
         "files": paginated_files
     })
+
 
 
 @files_bp.route('/<int:file_id>', methods=['DELETE'])
@@ -529,15 +534,42 @@ def get_users_permissions_for_file(file_id):
     permissions = db.query(FilePermission).filter(FilePermission.file_id == file_id).all()
     permissions_map = {perm.granted_user_id: perm.permission_type for perm in permissions}
 
+    # Obtener historial de descargas con conteo y última fecha
+    download_stats = db.query(
+        DownloadHistory.user_id,
+        func.count(DownloadHistory.id).label('total_downloads'),
+        func.max(DownloadHistory.download_time).label('last_download_time')
+    ).filter(DownloadHistory.file_id == file_id).group_by(DownloadHistory.user_id).all()
+    download_map = {d.user_id: d for d in download_stats}
+
+    # Obtener última descarga para nombre de archivo
+    last_downloads = db.query(
+        DownloadHistory.user_id,
+        File.file_name,
+        DownloadHistory.download_time
+    ).join(File, File.id == DownloadHistory.file_id).filter(
+        DownloadHistory.file_id == file_id
+    ).order_by(DownloadHistory.user_id, desc(DownloadHistory.download_time)).all()
+
+    # Guardar solo el último archivo descargado por cada usuario
+    last_file_name_map = {}
+    for entry in last_downloads:
+        if entry.user_id not in last_file_name_map:
+            last_file_name_map[entry.user_id] = entry.file_name
+
     # Armar respuesta
     users_permissions = []
     for user in all_users:
+        stats = download_map.get(user.id)
         users_permissions.append({
             "user_id": user.id,
             "email": user.email,
             "first_name": user.first_name,
             "last_name": user.last_name,
-            "permission_type": permissions_map.get(user.id, "none")
+            "permission_type": permissions_map.get(user.id, "none"),
+            "total_downloads": stats.total_downloads if stats else 0,
+            "last_download_time": stats.last_download_time.isoformat() if stats else None,
+            "last_downloaded_file_name": last_file_name_map.get(user.id)
         })
 
     return jsonify({

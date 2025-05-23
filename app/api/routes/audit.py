@@ -18,7 +18,7 @@ def get_user_map(db, user_ids):
     users = db.query(User).filter(User.id.in_(user_ids)).all()
     return {u.id: u.email for u in users}
 
-# 🕵️ Intentos de inicio de sesión (ya tiene email, no necesita cambio)
+# 🕵️ Intentos de inicio de sesión
 @audit_bp.route("/logins", methods=["GET"])
 @require_auth
 @require_admin
@@ -48,25 +48,25 @@ def get_logins():
 @require_admin
 def get_downloads():
     db: Session = next(get_db())
-    user_id = request.args.get("user_id")
+    user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
 
-    query = db.query(DownloadHistory)
-    if user_id:
-        query = query.filter(DownloadHistory.user_id == int(user_id))
+    query = db.query(DownloadHistory, File.file_name).join(File, DownloadHistory.file_id == File.id)
+    if user_id is not None:
+        query = query.filter(DownloadHistory.user_id == user_id)
     if start_date:
         query = query.filter(DownloadHistory.download_time >= start_date)
     if end_date:
         query = query.filter(DownloadHistory.download_time <= end_date)
 
     results = query.order_by(desc(DownloadHistory.download_time)).all()
-    user_map = get_user_map(db, {d.user_id for d in results})
+    user_map = get_user_map(db, {d.user_id for d, _ in results})
 
     return jsonify({
         "logs": [
-            f"[{d.download_time.isoformat()}] Usuario {user_map.get(d.user_id, d.user_id)} descargó archivo {d.file_id} desde IP {d.ip_address or 'desconocida'}"
-            for d in results
+            f"[{d.download_time.isoformat()}] Usuario {user_map.get(d.user_id, d.user_id)} descargó archivo '{file_name}' desde IP {d.ip_address or 'desconocida'}"
+            for d, file_name in results
         ],
         "data": [
             {
@@ -74,10 +74,11 @@ def get_downloads():
                 "user_id": d.user_id,
                 "email": user_map.get(d.user_id),
                 "file_id": d.file_id,
+                "file_name": file_name,
                 "download_time": d.download_time.isoformat(),
                 "ip_address": d.ip_address,
                 "user_agent": d.user_agent
-            } for d in results
+            } for d, file_name in results
         ]
     })
 
@@ -87,13 +88,13 @@ def get_downloads():
 @require_admin
 def get_sessions():
     db: Session = next(get_db())
-    user_id = request.args.get("user_id")
+    user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
 
     query = db.query(ActiveSession).filter(ActiveSession.is_active == True)
-    if user_id:
-        query = query.filter(ActiveSession.user_id == int(user_id))
+    if user_id is not None:
+        query = query.filter(ActiveSession.user_id == user_id)
     if start_date:
         query = query.filter(ActiveSession.last_activity_at >= start_date)
     if end_date:
@@ -126,35 +127,36 @@ def get_sessions():
 @require_admin
 def get_permissions():
     db: Session = next(get_db())
-    user_id = request.args.get("user_id")
+    user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
 
-    query = db.query(FilePermission)
-    if user_id:
-        query = query.filter(FilePermission.granted_user_id == int(user_id))
+    query = db.query(FilePermission, File.file_name).join(File, FilePermission.file_id == File.id)
+    if user_id is not None:
+        query = query.filter(FilePermission.granted_user_id == user_id)
     if start_date:
         query = query.filter(FilePermission.granted_at >= start_date)
     if end_date:
         query = query.filter(FilePermission.granted_at <= end_date)
 
     results = query.order_by(desc(FilePermission.granted_at)).all()
-    user_map = get_user_map(db, {p.granted_user_id for p in results})
+    user_map = get_user_map(db, {p.granted_user_id for p, _ in results})
 
     return jsonify({
         "logs": [
-            f"[{p.granted_at.isoformat()}] Usuario {user_map.get(p.granted_user_id, p.granted_user_id)} recibió permiso '{p.permission_type}' sobre archivo {p.file_id}"
-            for p in results
+            f"[{p.granted_at.isoformat()}] Usuario {user_map.get(p.granted_user_id, p.granted_user_id)} recibió permiso '{p.permission_type}' sobre archivo '{file_name}'"
+            for p, file_name in results
         ],
         "data": [
             {
                 "id": p.id,
                 "file_id": p.file_id,
+                "file_name": file_name,
                 "granted_user_id": p.granted_user_id,
                 "email": user_map.get(p.granted_user_id),
                 "permission_type": p.permission_type,
                 "granted_at": p.granted_at.isoformat()
-            } for p in results
+            } for p, file_name in results
         ]
     })
 
@@ -164,13 +166,13 @@ def get_permissions():
 @require_admin
 def get_files():
     db: Session = next(get_db())
-    user_id = request.args.get("user_id")
+    user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
 
     query = db.query(File)
-    if user_id:
-        query = query.filter(File.user_id == int(user_id))
+    if user_id is not None:
+        query = query.filter(File.user_id == user_id)
     if start_date:
         query = query.filter(File.created_at >= start_date)
     if end_date:
@@ -201,28 +203,28 @@ def get_files():
 @require_admin
 def get_file_audit_logs():
     db: Session = next(get_db())
-    user_id = request.args.get("user_id")
-    file_id = request.args.get("file_id")
+    user_id = request.args.get("user_id", type=int)
+    file_id = request.args.get("file_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
 
-    query = db.query(FileAuditLog)
-    if user_id:
-        query = query.filter(FileAuditLog.user_id == int(user_id))
-    if file_id:
-        query = query.filter(FileAuditLog.file_id == int(file_id))
+    query = db.query(FileAuditLog, File.file_name).join(File, FileAuditLog.file_id == File.id)
+    if user_id is not None:
+        query = query.filter(FileAuditLog.user_id == user_id)
+    if file_id is not None:
+        query = query.filter(FileAuditLog.file_id == file_id)
     if start_date:
         query = query.filter(FileAuditLog.timestamp >= start_date)
     if end_date:
         query = query.filter(FileAuditLog.timestamp <= end_date)
 
     results = query.order_by(desc(FileAuditLog.timestamp)).all()
-    user_map = get_user_map(db, {a.user_id for a in results})
+    user_map = get_user_map(db, {a.user_id for a, _ in results})
 
     return jsonify({
         "logs": [
-            f"[{a.timestamp.isoformat()}] Usuario {user_map.get(a.user_id, a.user_id)} ejecutó '{a.action}' sobre archivo {a.file_id} desde IP {a.ip_address or 'desconocida'} ({a.details})"
-            for a in results
+            f"[{a.timestamp.isoformat()}] Usuario {user_map.get(a.user_id, a.user_id)} ejecutó '{a.action}' sobre archivo '{file_name}' desde IP {a.ip_address or 'desconocida'} ({a.details})"
+            for a, file_name in results
         ],
         "data": [
             {
@@ -230,10 +232,11 @@ def get_file_audit_logs():
                 "user_id": a.user_id,
                 "email": user_map.get(a.user_id),
                 "file_id": a.file_id,
+                "file_name": file_name,
                 "action": a.action,
                 "timestamp": a.timestamp.isoformat(),
                 "ip_address": a.ip_address,
                 "details": a.details
-            } for a in results
+            } for a, file_name in results
         ]
     })

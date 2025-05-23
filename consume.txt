@@ -156,26 +156,33 @@ Headers:
 Authorization: Bearer <session_token>
 
 {
-    "total": 2,
-    "page": 1,
-    "per_page": 10,
-    "files": [
-        {
-            "file_id": 1,
-            "file_name": "documento1.pdf",
-            "user_id": 5,
-            "created_at": "2025-05-11T10:00:00",
-            "access_type": "own"
-        },
-        {
-            "file_id": 2,
-            "file_name": "informe_compartido.docx",
-            "user_id": 8,
-            "created_at": "2025-05-10T15:30:00",
-            "access_type": "shared"
-        }
-    ]
+  "total": 2,
+  "page": 1,
+  "per_page": 10,
+  "files": [
+    {
+      "file_id": 1,
+      "file_name": "documento1.pdf",
+      "user_id": 5,
+      "created_at": "2025-05-11T10:00:00",
+      "access_type": "own",
+      "permission_type": "full",
+      "can_view": true,
+      "can_download": true
+    },
+    {
+      "file_id": 2,
+      "file_name": "informe_compartido.docx",
+      "user_id": 8,
+      "created_at": "2025-05-10T15:30:00",
+      "access_type": "shared",
+      "permission_type": "view",
+      "can_view": true,
+      "can_download": false
+    }
+  ]
 }
+
 
 --------------------------------------
 Eliminar Archivo
@@ -355,25 +362,31 @@ Authorization	Bearer <tu_token_jwt>
       "email": "ana@example.com",
       "first_name": "Ana",
       "last_name": "López",
-      "permission_type": "download"
+      "permission_type": "download",
+      "total_downloads": 3,
+      "last_download_time": "2025-05-20T10:45:00",
+      "last_downloaded_file_name": "documento_2025.pdf"
     },
     {
       "user_id": 3,
       "email": "juan@example.com",
       "first_name": "Juan",
       "last_name": "Pérez",
-      "permission_type": "none"
+      "permission_type": "none",
+      "total_downloads": 0,
+      "last_download_time": null,
+      "last_downloaded_file_name": null
     }
   ]
 }
 
-total de descargas , utlimo de descarga , fecha de descarga
+
 
 ------------------------------------------------
 Auditoria 
 ojo que no necesariamente se tiene que enviar una fech asi nos e envia una fech atrae todo 
 
-parsearle los nombres de los archivos , y que si no mando usuario me traiga todo 
+si no se envia el id de usuario trae de todos los usuarios 
 ---------------------------------------------------------------------------------
 📥 Ver Historial de Descargas
 http://localhost:5000/audit/downloads?user_id=5&start_date=2025-05-01&end_date=2025-05-20
