@@ -18,6 +18,7 @@ from app.auth.utils.email_utils import send_password_email
 from app.db.models import FileAuditLog
 
 import hashlib
+fernet = Fernet(os.getenv("FERNET_KEY").encode())
 
 # 📤 Subir archivo
 @files_bp.route('/', methods=['POST'])
@@ -466,6 +467,12 @@ def get_download_history(file_id):
     if not file:
         return jsonify({"error": "Archivo no encontrado o no tienes permisos para ver el historial."}), 404
 
+    # Obtener la clave Fernet
+    fernet_key = os.getenv("FERNET_KEY")
+    if not fernet_key:
+        return jsonify({"error": "Clave de cifrado no configurada."}), 500
+    name_fernet = Fernet(fernet_key.encode())
+
     # Consultar historial de descargas agrupado por usuario
     results = db.query(
         DownloadHistory.user_id,
@@ -476,11 +483,19 @@ def get_download_history(file_id):
     history = []
     for r in results:
         user = db.query(User).filter(User.id == r.user_id).first()
+
+        try:
+            decrypted_first_name = name_fernet.decrypt(user.first_name).decode()
+            decrypted_last_name = name_fernet.decrypt(user.last_name).decode()
+        except Exception:
+            decrypted_first_name = "[Error]"
+            decrypted_last_name = "[Error]"
+
         history.append({
             "user_id": user.id,
             "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
+            "first_name": decrypted_first_name,
+            "last_name": decrypted_last_name,
             "download_count": r.download_count,
             "last_download": r.last_download
         })
@@ -491,14 +506,13 @@ def get_download_history(file_id):
     }), 200
 
 
+
 @files_bp.route('/<int:file_id>/view', methods=['GET'])
 @require_auth
 @require_active_user
 @require_file_permission('view')  # 👈 Valida que tenga permiso 'view' o 'both'
 def view_file(file_id):
     db = next(get_db())
-    user_id = request.user.get('user_id')
-
     # ✅ Buscar el archivo (la existencia ya se validó en el middleware, pero incluimos por seguridad)
     file_record = db.query(File).filter(File.id == file_id).first()
     if not file_record:
@@ -522,19 +536,19 @@ def get_users_permissions_for_file(file_id):
     db = next(get_db())
     current_user_id = request.user.get('user_id')
 
-    # Verificar que el archivo le pertenezca al usuario actual
     file = db.query(File).filter(File.id == file_id, File.user_id == current_user_id).first()
     if not file:
         return jsonify({"error": "No tienes acceso a este archivo o no existe."}), 403
 
-    # Obtener todos los usuarios del sistema (excepto el dueño del archivo)
-    all_users = db.query(User).filter(User.id != current_user_id).all()
+    fernet_key = os.getenv("FERNET_KEY")
+    if not fernet_key:
+        return jsonify({"error": "Clave de cifrado no configurada."}), 500
+    name_fernet = Fernet(fernet_key.encode())
 
-    # Obtener permisos existentes sobre este archivo
+    all_users = db.query(User).filter(User.id != current_user_id).all()
     permissions = db.query(FilePermission).filter(FilePermission.file_id == file_id).all()
     permissions_map = {perm.granted_user_id: perm.permission_type for perm in permissions}
 
-    # Obtener historial de descargas con conteo y última fecha
     download_stats = db.query(
         DownloadHistory.user_id,
         func.count(DownloadHistory.id).label('total_downloads'),
@@ -542,7 +556,6 @@ def get_users_permissions_for_file(file_id):
     ).filter(DownloadHistory.file_id == file_id).group_by(DownloadHistory.user_id).all()
     download_map = {d.user_id: d for d in download_stats}
 
-    # Obtener última descarga para nombre de archivo
     last_downloads = db.query(
         DownloadHistory.user_id,
         File.file_name,
@@ -550,22 +563,26 @@ def get_users_permissions_for_file(file_id):
     ).join(File, File.id == DownloadHistory.file_id).filter(
         DownloadHistory.file_id == file_id
     ).order_by(DownloadHistory.user_id, desc(DownloadHistory.download_time)).all()
-
-    # Guardar solo el último archivo descargado por cada usuario
     last_file_name_map = {}
     for entry in last_downloads:
         if entry.user_id not in last_file_name_map:
             last_file_name_map[entry.user_id] = entry.file_name
 
-    # Armar respuesta
     users_permissions = []
     for user in all_users:
+        try:
+            decrypted_first_name = name_fernet.decrypt(user.first_name).decode()
+            decrypted_last_name = name_fernet.decrypt(user.last_name).decode()
+        except Exception:
+            decrypted_first_name = "[Error]"
+            decrypted_last_name = "[Error]"
+
         stats = download_map.get(user.id)
         users_permissions.append({
             "user_id": user.id,
             "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
+            "first_name": decrypted_first_name,
+            "last_name": decrypted_last_name,
             "permission_type": permissions_map.get(user.id, "none"),
             "total_downloads": stats.total_downloads if stats else 0,
             "last_download_time": stats.last_download_time.isoformat() if stats else None,

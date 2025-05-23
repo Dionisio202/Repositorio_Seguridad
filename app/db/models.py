@@ -16,8 +16,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
-    first_name = Column(String(100), nullable=False)
-    last_name = Column(String(100), nullable=False)
+    first_name = Column(LargeBinary, nullable=False)
+    last_name = Column(LargeBinary, nullable=False)
     # Rol y estado
     role = Column(String(50), default="user")  # 'admin' o 'user'
     is_active = Column(Boolean, default=True)

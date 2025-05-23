@@ -1,7 +1,9 @@
+import os
 from flask import Blueprint, request, jsonify
 from app.auth.services.midelwares import require_admin, require_auth
 from app.db.config import SessionLocal
 from app.db.models import User
+from cryptography.fernet import Fernet
 
 
 admin_bp = Blueprint('admin', __name__)
@@ -63,19 +65,31 @@ def list_users():
     try:
         users = db.query(User).filter(User.id != current_user_id).all()
 
-        users_list = [
-            {
+        fernet_key = os.getenv("FERNET_KEY")
+        if not fernet_key:
+            return jsonify({"error": "FERNET_KEY no configurada"}), 500
+        fernet = Fernet(fernet_key.encode())
+
+        users_list = []
+        for u in users:
+            try:
+                decrypted_first_name = fernet.decrypt(u.first_name).decode()
+                decrypted_last_name = fernet.decrypt(u.last_name).decode()
+            except Exception:
+                decrypted_first_name = "[Error al descifrar]"
+                decrypted_last_name = "[Error al descifrar]"
+
+            users_list.append({
                 "id": u.id,
                 "email": u.email,
-                "first_name": u.first_name,
-                "last_name": u.last_name,
+                "first_name": decrypted_first_name,
+                "last_name": decrypted_last_name,
                 "role": u.role,
                 "is_active": u.is_active,
                 "can_upload": u.can_upload,
                 "created_at": u.created_at,
                 "updated_at": u.updated_at
-            } for u in users
-        ]
+            })
 
         return jsonify({"users": users_list}), 200
 
