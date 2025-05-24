@@ -30,17 +30,27 @@ public_key_bytes = key.public_key().public_bytes(
     format=serialization.PublicFormat.SubjectPublicKeyInfo
 )
 
-# 3. Cifrar la clave privada con la SECRET_KEY de tu .env
-secret = os.getenv("SIGNATURE_SECRET_KEY")
-fernet = Fernet(secret.encode())
-encrypted_private_key = fernet.encrypt(private_key_bytes)
+# 3. Cargar claves para cifrado
+signature_secret = os.getenv("SIGNATURE_SECRET_KEY")
+fernet_secret = os.getenv("FERNET_KEY")
 
-# 4. Crear el usuario administrador
+if not signature_secret or not fernet_secret:
+    raise Exception("Las claves SIGNATURE_SECRET_KEY y FERNET_KEY no están definidas en el .env.")
+
+fernet_private_key = Fernet(signature_secret.encode())
+fernet_name = Fernet(fernet_secret.encode())
+
+# 4. Cifrar la clave privada y los nombres
+encrypted_private_key = fernet_private_key.encrypt(private_key_bytes)
+encrypted_first_name = fernet_name.encrypt("Admin".encode())
+encrypted_last_name = fernet_name.encrypt("User".encode())
+
+# 5. Crear el usuario administrador
 admin_user = User(
     email="m5954852@gmail.com",
     password_hash=generate_password_hash("Admin123!"),
-    first_name="Admin",
-    last_name="User",
+    first_name=encrypted_first_name,
+    last_name=encrypted_last_name,
     role="admin",
     is_active=True,
     can_upload=True,
@@ -54,6 +64,7 @@ db.commit()
 db.close()
 
 print("✅ Usuario administrador creado exitosamente.")
+
 
 ----
 
