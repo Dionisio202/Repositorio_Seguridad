@@ -30,26 +30,26 @@ def request_2fa():
     password = data.get("password")  
 
     if not email or not password:
-        return jsonify({"detail": "El email y la contraseña son obligatorios."}), 400
+        return jsonify({"error": "El email y la contraseña son obligatorios."}), 400
 
     db = SessionLocal()
     try:
         if is_user_blocked(db, email):
-            return jsonify({"detail": "Demasiados intentos fallidos. Intenta de nuevo en 15 minutos."}), 429
+            return jsonify({"error": "Demasiados intentos fallidos. Intenta de nuevo en 15 minutos."}), 429
 
         user = db.query(User).filter(User.email == email).first()
         if not user:
             db.add(LoginAttempt(email=email))
             db.commit()
-            return jsonify({"detail": "Usuario no encontrado."}), 404
+            return jsonify({"error": "Usuario no encontrado."}), 404
 
         if not user.is_active:
-            return jsonify({"detail": "Tu cuenta está inactiva. Contacta al administrador."}), 403
+            return jsonify({"error": "Tu cuenta está inactiva. Contacta al administrador."}), 403
 
         if not check_password_hash(user.password_hash, password):
             db.add(LoginAttempt(email=email))
             db.commit()
-            return jsonify({"detail": "Contraseña incorrecta."}), 401
+            return jsonify({"error": "Contraseña incorrecta."}), 401
 
         # ✅ Limpiar intentos fallidos exitosos
         db.query(LoginAttempt).filter(LoginAttempt.email == email).delete()
@@ -68,7 +68,7 @@ def request_2fa():
         return jsonify({"message": "Se envió el enlace de verificación a tu correo."}), 200
     except Exception as e:
         db.rollback()
-        return jsonify({"detail": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
     finally:
         db.close()
 
@@ -76,21 +76,21 @@ def request_2fa():
 def verify_link():
     token = request.args.get('token')
     if not token:
-        return jsonify({"detail": "Token de verificación faltante."}), 400
+        return jsonify({"error": "Token de verificación faltante."}), 400
 
     payload = verify_jwt(token)
     if not payload or payload.get("purpose") != "2fa_verification":
-        return jsonify({"detail": "Token inválido o expirado."}), 400
+        return jsonify({"error": "Token inválido o expirado."}), 400
 
     db = SessionLocal()
     try:
         user = db.query(User).filter(User.id == payload["user_id"]).first()
         if not user:
-            return jsonify({"detail": "Usuario no encontrado."}), 404
+            return jsonify({"error": "Usuario no encontrado."}), 404
 
         # ✅ Seguridad adicional: Verificar que siga activo
         if not user.is_active:
-            return jsonify({"detail": "Cuenta inactiva. Contacta al administrador."}), 403
+            return jsonify({"error": "Cuenta inactiva. Contacta al administrador."}), 403
 
         user.otp_code = None
         user.otp_expires = None
@@ -100,7 +100,8 @@ def verify_link():
         session_token = generate_jwt({
             "user_id": user.id,
             "email": user.email,
-            "role": user.role
+            "role": user.role,
+            "can_upload": user.can_upload 
         })
         # Registrar sesión activa
         token_hashed = hash_token(session_token)
@@ -119,7 +120,7 @@ def verify_link():
 
     except Exception as e:
         db.rollback()
-        return jsonify({"detail": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
     finally:
         db.close()
         
@@ -141,7 +142,7 @@ def logout():
         ).first()
 
         if not session_record:
-            return jsonify({"detail": "Sesión no encontrada o ya cerrada."}), 404
+            return jsonify({"error": "Sesión no encontrada o ya cerrada."}), 404
 
         session_record.is_active = False
         session_record.last_activity_at = datetime.utcnow()
@@ -150,7 +151,7 @@ def logout():
         return jsonify({"message": "Sesión cerrada exitosamente."}), 200
     except Exception as e:
         db.rollback()
-        return jsonify({"detail": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
     finally:
         db.close()
 

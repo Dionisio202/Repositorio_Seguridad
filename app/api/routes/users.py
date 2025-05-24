@@ -2,8 +2,14 @@ from flask import Blueprint, request, jsonify
 from app.db.config import SessionLocal
 from app.db.models import User
 from app.auth.services.midelwares import require_active_user, require_auth
+from cryptography.fernet import Fernet
+import os
 
 users_bp = Blueprint('users', __name__, url_prefix='/users')
+
+# Instanciar Fernet una vez
+FERNET_KEY = os.getenv("FERNET_KEY")
+fernet = Fernet(FERNET_KEY.encode()) if FERNET_KEY else None
 
 @users_bp.route('/profile', methods=['GET'])
 @require_auth
@@ -15,10 +21,14 @@ def get_profile():
         if not user:
             return jsonify({"error": "Usuario no encontrado."}), 404
 
+        # Descifrar nombres
+        decrypted_first_name = fernet.decrypt(user.first_name).decode() if user.first_name else ""
+        decrypted_last_name = fernet.decrypt(user.last_name).decode() if user.last_name else ""
+
         return jsonify({
             "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
+            "first_name": decrypted_first_name,
+            "last_name": decrypted_last_name,
             "role": user.role,
             "is_active": user.is_active,
             "can_upload": user.can_upload
@@ -47,16 +57,15 @@ def update_profile():
             return jsonify({"error": "Usuario no encontrado."}), 404
 
         if email:
-            # Verificar que no exista otro usuario con ese email
             existing_user = db.query(User).filter(User.email == email, User.id != user_id).first()
             if existing_user:
                 return jsonify({"error": "El email ya está en uso por otro usuario."}), 400
             user.email = email
 
         if first_name:
-            user.first_name = first_name
+            user.first_name = fernet.encrypt(first_name.encode())
         if last_name:
-            user.last_name = last_name
+            user.last_name = fernet.encrypt(last_name.encode())
 
         db.commit()
         return jsonify({"message": "Perfil actualizado correctamente."}), 200
