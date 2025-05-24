@@ -29,7 +29,7 @@ def register_user():
     required_fields = ['email', 'password', 'first_name', 'last_name']
     for field in required_fields:
         if field not in data:
-            return jsonify({"detail": f"El campo {field} es obligatorio."}), 400
+            return jsonify({"error": f"El campo {field} es obligatorio."}), 400
 
     email = html.escape(data.get('email', '').strip())
     password = data.get('password', '').strip()
@@ -37,21 +37,21 @@ def register_user():
     last_name = html.escape(data.get('last_name', '').strip())
 
     if len(email) > 100 or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        return jsonify({"detail": "Formato de email inválido o demasiado largo."}), 400
+        return jsonify({"error": "Formato de email inválido o demasiado largo."}), 400
 
     if len(first_name) > 50 or len(last_name) > 50:
-        return jsonify({"detail": "Nombre o apellido demasiado largo (máx 50 caracteres)."}), 400
+        return jsonify({"error": "Nombre o apellido demasiado largo (máx 50 caracteres)."}), 400
 
     if (len(password) < 8 or not re.search(r"[A-Za-z]", password) 
             or not re.search(r"\d", password) 
             or not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)):
-        return jsonify({"detail": "La contraseña debe tener al menos 8 caracteres, incluir una letra, un número y un símbolo especial."}), 400
+        return jsonify({"error": "La contraseña debe tener al menos 8 caracteres, incluir una letra, un número y un símbolo especial."}), 400
 
     db = SessionLocal()
     try:
         existing_user = db.query(User).filter(User.email == email).first()
         if existing_user:
-            return jsonify({"detail": "Ya existe un usuario con este email."}), 400
+            return jsonify({"error": "Ya existe un usuario con este email."}), 400
 
         key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
         private_key_bytes = key.private_bytes(
@@ -68,7 +68,7 @@ def register_user():
         fernet_secret = os.getenv("FERNET_KEY")  # 👈 para nombre y apellido
         if not secret or not fernet_secret:
             logging.error("Faltan claves de entorno SIGNATURE_SECRET_KEY o FERNET_KEY")
-            return jsonify({"detail": "Error interno de configuración."}), 500
+            return jsonify({"error": "Error interno de configuración."}), 500
 
         fernet = Fernet(secret.encode())
         encrypted_private_key = fernet.encrypt(private_key_bytes)
@@ -102,7 +102,7 @@ def register_user():
     except Exception as e:
         db.rollback()
         logging.exception("Error en el registro de usuario: %s", e)
-        return jsonify({"detail": "Error interno. Contacte al administrador."}), 500
+        return jsonify({"error": "Error interno. Contacte al administrador."}), 500
     finally:
         db.close()
 

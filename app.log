@@ -418,3 +418,35 @@
 2025-05-23 00:50:34,551 - INFO - 127.0.0.1 - - [23/May/2025 00:50:34] "[31m[1m\x16\x03\x01\x07\x12\x01\x00\x07\x0e\x03\x03Íæ\x11\x9c©\x80zê¯ÂT[0m" 400 -
 2025-05-23 00:51:35,956 - INFO - 127.0.0.1 - - [23/May/2025 00:51:35] "[33mGET / HTTP/1.0[0m" 404 -
 2025-05-23 00:51:36,076 - INFO - 127.0.0.1 - - [23/May/2025 00:51:36] "[33mGET /favicon.ico HTTP/1.0[0m" 404 -
+2025-05-23 01:30:54,160 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-23 01:30:54,160 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-23 01:30:54,161 - INFO -  * Restarting with stat
+2025-05-23 01:30:54,993 - WARNING -  * Debugger is active!
+2025-05-23 01:30:55,002 - INFO -  * Debugger PIN: 434-561-526
+2025-05-23 01:31:00,889 - INFO - 127.0.0.1 - - [23/May/2025 01:31:00] "OPTIONS /users/profile HTTP/1.1" 200 -
+2025-05-23 01:31:00,890 - INFO - 127.0.0.1 - - [23/May/2025 01:31:00] "OPTIONS /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:00,893 - INFO - 127.0.0.1 - - [23/May/2025 01:31:00] "OPTIONS /users/profile HTTP/1.1" 200 -
+2025-05-23 01:31:00,896 - INFO - 127.0.0.1 - - [23/May/2025 01:31:00] "OPTIONS /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:01,170 - INFO - 127.0.0.1 - - [23/May/2025 01:31:01] "GET /users/profile HTTP/1.1" 200 -
+2025-05-23 01:31:01,208 - INFO - 127.0.0.1 - - [23/May/2025 01:31:01] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:01,213 - INFO - 127.0.0.1 - - [23/May/2025 01:31:01] "GET /users/profile HTTP/1.1" 200 -
+2025-05-23 01:31:01,498 - INFO - 127.0.0.1 - - [23/May/2025 01:31:01] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:35,255 - INFO - 127.0.0.1 - - [23/May/2025 01:31:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:35,575 - INFO - 127.0.0.1 - - [23/May/2025 01:31:35] "OPTIONS /auth/admin/users HTTP/1.1" 200 -
+2025-05-23 01:31:35,577 - INFO - 127.0.0.1 - - [23/May/2025 01:31:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:35,587 - INFO - 127.0.0.1 - - [23/May/2025 01:31:35] "OPTIONS /auth/admin/users HTTP/1.1" 200 -
+2025-05-23 01:31:35,615 - INFO - 127.0.0.1 - - [23/May/2025 01:31:35] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:35,904 - INFO - 127.0.0.1 - - [23/May/2025 01:31:35] "[31m[1mGET /auth/admin/users HTTP/1.1[0m" 403 -
+2025-05-23 01:31:35,944 - INFO - 127.0.0.1 - - [23/May/2025 01:31:35] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:31:36,215 - INFO - 127.0.0.1 - - [23/May/2025 01:31:36] "[31m[1mGET /auth/admin/users HTTP/1.1[0m" 403 -
+2025-05-23 01:32:18,570 - INFO - 127.0.0.1 - - [23/May/2025 01:32:18] "OPTIONS /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:32:18,574 - INFO - 127.0.0.1 - - [23/May/2025 01:32:18] "OPTIONS /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:32:18,842 - INFO - 127.0.0.1 - - [23/May/2025 01:32:18] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:32:18,903 - INFO - 127.0.0.1 - - [23/May/2025 01:32:18] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:32:19,572 - INFO - 127.0.0.1 - - [23/May/2025 01:32:19] "OPTIONS /auth/admin/users HTTP/1.1" 200 -
+2025-05-23 01:32:19,889 - INFO - 127.0.0.1 - - [23/May/2025 01:32:19] "OPTIONS /auth/admin/users HTTP/1.1" 200 -
+2025-05-23 01:32:19,904 - INFO - 127.0.0.1 - - [23/May/2025 01:32:19] "[31m[1mGET /auth/admin/users HTTP/1.1[0m" 403 -
+2025-05-23 01:32:19,916 - INFO - 127.0.0.1 - - [23/May/2025 01:32:19] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
+2025-05-23 01:32:20,218 - INFO - 127.0.0.1 - - [23/May/2025 01:32:20] "[31m[1mGET /auth/admin/users HTTP/1.1[0m" 403 -
+2025-05-23 01:32:20,238 - INFO - 127.0.0.1 - - [23/May/2025 01:32:20] "GET /files/?page=1&per_page=50 HTTP/1.1" 200 -
