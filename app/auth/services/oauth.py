@@ -61,7 +61,7 @@ def request_2fa():
             "purpose": "2fa_verification"
         }
         verification_token = generate_jwt(token_payload, expires_in_minutes=3)
-        verification_link = f"http://localhost:5000/auth/two-factor/verify-link?token={verification_token}"
+        verification_link = f"https://localhost:5000/auth/two-factor/verify-link?token={verification_token}"
 
         send_otp_email(to_email=user.email, link=verification_link)
 
