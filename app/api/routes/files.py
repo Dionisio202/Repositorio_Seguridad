@@ -1,6 +1,7 @@
 import os
 from flask import Blueprint, request, jsonify, send_file
 from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload, require_file_permission
+from app.crypto.aes import AES128
 from app.db.config import get_db
 from app.db.models import DownloadHistory, File, FilePermission, User
 from datetime import datetime
@@ -20,6 +21,8 @@ from app.db.models import FileAuditLog
 import hashlib
 fernet = Fernet(os.getenv("FERNET_KEY").encode())
 
+
+MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
 # 📤 Subir archivo
 @files_bp.route('/', methods=['POST'])
 @require_auth
@@ -35,8 +38,12 @@ def upload_file():
 
     file_data = file.read()
 
+    # 🚫 Validar tamaño máximo del archivo
+    if len(file_data) > MAX_FILE_SIZE:
+        return jsonify({"error": f"El archivo es demasiado grande. Tamaño máximo permitido: {MAX_FILE_SIZE // (1024 * 1024)} MB"}), 400
+
     try:
-        # 1️⃣ Calcular hash del archivo
+        # 1️⃣ Calcular hash del archivo original
         file_hash = hashlib.sha256(file_data).hexdigest()
 
         # 2️⃣ Verificar si ya existe un archivo con el mismo hash (evitar duplicados)
@@ -60,7 +67,7 @@ def upload_file():
             password=None,
         )
 
-        # 4️⃣ Firmar el archivo
+        # 4️⃣ Firmar el archivo original (antes de cifrar)
         signature = private_key.sign(
             file_data,
             padding.PSS(
@@ -70,13 +77,16 @@ def upload_file():
             hashes.SHA256()
         )
 
-        # 5️⃣ Guardar archivo, firma y hash
+        # 5️⃣ Cifrar el archivo
+        file_data_encrypted = AES128.encrypt(file_data)
+
+        # 6️⃣ Guardar archivo, firma y hash (hash es del archivo original, no del cifrado)
         new_file = File(
             user_id=user_id,
             file_name=secure_filename(file.filename),
-            file_data=file_data,
-            signature=signature,
-            file_hash=file_hash,  # ✅ Guarda el hash calculado
+            file_data=file_data_encrypted,  # Archivo cifrado
+            signature=signature,            # Firma del archivo original
+            file_hash=file_hash,            # Hash del archivo original
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow()
         )
@@ -85,20 +95,21 @@ def upload_file():
         db.commit()
 
         return jsonify({
-            "message": "Archivo subido y firmado correctamente.",
+            "message": "Archivo subido, firmado y cifrado correctamente.",
             "file_id": new_file.id
         }), 201
 
     except Exception as e:
         db.rollback()
-        return jsonify({"error": f"Error al procesar la firma: {str(e)}"}), 500
+        return jsonify({"error": f"Error al procesar la firma o el cifrado: {str(e)}"}), 500
+
 
 
 
 @files_bp.route('/<int:file_id>', methods=['GET'])
 @require_auth
 @require_active_user
-@require_file_permission('download')  # 👈 Valida si puede descargar
+@require_file_permission('download')
 def download_file(file_id):
     db = next(get_db())
     user_id = request.user.get('user_id')
@@ -108,17 +119,23 @@ def download_file(file_id):
     if not file_record:
         return jsonify({"error": "Archivo no encontrado."}), 404
 
+    try:
+        # ✅ Descifrar el archivo (usando la clave del .env)
+        decrypted_file_data = AES128.decrypt(file_record.file_data)
+    except Exception as e:
+        return jsonify({"error": f"Error al descifrar el archivo: {str(e)}"}), 500
+
     # ✅ Recuperar la clave pública del usuario que subió el archivo
     uploader = db.query(User).filter(User.id == file_record.user_id).first()
     if not uploader or not uploader.public_key:
         return jsonify({"error": "No se puede verificar la firma del archivo. Clave pública no disponible."}), 400
 
-    # ✅ Verificar la firma antes de permitir la descarga
+    # ✅ Verificar la firma del archivo original (descifrado)
     try:
         public_key = serialization.load_pem_public_key(uploader.public_key)
         public_key.verify(
             file_record.signature,
-            file_record.file_data,
+            decrypted_file_data,
             padding.PSS(
                 mgf=padding.MGF1(hashes.SHA256()),
                 salt_length=padding.PSS.MAX_LENGTH
@@ -128,9 +145,9 @@ def download_file(file_id):
     except Exception:
         return jsonify({"error": "La firma del archivo no es válida. Posible alteración de datos."}), 400
 
-    # ✅ Generar contraseña y proteger el PDF
+    # ✅ Generar contraseña y proteger el PDF (si es PDF, opcional)
     password = generate_secure_password()
-    protected_pdf_data = protect_pdf(file_record.file_data, password)
+    protected_pdf_data = protect_pdf(decrypted_file_data,password)
 
     # ✅ Obtener el correo del usuario que descarga
     user = db.query(User).filter(User.id == user_id).first()
@@ -156,7 +173,7 @@ def download_file(file_id):
     # ✅ Enviar archivo protegido
     mime_type, _ = mimetypes.guess_type(file_record.file_name)
     if not mime_type:
-        mime_type = "application/pdf"
+        mime_type = "application/octet-stream"
 
     return send_file(
         io.BytesIO(protected_pdf_data),
@@ -355,13 +372,28 @@ def update_file(file_id):
         return jsonify({"error": "Debes enviar al menos un archivo o un nuevo nombre."}), 400
 
     try:
+        # ✅ Validar tamaño máximo (50 MB)
+        MAX_FILE_SIZE_MB = 50
+        if new_file:
+            new_file.seek(0, 2)  # Mover al final
+            file_size_mb = new_file.tell() / (1024 * 1024)
+            new_file.seek(0)  # Reset pointer
+
+            if file_size_mb > MAX_FILE_SIZE_MB:
+                return jsonify({"error": f"El archivo excede el tamaño máximo permitido de {MAX_FILE_SIZE_MB} MB."}), 400
+
         # ✅ Actualizar archivo si se envió uno nuevo
         if new_file:
-            file_data = new_file.read()
-            file_hash = hashlib.sha256(file_data).hexdigest()
-            file.file_hash = file_hash
-            file.file_data = file_data
+            original_data = new_file.read()
 
+            # 1️⃣ Calcular hash del archivo original (antes de cifrar)
+            file_hash = hashlib.sha256(original_data).hexdigest()
+            file.file_hash = file_hash
+
+            # 2️⃣ Cifrar el archivo
+            encrypted_data = AES128.encrypt(original_data)
+
+            # 3️⃣ Firmar el archivo original (no el cifrado)
             secret_key = os.getenv("SIGNATURE_SECRET_KEY")
             if not secret_key:
                 return jsonify({"error": "Configuración de clave secreta no encontrada."}), 500
@@ -371,23 +403,27 @@ def update_file(file_id):
             private_key = serialization.load_pem_private_key(private_key_bytes, password=None)
 
             signature = private_key.sign(
-                file_data,
+                original_data,  # ✅ Aquí está la corrección: firmar el archivo original
                 padding.PSS(
                     mgf=padding.MGF1(hashes.SHA256()),
                     salt_length=padding.PSS.MAX_LENGTH
                 ),
                 hashes.SHA256()
             )
+
+            # 4️⃣ Guardar archivo cifrado y firma
+            file.file_data = encrypted_data
             file.signature = signature
 
+        # ✅ Actualizar nombre del archivo si se envió
         if new_file_name:
             file.file_name = new_file_name
 
-        file.updated_at = datetime.now()
+        file.updated_at = datetime.utcnow()
         db.commit()
 
         # 🔐 Registrar auditoría de actualización
-        from app.db.models import FileAuditLog  # Asegúrate de importar
+        from app.db.models import FileAuditLog
         audit = FileAuditLog(
             user_id=user_id,
             file_id=file.id,
@@ -403,7 +439,10 @@ def update_file(file_id):
 
     except Exception as e:
         db.rollback()
-        return jsonify({"error": f"Error al actualizar la firma: {str(e)}"}), 500
+        return jsonify({"error": f"Error al actualizar el archivo: {str(e)}"}), 500
+
+
+
 
     
 @files_bp.route('/<int:file_id>/permissions', methods=['PUT'])
@@ -513,21 +552,31 @@ def get_download_history(file_id):
 @require_file_permission('view')  # 👈 Valida que tenga permiso 'view' o 'both'
 def view_file(file_id):
     db = next(get_db())
-    # ✅ Buscar el archivo (la existencia ya se validó en el middleware, pero incluimos por seguridad)
+    # ✅ Buscar el archivo
     file_record = db.query(File).filter(File.id == file_id).first()
     if not file_record:
         return jsonify({"error": "Archivo no encontrado."}), 404
 
-    mime_type, _ = mimetypes.guess_type(file_record.file_name)
-    if not mime_type:
-        mime_type = "application/octet-stream"
+    try:
+        # ✅ Descifrar el archivo
+        decrypted_data = AES128.decrypt(file_record.file_data)
 
-    return send_file(
-        io.BytesIO(file_record.file_data),
-        download_name=file_record.file_name,
-        mimetype=mime_type,
-        as_attachment=False  # 👈 Importante: Esto permite mostrar en navegador
-    )
+        # ✅ Obtener MIME type
+        mime_type, _ = mimetypes.guess_type(file_record.file_name)
+        if not mime_type:
+            mime_type = "application/octet-stream"
+
+        # ✅ Enviar archivo descifrado
+        return send_file(
+            io.BytesIO(decrypted_data),
+            download_name=file_record.file_name,
+            mimetype=mime_type,
+            as_attachment=False  # Para mostrar en navegador
+        )
+
+    except Exception as e:
+        return jsonify({"error": f"Error al visualizar el archivo: {str(e)}"}), 500
+
 
 @files_bp.route('/<int:file_id>/permissions/users', methods=['GET'])
 @require_auth
