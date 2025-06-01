@@ -61,7 +61,7 @@ def request_2fa():
             "purpose": "2fa_verification"
         }
         verification_token = generate_jwt(token_payload, expires_in_minutes=3)
-        verification_link = f"https://localhost:5000/auth/two-factor/verify-link?token={verification_token}"
+        verification_link = f"https://localhost/auth/two-factor/verify-link?token={verification_token}"
 
         send_otp_email(to_email=user.email, link=verification_link)
 
@@ -116,7 +116,7 @@ def verify_link():
 
 
         # ✅ Mejor práctica: Redirigir al frontend sin exponer token en URL (se maneja en frontend)
-        return redirect(f"http://localhost:5173?session_token={session_token}&role={user.role}")
+        return redirect(f"https://localhost:5173?session_token={session_token}&role={user.role}")
 
     except Exception as e:
         db.rollback()
