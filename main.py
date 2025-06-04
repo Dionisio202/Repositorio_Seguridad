@@ -9,7 +9,7 @@ from flask_cors import CORS
 # Importa otros blueprints (por ejemplo, de users, files, etc.) según tu estructura
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "https://localhost:5173"}}, supports_credentials=True)
 
 # Registrar el blueprint de autenticación con el prefijo '/auth'
 app.register_blueprint(auth_bp)
