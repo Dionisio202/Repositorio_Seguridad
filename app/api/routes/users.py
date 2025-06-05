@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import CORS
 from app.db.config import SessionLocal
 from app.db.models import User
 from app.auth.services.midelwares import require_active_user, require_auth
@@ -6,7 +7,7 @@ from cryptography.fernet import Fernet
 import os
 
 users_bp = Blueprint('users', __name__, url_prefix='/users')
-
+CORS(users_bp, origins="https://localhost:5173", supports_credentials=True)
 # Instanciar Fernet una vez
 FERNET_KEY = os.getenv("FERNET_KEY")
 fernet = Fernet(FERNET_KEY.encode()) if FERNET_KEY else None

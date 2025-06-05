@@ -5,6 +5,7 @@ import html
 import logging
 
 from flask import Blueprint, request, jsonify
+from flask_cors import CORS
 from sqlalchemy.orm import Session
 from werkzeug.security import generate_password_hash
 
@@ -21,6 +22,8 @@ logging.basicConfig(level=logging.INFO, filename='app.log',
 
 # Crear Blueprint para registro
 register_bp = Blueprint('register', __name__)
+CORS(register_bp, origins="https://localhost:5173", supports_credentials=True)
+
 
 @register_bp.route('/register', methods=['POST'])
 def register_user():

@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, request, jsonify
+from flask_cors import CORS
 from sqlalchemy.orm import Session
 from werkzeug.security import check_password_hash
 from datetime import datetime, timedelta
@@ -10,6 +11,7 @@ from app.auth.utils.jwt_utils import generate_jwt, hash_token, verify_jwt
 from app.auth.services.midelwares import require_active_user, require_auth
 
 oauth_bp = Blueprint('oauth', __name__)
+CORS(oauth_bp, origins="https://localhost:5173", supports_credentials=True)
 
 MAX_ATTEMPTS = 5
 BLOCK_TIME_MINUTES = 15

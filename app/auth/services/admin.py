@@ -1,5 +1,6 @@
 import os
 from flask import Blueprint, request, jsonify
+from flask_cors import CORS
 from app.auth.services.midelwares import require_admin, require_auth
 from app.db.config import SessionLocal
 from app.db.models import User
@@ -7,6 +8,7 @@ from cryptography.fernet import Fernet
 
 
 admin_bp = Blueprint('admin', __name__)
+CORS(admin_bp, origins="https://localhost:5173", supports_credentials=True)
 
 @admin_bp.route('/update-user', methods=['PUT'])
 @require_auth

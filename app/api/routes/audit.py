@@ -7,6 +7,8 @@ from sqlalchemy import desc
 from datetime import datetime
 
 audit_bp = Blueprint("audit", __name__, url_prefix="/audit")
+from flask_cors import CORS
+CORS(audit_bp, origins="https://localhost:5173", supports_credentials=True)
 
 def parse_date(param):
     try:

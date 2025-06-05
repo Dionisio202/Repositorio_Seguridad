@@ -19,6 +19,11 @@ from app.auth.utils.email_utils import send_password_email
 from app.db.models import FileAuditLog
 
 import hashlib
+
+from flask_cors import CORS
+
+CORS(files_bp, origins="https://localhost:5173", supports_credentials=True)
+
 fernet = Fernet(os.getenv("FERNET_KEY").encode())
 
 
@@ -620,3 +625,51 @@ def get_users_permissions_for_file(file_id):
         "file_id": file_id,
         "users": users_permissions
     }), 200
+
+
+
+@files_bp.route('/verify-signature', methods=['POST'])
+@require_auth
+def verify_signature():
+    db = next(get_db())
+
+    # 📥 Obtener datos del frontend
+    file_hash = request.json.get('file_hash')
+    signature_hex = request.json.get('signature')
+
+    if not file_hash or not signature_hex:
+        return jsonify({"error": "Se requiere el hash del archivo y la firma."}), 400
+
+    # 🧾 Convertir firma a bytes
+    try:
+        signature_bytes = bytes.fromhex(signature_hex)
+    except Exception:
+        return jsonify({"error": "Formato de firma inválido."}), 400
+
+    # 🔎 Buscar el archivo por su hash
+    file_record = db.query(File).filter(File.file_hash == file_hash).first()
+    if not file_record:
+        return jsonify({"error": "No se encontró un archivo con ese hash."}), 404
+
+    # 🔐 Obtener clave pública del autor del archivo
+    uploader = db.query(User).filter(User.id == file_record.user_id).first()
+    if not uploader or not uploader.public_key:
+        return jsonify({"error": "Clave pública no disponible para este usuario."}), 400
+
+    # 🧠 Verificar la firma sobre el hash original
+    try:
+        public_key = serialization.load_pem_public_key(uploader.public_key)
+
+        public_key.verify(
+            signature_bytes,
+            bytes.fromhex(file_hash),  # Verificación contra el hash (como fue firmado)
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+    except Exception as e:
+        return jsonify({"valid": False, "error": f"Firma inválida: {str(e)}"}), 400
+
+    return jsonify({"valid": True, "message": "Firma válida. El archivo no ha sido alterado."}), 200
