@@ -32,21 +32,25 @@ def upload_file():
     user_id = request.user.get('user_id')
     user = db.query(User).filter(User.id == user_id).first()
 
+    # 📥 Obtener archivo y campos del formulario
     file = request.files.get('file')
-    if not file:
-        return jsonify({"error": "No se ha enviado ningún archivo."}), 400
+    file_hash = request.form.get('file_hash')
+    signature_hex = request.form.get('signature')  # Firma enviada como string HEX
 
-    file_data = file.read()
+    if not file or not file_hash or not signature_hex:
+        return jsonify({"error": "Archivo, hash y firma son requeridos."}), 400
 
-    # 🚫 Validar tamaño máximo del archivo
-    if len(file_data) > MAX_FILE_SIZE:
+    encrypted_data_from_frontend = file.read()
+
+    # 🚫 Validar tamaño máximo
+    if len(encrypted_data_from_frontend) > MAX_FILE_SIZE:
         return jsonify({"error": f"El archivo es demasiado grande. Tamaño máximo permitido: {MAX_FILE_SIZE // (1024 * 1024)} MB"}), 400
 
     try:
-        # 1️⃣ Calcular hash del archivo original
-        file_hash = hashlib.sha256(file_data).hexdigest()
+        # 🧾 Convertir firma de hex a bytes
+        signature_bytes = bytes.fromhex(signature_hex)
 
-        # 2️⃣ Verificar si ya existe un archivo con el mismo hash (evitar duplicados)
+        # 🔁 Verificar si ya existe un archivo con el mismo hash
         existing_file = db.query(File).filter(File.file_hash == file_hash).first()
         if existing_file:
             return jsonify({
@@ -54,39 +58,16 @@ def upload_file():
                 "file_id": existing_file.id
             }), 400
 
-        # 3️⃣ Desencriptar la clave privada del usuario
-        secret_key = os.getenv("SIGNATURE_SECRET_KEY")
-        if not secret_key:
-            return jsonify({"error": "Configuración de clave secreta no encontrada."}), 500
+        # 🔐 Aplicar segunda capa de cifrado (doble cifrado)
+        double_encrypted_data = AES128.encrypt(encrypted_data_from_frontend)
 
-        fernet = Fernet(secret_key.encode())
-        private_key_bytes = fernet.decrypt(user.encrypted_private_key)
-
-        private_key = serialization.load_pem_private_key(
-            private_key_bytes,
-            password=None,
-        )
-
-        # 4️⃣ Firmar el archivo original (antes de cifrar)
-        signature = private_key.sign(
-            file_data,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256()
-        )
-
-        # 5️⃣ Cifrar el archivo
-        file_data_encrypted = AES128.encrypt(file_data)
-
-        # 6️⃣ Guardar archivo, firma y hash (hash es del archivo original, no del cifrado)
+        # 💾 Guardar archivo cifrado, firma y hash
         new_file = File(
             user_id=user_id,
             file_name=secure_filename(file.filename),
-            file_data=file_data_encrypted,  # Archivo cifrado
-            signature=signature,            # Firma del archivo original
-            file_hash=file_hash,            # Hash del archivo original
+            file_data=double_encrypted_data,
+            signature=signature_bytes,
+            file_hash=file_hash,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow()
         )
@@ -95,14 +76,13 @@ def upload_file():
         db.commit()
 
         return jsonify({
-            "message": "Archivo subido, firmado y cifrado correctamente.",
+            "message": "Archivo doblemente cifrado y almacenado correctamente.",
             "file_id": new_file.id
         }), 201
 
     except Exception as e:
         db.rollback()
-        return jsonify({"error": f"Error al procesar la firma o el cifrado: {str(e)}"}), 500
-
+        return jsonify({"error": f"Error al procesar el archivo: {str(e)}"}), 500
 
 
 
@@ -120,36 +100,15 @@ def download_file(file_id):
         return jsonify({"error": "Archivo no encontrado."}), 404
 
     try:
-        # ✅ Descifrar el archivo (usando la clave del .env)
-        decrypted_file_data = AES128.decrypt(file_record.file_data)
+        # ✅ Quitar solo la capa de cifrado del backend (deja la del frontend)
+        decrypted_once = AES128.decrypt(file_record.file_data)
     except Exception as e:
         return jsonify({"error": f"Error al descifrar el archivo: {str(e)}"}), 500
 
-    # ✅ Recuperar la clave pública del usuario que subió el archivo
-    uploader = db.query(User).filter(User.id == file_record.user_id).first()
-    if not uploader or not uploader.public_key:
-        return jsonify({"error": "No se puede verificar la firma del archivo. Clave pública no disponible."}), 400
-
-    # ✅ Verificar la firma del archivo original (descifrado)
-    try:
-        public_key = serialization.load_pem_public_key(uploader.public_key)
-        public_key.verify(
-            file_record.signature,
-            decrypted_file_data,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256()
-        )
-    except Exception:
-        return jsonify({"error": "La firma del archivo no es válida. Posible alteración de datos."}), 400
-
-    # ✅ Generar contraseña y proteger el PDF (si es PDF, opcional)
+    # ✅ Generar contraseña aleatoria para proteger el archivo (en frontend)
     password = generate_secure_password()
-    protected_pdf_data = protect_pdf(decrypted_file_data,password)
 
-    # ✅ Obtener el correo del usuario que descarga
+    # ✅ Obtener el correo del usuario autenticado
     user = db.query(User).filter(User.id == user_id).first()
     if not user or not user.email:
         return jsonify({"error": "No se pudo obtener el correo del usuario."}), 500
@@ -170,17 +129,22 @@ def download_file(file_id):
     db.add(download_log)
     db.commit()
 
-    # ✅ Enviar archivo protegido
+    # ✅ Detectar MIME
     mime_type, _ = mimetypes.guess_type(file_record.file_name)
     if not mime_type:
         mime_type = "application/octet-stream"
 
+    # ✅ Enviar archivo y contraseña (temporalmente) al frontend
     return send_file(
-        io.BytesIO(protected_pdf_data),
+        io.BytesIO(decrypted_once),
         download_name=file_record.file_name,
         mimetype=mime_type,
-        as_attachment=True
+        as_attachment=True,
+        headers={
+            'X-File-Protection-Password': password  
+        }
     )
+
 
 
 @files_bp.route('/', methods=['GET'])
@@ -188,55 +152,69 @@ def download_file(file_id):
 @require_active_user
 def list_files():
     db = next(get_db())
-    user_id = request.user.get('user_id')
+    payload = request.user
+    user_id = payload.get('user_id')
+    user_role = payload.get('role')
 
     # Paginación
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 10))
     offset = (page - 1) * per_page
 
-    # ✅ Consulta de archivos propios
-    own_files = db.query(
-        File.id, File.file_name, File.user_id, File.created_at
-    ).filter(File.user_id == user_id).all()
-
-    # ✅ Consulta de archivos compartidos, incluyendo el tipo de permiso
-    shared_files = db.query(
-        File.id, File.file_name, File.user_id, File.created_at, FilePermission.permission_type
-    ).join(FilePermission).filter(
-        FilePermission.granted_user_id == user_id
-    ).all()
-
-    # ✅ Unificar resultados
     files_list = []
 
-    # Archivos propios (control total)
-    for f in own_files:
-        files_list.append({
-            "file_id": f.id,
-            "file_name": f.file_name,
-            "user_id": f.user_id,
-            "created_at": f.created_at,
-            "access_type": "own",
-            "permission_type": "full",
-            "can_view": True,
-            "can_download": True
-        })
+    if user_role == "admin":
+        # ✅ Si es administrador, obtener todos los archivos del sistema
+        all_files = db.query(File).all()
+        for f in all_files:
+            files_list.append({
+                "file_id": f.id,
+                "file_name": f.file_name,
+                "user_id": f.user_id,
+                "created_at": f.created_at,
+                "access_type": "admin",
+                "permission_type": "full",
+                "can_view": True,
+                "can_download": True
+            })
+    else:
+        # ✅ Archivos propios
+        own_files = db.query(
+            File.id, File.file_name, File.user_id, File.created_at
+        ).filter(File.user_id == user_id).all()
 
-    # Archivos compartidos
-    for f in shared_files:
-        files_list.append({
-            "file_id": f.id,
-            "file_name": f.file_name,
-            "user_id": f.user_id,
-            "created_at": f.created_at,
-            "access_type": "shared",
-            "permission_type": f.permission_type,
-            "can_view": f.permission_type in ["view", "both"],
-            "can_download": f.permission_type in ["download", "both"]
-        })
+        for f in own_files:
+            files_list.append({
+                "file_id": f.id,
+                "file_name": f.file_name,
+                "user_id": f.user_id,
+                "created_at": f.created_at,
+                "access_type": "own",
+                "permission_type": "full",
+                "can_view": True,
+                "can_download": True
+            })
 
-    # ✅ Ordenar y aplicar paginación manual
+        # ✅ Archivos compartidos
+        shared_files = db.query(
+            File.id, File.file_name, File.user_id, File.created_at, FilePermission.permission_type
+        ).join(FilePermission).filter(
+            FilePermission.granted_user_id == user_id
+        ).all()
+
+        for f in shared_files:
+            files_list.append({
+                "file_id": f.id,
+                "file_name": f.file_name,
+                "user_id": f.user_id,
+                "created_at": f.created_at,
+                "access_type": "shared",
+                "permission_type": f.permission_type,
+                "can_view": f.permission_type in ["view", "both"],
+                "can_download": f.permission_type in ["download", "both"]
+            })
+
+    # ✅ Ordenar y paginar
     files_list.sort(key=lambda x: x["file_id"])
     total_files = len(files_list)
     paginated_files = files_list[offset:offset + per_page]

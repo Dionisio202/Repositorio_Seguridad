@@ -79,7 +79,7 @@ def require_can_upload(f):
             if not user:
                 return jsonify({"error": "Usuario no encontrado o inactivo."}), 404
             if not user.can_upload:
-                return jsonify({"error": "No tienes permisos para subir archivos."}), 403
+                return jsonify({"error": "No tienes permisos para subir archivos."}), 501
         finally:
             db.close()
 

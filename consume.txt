@@ -143,11 +143,21 @@ Authorization: Bearer <session_token>
 
 Body (form-data):
 
-file: (Selecciona un archivo)
+| Key         | Type | Value                                                                  |
+| ----------- | ---- | ---------------------------------------------------------------------- |
+| `file`      | File | 📁 Selecciona el archivo **YA CIFRADO por el frontend**                |
+| `file_hash` | Text | 🧮 El **hash SHA-256 del archivo original** (antes del cifrado)        |
+| `signature` | Text | ✍️  La **firma digital** (en formato hexadecimal) del archivo original |
+
 
 ---------------------------------------------------------------
 Descargar Archivo
 URL: http://localhost:5000/files/<file_id>
+
+se obtendra adicioonal del archivo este header Un header adicional:  X-File-Protection-Password: 3xTj82Kp!
+Esa es la contraseña generada por el backend, que también fue enviada por correo.
+
+
 
 Method: GET
 
