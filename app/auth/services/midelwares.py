@@ -137,3 +137,17 @@ def require_file_permission(permission_required):
             return f(file_id, *args, **kwargs)
         return decorated
     return decorator
+
+from functools import wraps
+from app.db.config import SessionLocal
+
+def with_db_session(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        db = SessionLocal()
+        try:
+            # Inyectamos db como argumento a la función decorada
+            return f(db, *args, **kwargs)
+        finally:
+            db.close()
+    return decorated

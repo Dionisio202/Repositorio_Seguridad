@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, request, jsonify, send_file
-from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload, require_file_permission
+from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload, require_file_permission, with_db_session
 from app.crypto.aes import AES128
 from app.db.config import get_db
 from app.db.models import DownloadHistory, File, FilePermission, User
@@ -32,8 +32,8 @@ MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
 @files_bp.route('/', methods=['POST'])
 @require_auth
 @require_can_upload
-def upload_file():
-    db = next(get_db())
+@with_db_session
+def upload_file(db):
     user_id = request.user.get('user_id')
     user = db.query(User).filter(User.id == user_id).first()
 
@@ -96,8 +96,8 @@ def upload_file():
 @require_auth
 @require_active_user
 @require_file_permission('download')
-def download_file(file_id):
-    db = next(get_db())
+@with_db_session
+def download_file(db,file_id):
     user_id = request.user.get('user_id')
 
     # ✅ Buscar el archivo
@@ -133,12 +133,12 @@ def download_file(file_id):
         as_attachment=True
     )
 
-@files_bp.route('/protect-pdf', methods=['POST'])
+@files_bp.route('/protect-dw-pdf', methods=['POST'])
 @require_auth
 @require_active_user
 @require_file_permission('download')
-def protect_uploaded_pdf():
-    db = next(get_db())
+@with_db_session
+def protect_dowland_pdf(db):
     user_id = request.user.get('user_id')
 
     # ✅ Obtener el archivo enviado
@@ -177,8 +177,8 @@ def protect_uploaded_pdf():
 @files_bp.route('/', methods=['GET'])
 @require_auth
 @require_active_user
-def list_files():
-    db = next(get_db())
+@with_db_session
+def list_files(db):
     payload = request.user
     user_id = payload.get('user_id')
     user_role = payload.get('role')
@@ -258,8 +258,8 @@ def list_files():
 @files_bp.route('/<int:file_id>', methods=['DELETE'])
 @require_auth
 @require_active_user
-def delete_file(file_id):
-    db: Session = next(get_db())
+@with_db_session
+def delete_file(db,file_id):
     payload = request.user
     user_id = payload.get('user_id')
     user_role = payload.get('role')
@@ -300,8 +300,8 @@ def delete_file(file_id):
 @files_bp.route('/<int:file_id>/share', methods=['POST'])
 @require_auth
 @require_active_user
-def share_file(file_id):
-    db = next(get_db())
+@with_db_session
+def share_file(db,file_id):
     data = request.get_json() or {}
     user_id = request.user.get('user_id')
     target_user_id = data.get('target_user_id')
@@ -361,8 +361,8 @@ def share_file(file_id):
 @files_bp.route('/<int:file_id>', methods=['PUT'])
 @require_auth
 @require_can_upload  
-def update_file(file_id):
-    db = next(get_db())
+@with_db_session
+def update_file(db,file_id):
     user_id = request.user.get('user_id')
     user = db.query(User).filter(User.id == user_id).first()
     file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
@@ -453,8 +453,8 @@ def update_file(file_id):
 @files_bp.route('/<int:file_id>/permissions', methods=['PUT'])
 @require_auth
 @require_active_user
-def update_file_permission(file_id):
-    db = next(get_db())
+@with_db_session
+def update_file_permission(db,file_id):
     data = request.get_json() or {}
     user_id = request.user.get('user_id')
     target_user_id = data.get('target_user_id')
@@ -502,8 +502,8 @@ def update_file_permission(file_id):
 @files_bp.route('/<int:file_id>/download-history', methods=['GET'])
 @require_auth
 @require_active_user
-def get_download_history(file_id):
-    db = next(get_db())
+@with_db_session
+def get_download_history(db,file_id):
     payload = request.user
     user_id = payload.get('user_id')
     user_role = payload.get('role')
@@ -562,9 +562,9 @@ def get_download_history(file_id):
 @files_bp.route('/<int:file_id>/view', methods=['GET'])
 @require_auth
 @require_active_user
+@with_db_session
 @require_file_permission('view')  # 👈 Valida que tenga permiso 'view' o 'both'
-def view_file(file_id):
-    db = next(get_db())
+def view_file(db,file_id):
     # ✅ Buscar el archivo
     file_record = db.query(File).filter(File.id == file_id).first()
     if not file_record:
@@ -594,8 +594,8 @@ def view_file(file_id):
 @files_bp.route('/<int:file_id>/permissions/users', methods=['GET'])
 @require_auth
 @require_active_user
-def get_users_permissions_for_file(file_id):
-    db = next(get_db())
+@with_db_session
+def get_users_permissions_for_file(db,file_id):
     current_user_id = request.user.get('user_id')
 
     file = db.query(File).filter(File.id == file_id, File.user_id == current_user_id).first()
@@ -660,8 +660,8 @@ def get_users_permissions_for_file(file_id):
 
 @files_bp.route('/verify-signature', methods=['POST'])
 @require_auth
-def verify_signature():
-    db = next(get_db())
+@with_db_session
+def verify_signature(db):
 
     # 📥 Obtener datos del frontend
     file_hash = request.json.get('file_hash')

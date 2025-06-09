@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from sqlalchemy.orm import Session
-from app.auth.services.midelwares import require_admin, require_auth
+from app.auth.services.midelwares import require_admin, require_auth, with_db_session
 from app.db.config import get_db
 from app.db.models import FileAuditLog, LoginAttempt, DownloadHistory, ActiveSession, FilePermission, File, User
 from sqlalchemy import desc
@@ -24,8 +24,8 @@ def get_user_map(db, user_ids):
 @audit_bp.route("/logins", methods=["GET"])
 @require_auth
 @require_admin
-def get_logins():
-    db: Session = next(get_db())
+@with_db_session
+def get_logins(db):
     email = request.args.get("email")
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
@@ -48,8 +48,8 @@ def get_logins():
 @audit_bp.route("/downloads", methods=["GET"])
 @require_auth
 @require_admin
-def get_downloads():
-    db: Session = next(get_db())
+@with_db_session
+def get_downloads(db):
     user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
@@ -88,8 +88,8 @@ def get_downloads():
 @audit_bp.route("/sessions", methods=["GET"])
 @require_auth
 @require_admin
-def get_sessions():
-    db: Session = next(get_db())
+@with_db_session
+def get_sessions(db):
     user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
@@ -127,8 +127,8 @@ def get_sessions():
 @audit_bp.route("/permissions", methods=["GET"])
 @require_auth
 @require_admin
-def get_permissions():
-    db: Session = next(get_db())
+@with_db_session
+def get_permissions(db):
     user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
@@ -166,8 +166,8 @@ def get_permissions():
 @audit_bp.route("/files", methods=["GET"])
 @require_auth
 @require_admin
-def get_files():
-    db: Session = next(get_db())
+@with_db_session
+def get_files(db):
     user_id = request.args.get("user_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
     end_date = parse_date(request.args.get("end_date"))
@@ -203,8 +203,8 @@ def get_files():
 @audit_bp.route("/file-actions", methods=["GET"])
 @require_auth
 @require_admin
-def get_file_audit_logs():
-    db: Session = next(get_db())
+@with_db_session
+def get_file_audit_logs(db):
     user_id = request.args.get("user_id", type=int)
     file_id = request.args.get("file_id", type=int)
     start_date = parse_date(request.args.get("start_date"))
