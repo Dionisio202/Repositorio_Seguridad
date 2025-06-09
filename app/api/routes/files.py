@@ -108,6 +108,7 @@ def download_file(file_id):
         # ✅ Quitar solo la capa de cifrado del backend (deja la del frontend)
         decrypted_once = AES128.decrypt(file_record.file_data)
     except Exception as e:
+        print(f"[ERROR AES] {str(e)}")
         return jsonify({"error": f"Error al descifrar el archivo: {str(e)}"}), 500
 
     # ✅ Generar contraseña aleatoria para proteger el archivo (en frontend)
@@ -122,17 +123,21 @@ def download_file(file_id):
     try:
         send_password_email(user.email, password, file_record.file_name)
     except Exception as e:
+        print(f"[ERROR EMAIL] {str(e)}")
         return jsonify({"error": f"No se pudo enviar la contraseña por correo: {str(e)}"}), 500
 
     # ✅ Registrar historial de descarga
-    download_log = DownloadHistory(
-        user_id=user_id,
-        file_id=file_id,
-        ip_address=request.remote_addr,
-        user_agent=request.headers.get('User-Agent')
-    )
-    db.add(download_log)
-    db.commit()
+    try:
+        download_log = DownloadHistory(
+            user_id=user_id,
+            file_id=file_id,
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent')
+        )
+        db.add(download_log)
+        db.commit()
+    except Exception as e:
+        print(f"[ERROR LOG DOWNLOAD] {str(e)}")
 
     # ✅ Detectar MIME
     mime_type, _ = mimetypes.guess_type(file_record.file_name)
@@ -140,15 +145,20 @@ def download_file(file_id):
         mime_type = "application/octet-stream"
 
     # ✅ Enviar archivo y contraseña (temporalmente) al frontend
-    return send_file(
+    response = send_file(
         io.BytesIO(decrypted_once),
         download_name=file_record.file_name,
         mimetype=mime_type,
-        as_attachment=True,
-        headers={
-            'X-File-Protection-Password': password  
-        }
+        as_attachment=True
     )
+
+    # ✅ Añadir headers CORS MANUALMENTE para que React lo acepte
+    response.headers['X-File-Protection-Password'] = password
+    response.headers['Access-Control-Allow-Origin'] = 'https://localhost:5173'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+
+    return response
+
 
 
 
@@ -482,10 +492,17 @@ def update_file_permission(file_id):
 @require_active_user
 def get_download_history(file_id):
     db = next(get_db())
-    user_id = request.user.get('user_id')
+    payload = request.user
+    user_id = payload.get('user_id')
+    user_role = payload.get('role')
 
-    # Verificar que el archivo le pertenece al usuario actual
-    file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
+    # Si es admin, permitir ver cualquier archivo
+    if user_role == "admin":
+        file = db.query(File).filter(File.id == file_id).first()
+    else:
+        # Si es usuario normal, solo si es propietario
+        file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
+
     if not file:
         return jsonify({"error": "Archivo no encontrado o no tienes permisos para ver el historial."}), 404
 
@@ -526,6 +543,7 @@ def get_download_history(file_id):
         "file_id": file_id,
         "history": history
     }), 200
+
 
 
 

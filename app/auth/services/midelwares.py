@@ -100,11 +100,16 @@ def require_file_permission(permission_required):
                 return jsonify({"error": "Autenticación requerida."}), 401
 
             user_id = payload.get("user_id")
+            user_role = payload.get("role")
             db = SessionLocal()
             try:
                 file = db.query(File).filter(File.id == file_id).first()
                 if not file:
                     return jsonify({"error": "Archivo no encontrado."}), 404
+
+                # ✅ Si es admin, permitir acceso total
+                if user_role == "admin":
+                    return f(file_id, *args, **kwargs)
 
                 # ✅ Si el usuario es propietario, permitir acceso total
                 if file.user_id == user_id:
