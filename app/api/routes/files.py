@@ -27,7 +27,7 @@ CORS(files_bp, origins="https://localhost:5173", supports_credentials=True)
 fernet = Fernet(os.getenv("FERNET_KEY").encode())
 
 
-MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 # 📤 Subir archivo
 @files_bp.route('/', methods=['POST'])
 @require_auth
@@ -136,7 +136,6 @@ def download_file(db,file_id):
 @files_bp.route('/protect-dw-pdf', methods=['POST'])
 @require_auth
 @require_active_user
-@require_file_permission('download')
 @with_db_session
 def protect_dowland_pdf(db):
     user_id = request.user.get('user_id')
@@ -454,9 +453,10 @@ def update_file(db,file_id):
 @require_auth
 @require_active_user
 @with_db_session
-def update_file_permission(db,file_id):
+def update_file_permission(db, file_id):
     data = request.get_json() or {}
     user_id = request.user.get('user_id')
+    user_role = request.user.get('role')  # ✅ Añadido aquí
     target_user_id = data.get('target_user_id')
     new_permission_type = data.get('permission_type')  # 'view', 'download', 'both', 'none'
 
@@ -468,8 +468,13 @@ def update_file_permission(db,file_id):
     except (ValueError, TypeError):
         return jsonify({"error": "target_user_id debe ser un número entero válido."}), 400
 
-    # ✅ Verificar que el archivo pertenece al usuario actual
-    file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
+    # ✅ Verificar que el archivo pertenece al usuario actual o es admin
+    if user_role == "admin":
+        file = db.query(File).filter(File.id == file_id).first()
+    else:
+        # Si es usuario normal, solo si es propietario
+        file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
+
     if not file:
         return jsonify({"error": "Archivo no encontrado o no tienes permisos para modificar permisos."}), 404
 
@@ -496,7 +501,6 @@ def update_file_permission(db,file_id):
         permission.permission_type = new_permission_type
         db.commit()
         return jsonify({"message": f"Permiso actualizado a '{new_permission_type}' correctamente."}), 200
-
 
 
 @files_bp.route('/<int:file_id>/download-history', methods=['GET'])
@@ -597,8 +601,12 @@ def view_file(db,file_id):
 @with_db_session
 def get_users_permissions_for_file(db,file_id):
     current_user_id = request.user.get('user_id')
+    user_role = request.user.get('role')
 
-    file = db.query(File).filter(File.id == file_id, File.user_id == current_user_id).first()
+    if user_role == "admin":
+        file = db.query(File).filter(File.id == file_id).first()
+    else:
+        file = db.query(File).filter(File.id == file_id, File.user_id == current_user_id).first()
     if not file:
         return jsonify({"error": "No tienes acceso a este archivo o no existe."}), 403
 
@@ -607,7 +615,12 @@ def get_users_permissions_for_file(db,file_id):
         return jsonify({"error": "Clave de cifrado no configurada."}), 500
     name_fernet = Fernet(fernet_key.encode())
 
-    all_users = db.query(User).filter(User.id != current_user_id).all()
+    all_users = db.query(User).filter(
+    User.id != current_user_id,
+    User.id != file.user_id,  # ✅ excluir al dueño también
+
+    User.role != 'admin'  # ← esta línea lo filtra
+).all()
     permissions = db.query(FilePermission).filter(FilePermission.file_id == file_id).all()
     permissions_map = {perm.granted_user_id: perm.permission_type for perm in permissions}
 
