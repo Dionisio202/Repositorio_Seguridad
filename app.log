@@ -2392,3 +2392,19 @@
 2025-06-08 23:15:09,564 - INFO -  * Debugger PIN: 670-632-634
 2025-06-08 23:21:58,300 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
 2025-06-08 23:21:58,401 - INFO -  * Restarting with stat
+2025-06-08 23:21:59,200 - WARNING -  * Debugger is active!
+2025-06-08 23:21:59,203 - INFO -  * Debugger PIN: 670-632-634
+2025-06-08 23:27:57,885 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-08 23:27:57,985 - INFO -  * Restarting with stat
+2025-06-08 23:27:58,783 - WARNING -  * Debugger is active!
+2025-06-08 23:27:58,785 - INFO -  * Debugger PIN: 670-632-634
+2025-06-08 23:29:28,262 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-08 23:29:28,392 - INFO -  * Restarting with stat
+2025-06-08 23:29:29,177 - WARNING -  * Debugger is active!
+2025-06-08 23:29:29,179 - INFO -  * Debugger PIN: 670-632-634
+2025-06-08 23:29:41,310 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-08 23:29:41,425 - INFO -  * Restarting with stat
+2025-06-08 23:29:42,215 - WARNING -  * Debugger is active!
+2025-06-08 23:29:42,218 - INFO -  * Debugger PIN: 670-632-634
+2025-06-08 23:29:59,412 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-08 23:29:59,506 - INFO -  * Restarting with stat

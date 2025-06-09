@@ -91,6 +91,7 @@ def upload_file():
 
 
 
+
 @files_bp.route('/<int:file_id>', methods=['GET'])
 @require_auth
 @require_active_user
@@ -105,14 +106,52 @@ def download_file(file_id):
         return jsonify({"error": "Archivo no encontrado."}), 404
 
     try:
-        # ✅ Quitar solo la capa de cifrado del backend (deja la del frontend)
-        decrypted_once = AES128.decrypt(file_record.file_data)
+        # ✅ Descifrar el archivo (usando la clave del .env)
+        decrypted_file_data = AES128.decrypt(file_record.file_data)
     except Exception as e:
-        print(f"[ERROR AES] {str(e)}")
         return jsonify({"error": f"Error al descifrar el archivo: {str(e)}"}), 500
 
-    # ✅ Generar contraseña aleatoria para proteger el archivo (en frontend)
+    # ✅ Registrar historial de descarga
+    download_log = DownloadHistory(
+        user_id=user_id,
+        file_id=file_id,
+        ip_address=request.remote_addr,
+        user_agent=request.headers.get('User-Agent')
+    )
+    db.add(download_log)
+    db.commit()
+
+    # ✅ Enviar archivo descifrado
+    mime_type, _ = mimetypes.guess_type(file_record.file_name)
+    if not mime_type:
+        mime_type = "application/octet-stream"
+
+    return send_file(
+        io.BytesIO(decrypted_file_data),
+        download_name=file_record.file_name,
+        mimetype=mime_type,
+        as_attachment=True
+    )
+
+@files_bp.route('/protect-pdf', methods=['POST'])
+@require_auth
+@require_active_user
+@require_file_permission('download')
+def protect_uploaded_pdf():
+    db = next(get_db())
+    user_id = request.user.get('user_id')
+
+    # ✅ Obtener el archivo enviado
+    uploaded_file = request.files.get('file')
+    if not uploaded_file or uploaded_file.filename == '':
+        return jsonify({"error": "No se ha enviado ningún archivo."}), 400
+
+    # ✅ Leer el contenido del archivo
+    pdf_data = uploaded_file.read()
+
+    # ✅ Generar contraseña y proteger el PDF
     password = generate_secure_password()
+    protected_pdf_data = protect_pdf(pdf_data, password)
 
     # ✅ Obtener el correo del usuario autenticado
     user = db.query(User).filter(User.id == user_id).first()
@@ -121,44 +160,17 @@ def download_file(file_id):
 
     # ✅ Enviar contraseña por correo
     try:
-        send_password_email(user.email, password, file_record.file_name)
+        send_password_email(user.email, password, uploaded_file.filename)
     except Exception as e:
-        print(f"[ERROR EMAIL] {str(e)}")
         return jsonify({"error": f"No se pudo enviar la contraseña por correo: {str(e)}"}), 500
 
-    # ✅ Registrar historial de descarga
-    try:
-        download_log = DownloadHistory(
-            user_id=user_id,
-            file_id=file_id,
-            ip_address=request.remote_addr,
-            user_agent=request.headers.get('User-Agent')
-        )
-        db.add(download_log)
-        db.commit()
-    except Exception as e:
-        print(f"[ERROR LOG DOWNLOAD] {str(e)}")
-
-    # ✅ Detectar MIME
-    mime_type, _ = mimetypes.guess_type(file_record.file_name)
-    if not mime_type:
-        mime_type = "application/octet-stream"
-
-    # ✅ Enviar archivo y contraseña (temporalmente) al frontend
-    response = send_file(
-        io.BytesIO(decrypted_once),
-        download_name=file_record.file_name,
-        mimetype=mime_type,
+    # ✅ Devolver el PDF protegido
+    return send_file(
+        io.BytesIO(protected_pdf_data),
+        download_name=uploaded_file.filename,
+        mimetype='application/pdf',
         as_attachment=True
     )
-
-    # ✅ Añadir headers CORS MANUALMENTE para que React lo acepte
-    response.headers['X-File-Protection-Password'] = password
-    response.headers['Access-Control-Allow-Origin'] = 'https://localhost:5173'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
-
-    return response
-
 
 
 
