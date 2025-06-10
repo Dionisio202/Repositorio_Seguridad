@@ -18,6 +18,7 @@ files_bp = Blueprint('files', __name__, url_prefix='/files')
 from app.auth.utils.file_utils import generate_secure_password, protect_pdf
 from app.auth.utils.email_utils import send_password_email  
 from app.db.models import FileAuditLog
+from cryptography.hazmat.primitives.asymmetric.utils import Prehashed
 
 import hashlib
 
@@ -102,10 +103,10 @@ def upload_file(db):
 
 
 @files_bp.route('/<int:file_id>', methods=['GET'])
+@with_db_session
 @require_auth
 @require_active_user
 @require_file_permission('download')
-@with_db_session
 def download_file(db, file_id):
     user_id = request.user.get('user_id')
 
@@ -368,95 +369,6 @@ def share_file(db,file_id):
     return jsonify({"message": f"Permiso '{permission_type}' concedido correctamente."}), 200
 
 
-@files_bp.route('/<int:file_id>', methods=['PUT'])
-@require_auth
-@require_can_upload  
-@with_db_session
-def update_file(db,file_id):
-    user_id = request.user.get('user_id')
-    user = db.query(User).filter(User.id == user_id).first()
-    file = db.query(File).filter(File.id == file_id, File.user_id == user_id).first()
-
-    if not file:
-        return jsonify({"error": "Archivo no encontrado o sin permisos para actualizarlo."}), 404
-
-    new_file = request.files.get('file')
-    new_file_name = request.form.get('file_name')
-
-    if not new_file and not new_file_name:
-        return jsonify({"error": "Debes enviar al menos un archivo o un nuevo nombre."}), 400
-
-    try:
-        # ✅ Validar tamaño máximo (50 MB)
-        MAX_FILE_SIZE_MB = 50
-        if new_file:
-            new_file.seek(0, 2)  # Mover al final
-            file_size_mb = new_file.tell() / (1024 * 1024)
-            new_file.seek(0)  # Reset pointer
-
-            if file_size_mb > MAX_FILE_SIZE_MB:
-                return jsonify({"error": f"El archivo excede el tamaño máximo permitido de {MAX_FILE_SIZE_MB} MB."}), 400
-
-        # ✅ Actualizar archivo si se envió uno nuevo
-        if new_file:
-            original_data = new_file.read()
-
-            # 1️⃣ Calcular hash del archivo original (antes de cifrar)
-            file_hash = hashlib.sha256(original_data).hexdigest()
-            file.file_hash = file_hash
-
-            # 2️⃣ Cifrar el archivo
-            encrypted_data = AES128.encrypt(original_data)
-
-            # 3️⃣ Firmar el archivo original (no el cifrado)
-            secret_key = os.getenv("SIGNATURE_SECRET_KEY")
-            if not secret_key:
-                return jsonify({"error": "Configuración de clave secreta no encontrada."}), 500
-
-            fernet = Fernet(secret_key.encode())
-            private_key_bytes = fernet.decrypt(user.encrypted_private_key)
-            private_key = serialization.load_pem_private_key(private_key_bytes, password=None)
-
-            signature = private_key.sign(
-                original_data,  # ✅ Aquí está la corrección: firmar el archivo original
-                padding.PSS(
-                    mgf=padding.MGF1(hashes.SHA256()),
-                    salt_length=padding.PSS.MAX_LENGTH
-                ),
-                hashes.SHA256()
-            )
-
-            # 4️⃣ Guardar archivo cifrado y firma
-            file.file_data = encrypted_data
-            file.signature = signature
-
-        # ✅ Actualizar nombre del archivo si se envió
-        if new_file_name:
-            file.file_name = new_file_name
-
-        file.updated_at = datetime.utcnow()
-        db.commit()
-
-        # 🔐 Registrar auditoría de actualización
-        from app.db.models import FileAuditLog
-        audit = FileAuditLog(
-            user_id=user_id,
-            file_id=file.id,
-            action='update',
-            ip_address=request.remote_addr,
-            timestamp=datetime.utcnow(),
-            details=f"Archivo actualizado. Nombre: {file.file_name}"
-        )
-        db.add(audit)
-        db.commit()
-
-        return jsonify({"message": "Archivo actualizado correctamente.", "file_id": file.id}), 200
-
-    except Exception as e:
-        db.rollback()
-        return jsonify({"error": f"Error al actualizar el archivo: {str(e)}"}), 500
-
-
 
 
     
@@ -713,17 +625,29 @@ def verify_signature(db):
     # 🧠 Verificar la firma sobre el hash original
     try:
         public_key = serialization.load_pem_public_key(uploader.public_key)
-
         public_key.verify(
             signature_bytes,
-            bytes.fromhex(file_hash),  # Verificación contra el hash (como fue firmado)
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256()
+            bytes.fromhex(file_hash),
+            padding.PKCS1v15(),
+            Prehashed(hashes.SHA256())
         )
     except Exception as e:
         return jsonify({"valid": False, "error": f"Firma inválida: {str(e)}"}), 400
 
     return jsonify({"valid": True, "message": "Firma válida. El archivo no ha sido alterado."}), 200
+
+
+@files_bp.route('/by-hash/<string:file_hash>', methods=['GET'])
+@require_auth
+@with_db_session
+def get_file_signature_by_hash(db, file_hash):
+    file_record = db.query(File).filter(File.file_hash == file_hash).first()
+    if not file_record:
+        return jsonify({"error": "Archivo no encontrado."}), 404
+
+    signature_hex = file_record.signature.hex()
+
+    return jsonify({
+        "file_hash": file_record.file_hash,
+        "signature": signature_hex
+    }), 200
