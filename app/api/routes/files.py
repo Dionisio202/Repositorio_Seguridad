@@ -613,61 +613,45 @@ def get_users_permissions_for_file(db,file_id):
     }), 200
 
 
-
 @files_bp.route('/verify-signature', methods=['POST'])
 @require_auth
 @with_db_session
 def verify_signature(db):
-
-    # 📥 Obtener datos del frontend
+    # 📥 Solo se recibe el hash desde el frontend
     file_hash = request.json.get('file_hash')
-    signature_hex = request.json.get('signature')
 
-    if not file_hash or not signature_hex:
-        return jsonify({"error": "Se requiere el hash del archivo y la firma."}), 400
-
-    # 🧾 Convertir firma a bytes
-    try:
-        signature_bytes = bytes.fromhex(signature_hex)
-    except Exception:
-        return jsonify({"error": "Formato de firma inválido."}), 400
+    if not file_hash:
+        return jsonify({"error": "Se requiere el hash del archivo."}), 400
 
     # 🔎 Buscar el archivo por su hash
     file_record = db.query(File).filter(File.file_hash == file_hash).first()
-    if not file_record:
-        return jsonify({"error": "No se encontró un archivo con ese hash."}), 404
+    if not file_record or not file_record.signature:
+        return jsonify({"error": "No se encontró un archivo firmado con ese hash."}), 404
 
-    # 🔐 Obtener clave pública del autor del archivo
+    # 🔐 Obtener la clave pública del autor del archivo
     uploader = db.query(User).filter(User.id == file_record.user_id).first()
     if not uploader or not uploader.public_key:
         return jsonify({"error": "Clave pública no disponible para este usuario."}), 400
 
-    # 🧠 Verificar la firma sobre el hash original
+    # 🧠 Verificar la firma guardada sobre el hash recibido
     try:
         public_key = serialization.load_pem_public_key(uploader.public_key)
+
         public_key.verify(
-            signature_bytes,
-            bytes.fromhex(file_hash),
+            file_record.signature,            # ✅ Firma guardada en la BD (bytes)
+            bytes.fromhex(file_hash),          # ✅ Hash recibido en formato hexadecimal
             padding.PKCS1v15(),
             Prehashed(hashes.SHA256())
         )
+
     except Exception as e:
-        return jsonify({"valid": False, "error": f"Firma inválida: {str(e)}"}), 400
+        return jsonify({
+            "valid": False,
+            "error": f"Firma inválida: {str(e)}"
+        }), 400
 
-    return jsonify({"valid": True, "message": "Firma válida. El archivo no ha sido alterado."}), 200
-
-
-@files_bp.route('/by-hash/<string:file_hash>', methods=['GET'])
-@require_auth
-@with_db_session
-def get_file_signature_by_hash(db, file_hash):
-    file_record = db.query(File).filter(File.file_hash == file_hash).first()
-    if not file_record:
-        return jsonify({"error": "Archivo no encontrado."}), 404
-
-    signature_hex = file_record.signature.hex()
-
+    # ✅ Si no hubo excepción, la firma es válida
     return jsonify({
-        "file_hash": file_record.file_hash,
-        "signature": signature_hex
+        "valid": True,
+        "message": "Firma válida. El archivo no ha sido alterado."
     }), 200
