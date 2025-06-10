@@ -1,3 +1,4 @@
+import base64
 import os
 from flask import Blueprint, request, jsonify, send_file
 from app.auth.services.midelwares import require_active_user, require_auth, require_can_upload, require_file_permission, with_db_session
@@ -35,21 +36,23 @@ MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 @with_db_session
 def upload_file(db):
     user_id = request.user.get('user_id')
-    user = db.query(User).filter(User.id == user_id).first()
 
     # 📥 Obtener archivo y campos del formulario
     file = request.files.get('file')
     file_hash = request.form.get('file_hash')
     signature_hex = request.form.get('signature')  # Firma enviada como string HEX
+    pdf_password = request.form.get('pdf_password')
 
-    if not file or not file_hash or not signature_hex:
-        return jsonify({"error": "Archivo, hash y firma son requeridos."}), 400
+    if not file or not file_hash or not signature_hex or not pdf_password:
+        return jsonify({"error": "Archivo, hash, firma y contraseña son requeridos."}), 400
 
     encrypted_data_from_frontend = file.read()
 
     # 🚫 Validar tamaño máximo
     if len(encrypted_data_from_frontend) > MAX_FILE_SIZE:
-        return jsonify({"error": f"El archivo es demasiado grande. Tamaño máximo permitido: {MAX_FILE_SIZE // (1024 * 1024)} MB"}), 400
+        return jsonify({
+            "error": f"El archivo es demasiado grande. Tamaño máximo permitido: {MAX_FILE_SIZE // (1024 * 1024)} MB"
+        }), 400
 
     try:
         # 🧾 Convertir firma de hex a bytes
@@ -66,13 +69,18 @@ def upload_file(db):
         # 🔐 Aplicar segunda capa de cifrado (doble cifrado)
         double_encrypted_data = AES128.encrypt(encrypted_data_from_frontend)
 
-        # 💾 Guardar archivo cifrado, firma y hash
+        # 🔐 Cifrar la contraseña antes de guardarla
+        fernet = Fernet(os.getenv("FERNET_KEY").encode())
+        encrypted_pdf_password = fernet.encrypt(pdf_password.encode())
+
+        # 💾 Guardar archivo cifrado, firma, hash y contraseña cifrada
         new_file = File(
             user_id=user_id,
             file_name=secure_filename(file.filename),
             file_data=double_encrypted_data,
             signature=signature_bytes,
             file_hash=file_hash,
+            pdf_password=encrypted_pdf_password,  # ✅ Aquí cifrada
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow()
         )
@@ -92,12 +100,13 @@ def upload_file(db):
 
 
 
+
 @files_bp.route('/<int:file_id>', methods=['GET'])
 @require_auth
 @require_active_user
 @require_file_permission('download')
 @with_db_session
-def download_file(db,file_id):
+def download_file(db, file_id):
     user_id = request.user.get('user_id')
 
     # ✅ Buscar el archivo
@@ -121,6 +130,24 @@ def download_file(db,file_id):
     db.add(download_log)
     db.commit()
 
+    # ✅ Obtener correo del usuario que descarga
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user or not user.email:
+        return jsonify({"error": "No se pudo obtener el correo del usuario."}), 500
+
+    # ✅ Descifrar la contraseña almacenada
+    try:
+        fernet = Fernet(os.getenv("FERNET_KEY").encode())
+        decrypted_pdf_password = fernet.decrypt(file_record.pdf_password).decode()
+    except Exception as e:
+        return jsonify({"error": f"Error al descifrar la contraseña del archivo: {str(e)}"}), 500
+
+    # ✅ Enviar la contraseña descifrada por correo
+    try:
+        send_password_email(user.email, decrypted_pdf_password, file_record.file_name)
+    except Exception as e:
+        return jsonify({"error": f"No se pudo enviar la contraseña por correo: {str(e)}"}), 500
+
     # ✅ Enviar archivo descifrado
     mime_type, _ = mimetypes.guess_type(file_record.file_name)
     if not mime_type:
@@ -133,43 +160,27 @@ def download_file(db,file_id):
         as_attachment=True
     )
 
+
+
 @files_bp.route('/protect-dw-pdf', methods=['POST'])
 @require_auth
 @require_active_user
-@with_db_session
-def protect_dowland_pdf(db):
-    user_id = request.user.get('user_id')
-
-    # ✅ Obtener el archivo enviado
+def protect_dowland_pdf():
     uploaded_file = request.files.get('file')
     if not uploaded_file or uploaded_file.filename == '':
         return jsonify({"error": "No se ha enviado ningún archivo."}), 400
 
-    # ✅ Leer el contenido del archivo
     pdf_data = uploaded_file.read()
 
-    # ✅ Generar contraseña y proteger el PDF
     password = generate_secure_password()
     protected_pdf_data = protect_pdf(pdf_data, password)
 
-    # ✅ Obtener el correo del usuario autenticado
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user or not user.email:
-        return jsonify({"error": "No se pudo obtener el correo del usuario."}), 500
-
-    # ✅ Enviar contraseña por correo
-    try:
-        send_password_email(user.email, password, uploaded_file.filename)
-    except Exception as e:
-        return jsonify({"error": f"No se pudo enviar la contraseña por correo: {str(e)}"}), 500
-
-    # ✅ Devolver el PDF protegido
-    return send_file(
-        io.BytesIO(protected_pdf_data),
-        download_name=uploaded_file.filename,
-        mimetype='application/pdf',
-        as_attachment=True
-    )
+    # ✅ Devolver JSON con el PDF protegido y la contraseña
+    return jsonify({
+        "protected_pdf": base64.b64encode(protected_pdf_data).decode(),  # El archivo como base64 (para que el frontend lo descargue o lo guarde)
+        "pdf_password": password,  # La contraseña que luego te enviarán en /files/
+        "file_name": uploaded_file.filename
+    }), 200
 
 
 

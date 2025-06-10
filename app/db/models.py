@@ -40,7 +40,7 @@ class File(Base):
     file_hash = Column(String(64), nullable=True)  
     created_at = Column(DateTime, nullable=True)
     updated_at = Column(DateTime, nullable=True)
-
+    pdf_password = Column(String(255), nullable=True)  
 
 
 

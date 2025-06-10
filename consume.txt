@@ -544,3 +544,59 @@ Authorization: Bearer <tu_token_JWT>
     }
   ]
 }
+
+
+
+
+------------------------------------------------------------------------------
+
+primero el back envia el archivo y recibe el archivo protegido
+
+POST http://localhost:5000/files/protect-dw-pdf
+Headers:
+Authorization: Bearer <tu_token_JWT>
+Content-Type: multipart/form-data
+Body (form-data):
+
+Key	Type	Value
+file	File	📁 El archivo PDF original (sin proteger)
+
+este enpoint retorna esto el archivo protegido en base 64 y la contraseña y 
+el nombre del archivo para que el front end recontruya el archivo y lo cifre con aes
+{
+    "protected_pdf": "JVBERi0xLjMKJcTl8uXrp/Og0MTGCjQgMCBvYmoKPDwKL0xlbmd0aCAxMTYK... (base64)",
+    "pdf_password": "3xTj82Kp!",
+    "file_name": "documento.pdf"
+}
+
+------------------------------------------------------------------------
+luego  antes de que el front cifre con aes tiene que calcular el hash , la firma y ahi si cifralo
+y enviarme la ocntraseña de antes le envie el hash, la firma y el archvio protegido cifrado 
+
+POST http://localhost:5000/files/
+Headers:
+Authorization: Bearer <session_token>
+Content-Type: multipart/form-data
+Body (form-data):
+
+
+| Key            | Type | Value                                                                   |
+| -------------- | ---- | ----------------------------------------------------------------------- |
+| `file`         | File | 📁 PDF **protegido** (proveniente del endpoint `/files/protect-dw-pdf`) |
+| `file_hash`    | Text | 🧮 Hash SHA-256 del archivo PDF protegido String hexadecimal SHA-256 del PDF protegido (64 caracteres)     |
+| `signature`    | Text | ✍️ Firma digital en formato HEX del `file_hash`                         |
+| `pdf_password` | Text | 🔐 Contraseña generada en `/files/protect-dw-pdf` y enviada al usuario  |
+
+la respuesta que envia el servidor es : 
+{
+    "message": "Archivo doblemente cifrado y almacenado correctamente.",
+    "file_id": 123
+}
+
+-----------------------------------------------------------------
+
+Descargar Archivo
+
+GET http://localhost:5000/files/<file_id>
+
+envia el archivo quitado una capa de cifrado y oibtiene la contraseña alamcenada en la bd y lo envia al correo 

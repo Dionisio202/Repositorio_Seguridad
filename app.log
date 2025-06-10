@@ -5863,3 +5863,45 @@
 2025-06-09 01:41:29,442 - INFO - 127.0.0.1 - - [09/Jun/2025 01:41:29] "GET /audit/logins?email=eortiz5364@uta.edu.ec HTTP/1.1" 200 -
 2025-06-09 01:41:29,763 - INFO - 127.0.0.1 - - [09/Jun/2025 01:41:29] "GET /audit/sessions?user_id=4 HTTP/1.1" 200 -
 2025-06-09 01:41:29,764 - INFO - 127.0.0.1 - - [09/Jun/2025 01:41:29] "GET /audit/downloads?user_id=4 HTTP/1.1" 200 -
+2025-06-09 21:23:17,907 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-09 21:23:17,907 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-09 21:23:17,908 - INFO -  * Restarting with stat
+2025-06-09 21:23:18,538 - WARNING -  * Debugger is active!
+2025-06-09 21:23:18,541 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 21:27:23,380 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\db\\models.py', reloading
+2025-06-09 21:27:23,475 - INFO -  * Restarting with stat
+2025-06-09 21:27:24,245 - WARNING -  * Debugger is active!
+2025-06-09 21:27:24,248 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 21:29:26,972 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-09 21:29:27,078 - INFO -  * Restarting with stat
+2025-06-09 21:29:27,792 - WARNING -  * Debugger is active!
+2025-06-09 21:29:27,794 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 21:36:05,065 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-09 21:36:05,159 - INFO -  * Restarting with stat
+2025-06-09 21:36:05,844 - WARNING -  * Debugger is active!
+2025-06-09 21:36:05,847 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 21:36:43,523 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-09 21:36:43,615 - INFO -  * Restarting with stat
+2025-06-09 21:36:44,303 - WARNING -  * Debugger is active!
+2025-06-09 21:36:44,307 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 21:40:01,763 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-09 21:40:01,902 - INFO -  * Restarting with stat
+2025-06-09 21:40:02,610 - WARNING -  * Debugger is active!
+2025-06-09 21:40:02,612 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 21:44:29,842 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-09 21:44:29,933 - INFO -  * Restarting with stat
+2025-06-09 21:44:30,678 - WARNING -  * Debugger is active!
+2025-06-09 21:44:30,681 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 22:05:57,910 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-09 22:05:57,911 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-09 22:05:57,912 - INFO -  * Restarting with stat
+2025-06-09 22:05:58,559 - WARNING -  * Debugger is active!
+2025-06-09 22:05:58,561 - INFO -  * Debugger PIN: 670-632-634
+2025-06-09 22:07:20,024 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-09 22:07:20,025 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-09 22:07:20,026 - INFO -  * Restarting with stat
+2025-06-09 22:07:20,728 - WARNING -  * Debugger is active!
+2025-06-09 22:07:20,731 - INFO -  * Debugger PIN: 670-632-634
