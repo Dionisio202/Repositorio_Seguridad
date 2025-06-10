@@ -567,8 +567,12 @@ el nombre del archivo para que el front end recontruya el archivo y lo cifre con
     "protected_pdf": "JVBERi0xLjMKJcTl8uXrp/Og0MTGCjQgMCBvYmoKPDwKL0xlbmd0aCAxMTYK... (base64)",
     "pdf_password": "3xTj82Kp!",
     "file_name": "documento.pdf",
-    "private_key_pem": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BA... (clave privada en formato PEM)\n-----END PRIVATE KEY-----"
+    "file_hash": "ab34f9c47ee1bce2383fa8d2b9a9d2fc9823746f2f...",
+    "signature": "b47c2183df234a87237f3afbc8472183df..."
 }
+
+
+
 
 
 ------------------------------------------------------------------------
@@ -582,12 +586,12 @@ Content-Type: multipart/form-data
 Body (form-data):
 
 
-| Key            | Type | Value                                                                   |
-| -------------- | ---- | ----------------------------------------------------------------------- |
-| `file`         | File | 📁 PDF **protegido** (proveniente del endpoint `/files/protect-dw-pdf`) |
-| `file_hash`    | Text | 🧮 Hash SHA-256 del archivo PDF protegido String hexadecimal SHA-256 del PDF protegido (64 caracteres)     |
-| `signature`    | Text | ✍️ Firma digital en formato HEX del `file_hash`                         |
-| `pdf_password` | Text | 🔐 Contraseña generada en `/files/protect-dw-pdf` y enviada al usuario  |
+| Key            | Type | Value                                                                                                                                          |
+| -------------- | ---- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `file`         | File | 📁 PDF **protegido** (obtenido del endpoint `/files/protect-dw-pdf`). Este archivo ya debe estar protegido con contraseña y firmado.           |
+| `file_hash`    | Text | 🧮 Hash SHA-256 del **archivo PDF protegido**, en formato hexadecimal (64 caracteres). Es el `file_hash` que devolvió `/files/protect-dw-pdf`. |
+| `signature`    | Text | ✍️ Firma digital en formato HEX que devolvió `/files/protect-dw-pdf`. Es la firma sobre el **contenido del PDF protegido**.                    |
+| `pdf_password` | Text | 🔐 Contraseña generada por `/files/protect-dw-pdf`, necesaria para abrir el PDF protegido. Esta contraseña se cifra antes de almacenarse.      |
 
 la respuesta que envia el servidor es : 
 {
