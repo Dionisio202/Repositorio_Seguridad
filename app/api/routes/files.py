@@ -173,6 +173,8 @@ def protect_dowland_pdf(db):
         return jsonify({"error": "No se ha enviado ningún archivo."}), 400
 
     pdf_data = uploaded_file.read()
+
+    # ✅ Proteger el PDF con contraseña
     password = generate_secure_password()
     protected_pdf_data = protect_pdf(pdf_data, password)
 
@@ -184,22 +186,41 @@ def protect_dowland_pdf(db):
     if not user or not user.encrypted_private_key:
         return jsonify({"error": "No se encontró la clave privada del usuario."}), 404
 
-    # ✅ Descifrar la clave privada
     try:
+        # ✅ Descifrar la clave privada
         secret = os.getenv("SIGNATURE_SECRET_KEY")
         fernet = Fernet(secret.encode())
-        decrypted_private_key_bytes = fernet.decrypt(user.encrypted_private_key)
-        decrypted_private_key_pem = decrypted_private_key_bytes.decode('utf-8').strip()  # 🧼 Limpieza opcional
-    except Exception as e:
-        return jsonify({"error": f"Error al descifrar la clave privada: {str(e)}"}), 500
+        private_key_bytes = fernet.decrypt(user.encrypted_private_key)
 
-    # ✅ Devolver JSON con el PDF protegido, la contraseña y la clave privada del usuario
-    return jsonify({
-        "protected_pdf": base64.b64encode(protected_pdf_data).decode(),
-        "pdf_password": password,
-        "file_name": uploaded_file.filename,
-        "private_key_pem": decrypted_private_key_pem
-    }), 200
+        private_key = serialization.load_pem_private_key(
+            private_key_bytes,
+            password=None,
+        )
+
+        # ✅ Calcular hash del PDF protegido
+        file_hash = hashlib.sha256(protected_pdf_data).hexdigest()
+
+        # ✅ Firmar el PDF protegido
+        signature_bytes = private_key.sign(
+            protected_pdf_data,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+
+        # ✅ Devolver todo al frontend (NO se guarda en BD)
+        return jsonify({
+            "protected_pdf": base64.b64encode(protected_pdf_data).decode(),
+            "pdf_password": password,
+            "file_name": uploaded_file.filename,
+            "file_hash": file_hash,
+            "signature": signature_bytes.hex()  # se lo envías en HEX (más cómodo que base64 para front)
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": f"Error al proteger, firmar o procesar el PDF: {str(e)}"}), 500
 
 
 
@@ -617,11 +638,16 @@ def get_users_permissions_for_file(db,file_id):
 @require_auth
 @with_db_session
 def verify_signature(db):
-    # 📥 Solo se recibe el hash desde el frontend
-    file_hash = request.json.get('file_hash')
+    # 📥 Recibir el archivo desde el frontend (multipart/form-data)
+    uploaded_file = request.files.get('file')
 
-    if not file_hash:
-        return jsonify({"error": "Se requiere el hash del archivo."}), 400
+    if not uploaded_file or uploaded_file.filename == '':
+        return jsonify({"error": "No se ha enviado ningún archivo."}), 400
+
+    file_data = uploaded_file.read()
+
+    # ✅ Calcular hash del archivo recibido
+    file_hash = hashlib.sha256(file_data).hexdigest()
 
     # 🔎 Buscar el archivo por su hash
     file_record = db.query(File).filter(File.file_hash == file_hash).first()
@@ -633,15 +659,18 @@ def verify_signature(db):
     if not uploader or not uploader.public_key:
         return jsonify({"error": "Clave pública no disponible para este usuario."}), 400
 
-    # 🧠 Verificar la firma guardada sobre el hash recibido
+    # 🧠 Verificar la firma guardada sobre el contenido real del archivo recibido
     try:
         public_key = serialization.load_pem_public_key(uploader.public_key)
 
         public_key.verify(
-            file_record.signature,            # ✅ Firma guardada en la BD (bytes)
-            bytes.fromhex(file_hash),          # ✅ Hash recibido en formato hexadecimal
-            padding.PKCS1v15(),
-            Prehashed(hashes.SHA256())
+            file_record.signature,    # ✅ Firma guardada en la BD (bytes)
+            file_data,                # ✅ Contenido real del archivo recibido
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
         )
 
     except Exception as e:
