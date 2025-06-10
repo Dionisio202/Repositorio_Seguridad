@@ -166,22 +166,42 @@ def download_file(db, file_id):
 @files_bp.route('/protect-dw-pdf', methods=['POST'])
 @require_auth
 @require_active_user
-def protect_dowland_pdf():
+@with_db_session
+def protect_dowland_pdf(db):
     uploaded_file = request.files.get('file')
     if not uploaded_file or uploaded_file.filename == '':
         return jsonify({"error": "No se ha enviado ningún archivo."}), 400
 
     pdf_data = uploaded_file.read()
-
     password = generate_secure_password()
     protected_pdf_data = protect_pdf(pdf_data, password)
 
-    # ✅ Devolver JSON con el PDF protegido y la contraseña
+    # ✅ Obtener el usuario autenticado desde el token JWT
+    user_id = request.user.get('user_id')
+
+    # ✅ Obtener la clave privada cifrada del usuario
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user or not user.encrypted_private_key:
+        return jsonify({"error": "No se encontró la clave privada del usuario."}), 404
+
+    # ✅ Descifrar la clave privada
+    try:
+        secret = os.getenv("SIGNATURE_SECRET_KEY")
+        fernet = Fernet(secret.encode())
+        decrypted_private_key_bytes = fernet.decrypt(user.encrypted_private_key)
+        decrypted_private_key_pem = decrypted_private_key_bytes.decode('utf-8').strip()  # 🧼 Limpieza opcional
+    except Exception as e:
+        return jsonify({"error": f"Error al descifrar la clave privada: {str(e)}"}), 500
+
+    # ✅ Devolver JSON con el PDF protegido, la contraseña y la clave privada del usuario
     return jsonify({
-        "protected_pdf": base64.b64encode(protected_pdf_data).decode(),  # El archivo como base64 (para que el frontend lo descargue o lo guarde)
-        "pdf_password": password,  # La contraseña que luego te enviarán en /files/
-        "file_name": uploaded_file.filename
+        "protected_pdf": base64.b64encode(protected_pdf_data).decode(),
+        "pdf_password": password,
+        "file_name": uploaded_file.filename,
+        "private_key_pem": decrypted_private_key_pem
     }), 200
+
+
 
 
 

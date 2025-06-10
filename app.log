@@ -6134,3 +6134,33 @@
 2025-06-10 00:06:26,203 - INFO -  * Restarting with stat
 2025-06-10 00:06:26,961 - WARNING -  * Debugger is active!
 2025-06-10 00:06:26,964 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 00:13:43,525 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-10 00:13:43,525 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-10 00:13:43,526 - INFO -  * Restarting with stat
+2025-06-10 00:13:44,280 - WARNING -  * Debugger is active!
+2025-06-10 00:13:44,284 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 00:14:42,173 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-10 00:14:42,259 - INFO -  * Restarting with stat
+2025-06-10 00:14:43,046 - WARNING -  * Debugger is active!
+2025-06-10 00:14:43,048 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 00:14:49,735 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 00:14:49,738 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 00:14:49,788 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 00:14:49,791 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 00:14:49,803 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 00:14:49,812 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 00:14:49,824 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 00:14:49,827 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 00:14:49,846 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 00:14:49,847 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 00:14:49,858 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 00:14:49,860 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 00:14:49,880 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 00:14:49,895 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:49] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 00:14:56,421 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:56] "OPTIONS /files/by-hash/9efea1d99a618d4d5c8d8edd34289a4d76fe4ce093a8c98f9f3aff83f9508672 HTTP/1.0" 200 -
+2025-06-10 00:14:56,434 - INFO - 127.0.0.1 - - [10/Jun/2025 00:14:56] "GET /files/by-hash/9efea1d99a618d4d5c8d8edd34289a4d76fe4ce093a8c98f9f3aff83f9508672 HTTP/1.0" 200 -
+2025-06-10 00:15:00,717 - INFO - 127.0.0.1 - - [10/Jun/2025 00:15:00] "OPTIONS /files/verify-signature HTTP/1.0" 200 -
+2025-06-10 00:15:00,785 - INFO - 127.0.0.1 - - [10/Jun/2025 00:15:00] "[31m[1mPOST /files/verify-signature HTTP/1.0[0m" 400 -
+2025-06-10 00:23:38,785 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-10 00:23:38,898 - INFO -  * Restarting with stat

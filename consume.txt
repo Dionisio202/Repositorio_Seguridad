@@ -566,8 +566,10 @@ el nombre del archivo para que el front end recontruya el archivo y lo cifre con
 {
     "protected_pdf": "JVBERi0xLjMKJcTl8uXrp/Og0MTGCjQgMCBvYmoKPDwKL0xlbmd0aCAxMTYK... (base64)",
     "pdf_password": "3xTj82Kp!",
-    "file_name": "documento.pdf"
+    "file_name": "documento.pdf",
+    "private_key_pem": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BA... (clave privada en formato PEM)\n-----END PRIVATE KEY-----"
 }
+
 
 ------------------------------------------------------------------------
 luego  antes de que el front cifre con aes tiene que calcular el hash , la firma y ahi si cifralo
