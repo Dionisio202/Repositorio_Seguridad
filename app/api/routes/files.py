@@ -532,7 +532,9 @@ def get_download_history(db,file_id):
 @require_active_user
 @with_db_session
 @require_file_permission('view')  # 👈 Valida que tenga permiso 'view' o 'both'
-def view_file(db,file_id):
+def view_file(db, file_id):
+    user_id = request.user.get('user_id')
+
     # ✅ Buscar el archivo
     file_record = db.query(File).filter(File.id == file_id).first()
     if not file_record:
@@ -547,6 +549,24 @@ def view_file(db,file_id):
         if not mime_type:
             mime_type = "application/octet-stream"
 
+        # ✅ Obtener correo del usuario que ve
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user or not user.email:
+            return jsonify({"error": "No se pudo obtener el correo del usuario."}), 500
+
+        # ✅ Descifrar la contraseña almacenada
+        try:
+            fernet = Fernet(os.getenv("FERNET_KEY").encode())
+            decrypted_pdf_password = fernet.decrypt(file_record.pdf_password).decode()
+        except Exception as e:
+            return jsonify({"error": f"Error al descifrar la contraseña del archivo: {str(e)}"}), 500
+
+        # ✅ Enviar la contraseña descifrada por correo
+        try:
+            send_password_email(user.email, decrypted_pdf_password, file_record.file_name)
+        except Exception as e:
+            return jsonify({"error": f"No se pudo enviar la contraseña por correo: {str(e)}"}), 500
+
         # ✅ Enviar archivo descifrado
         return send_file(
             io.BytesIO(decrypted_data),
@@ -557,6 +577,7 @@ def view_file(db,file_id):
 
     except Exception as e:
         return jsonify({"error": f"Error al visualizar el archivo: {str(e)}"}), 500
+
 
 
 @files_bp.route('/<int:file_id>/permissions/users', methods=['GET'])

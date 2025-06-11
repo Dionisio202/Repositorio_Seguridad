@@ -6221,3 +6221,578 @@
 2025-06-10 15:19:36,903 - INFO - 127.0.0.1 - - [10/Jun/2025 15:19:36] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
 2025-06-10 15:19:36,916 - INFO - 127.0.0.1 - - [10/Jun/2025 15:19:36] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
 2025-06-10 15:19:36,946 - INFO - 127.0.0.1 - - [10/Jun/2025 15:19:36] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:27:52,317 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-10 15:27:52,317 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-10 15:27:52,319 - INFO -  * Restarting with stat
+2025-06-10 15:27:53,262 - WARNING -  * Debugger is active!
+2025-06-10 15:27:53,273 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 15:31:16,204 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:16] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:31:16,738 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:16] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:31:17,026 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:17] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 15:31:17,037 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:17] "[31m[1mPOST /files/ HTTP/1.0[0m" 401 -
+2025-06-10 15:31:17,094 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:17] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:17,133 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:17] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:17,146 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:17] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:31:17,183 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:17] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:31:30,309 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:30] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:31:44,054 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:44] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:31:56,973 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:56] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NTg3NjcwfQ.gc3dDj5IeLWo314Gf-cwFDw5xVFM0feZGr5LA0XHBBE HTTP/1.0[0m" 302 -
+2025-06-10 15:31:57,503 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:31:57,517 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:57,519 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:31:57,524 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:57,549 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:31:57,568 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:31:57,573 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:57,589 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:31:57,606 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:57,621 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:31:57,651 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:57] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:31:59,884 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:59] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:59,914 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:59] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:31:59,934 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:59] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:31:59,958 - INFO - 127.0.0.1 - - [10/Jun/2025 15:31:59] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:32:01,553 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:01] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:32:01,582 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:01] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:32:16,955 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:16] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:32:17,847 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:17] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:32:18,802 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:18] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 15:32:18,864 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:18] "[31m[1mPOST /files/ HTTP/1.0[0m" 401 -
+2025-06-10 15:32:18,916 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:18] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:32:18,941 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:18] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:32:18,967 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:18] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:32:18,993 - INFO - 127.0.0.1 - - [10/Jun/2025 15:32:18] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:43:32,349 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:32] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:43:36,670 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:36] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:43:47,786 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:47] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NTg4MzkyfQ.ZduhxKoNyoEG2lvfd9pOmsF1dE4MKwX6c79FRHzv2XI HTTP/1.0[0m" 302 -
+2025-06-10 15:43:48,707 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:43:48,723 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:43:48,727 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:43:48,732 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:43:48,743 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:43:48,747 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:43:48,760 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:43:48,762 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:43:48,771 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:43:48,784 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:43:48,801 - INFO - 127.0.0.1 - - [10/Jun/2025 15:43:48] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:47:19,096 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-10 15:47:19,198 - INFO -  * Restarting with stat
+2025-06-10 15:47:20,122 - WARNING -  * Debugger is active!
+2025-06-10 15:47:20,125 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 15:47:35,356 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:47:35,357 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:35,359 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:47:35,362 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:35,390 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:47:35,403 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:35,404 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:47:35,416 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:47:35,420 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:35,438 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:47:35,453 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:35] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:47:37,455 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:37] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:37,474 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:37] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:37,500 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:37] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:47:37,518 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:37] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:47:50,538 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:50] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:47:50,978 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:50] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:47:51,160 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:51] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 15:47:51,219 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:51] "[31m[1mPOST /files/ HTTP/1.0[0m" 401 -
+2025-06-10 15:47:51,251 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:51] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:51,271 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:51] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:47:51,291 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:51] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:47:51,311 - INFO - 127.0.0.1 - - [10/Jun/2025 15:47:51] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:50:00,901 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-10 15:50:00,994 - INFO -  * Restarting with stat
+2025-06-10 15:50:01,764 - WARNING -  * Debugger is active!
+2025-06-10 15:50:01,767 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 15:50:17,708 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:17] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:50:21,598 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:21] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:50:28,655 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:28] "[31m[1mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NTg4NDAyfQ.3U_erRDpuhkcdUDyXuUGj8NguI4Vr8_74qnQZwD88bA HTTP/1.0[0m" 400 -
+2025-06-10 15:50:28,759 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:28] "[33mGET /favicon.ico HTTP/1.0[0m" 404 -
+2025-06-10 15:50:35,801 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:35] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NTg4Nzk3fQ.TX_y0L3d9rsW4k7jqlHKBV8yB3XSbSuDNl1Eoc1gvjk HTTP/1.0[0m" 302 -
+2025-06-10 15:50:36,533 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:50:36,544 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:36,548 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:50:36,551 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:36,568 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:50:36,579 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:36,582 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:50:36,590 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:50:36,601 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:36,615 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:50:36,632 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:36] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:50:39,567 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:39,583 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:39,588 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:50:39,605 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:50:49,674 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:49] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:50:50,488 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:50] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:50:50,853 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:50] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 15:50:50,932 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:50] "[35m[1mPOST /files/ HTTP/1.0[0m" 500 -
+2025-06-10 15:50:50,949 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:50] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:50,963 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:50] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:50:50,972 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:50] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:50:50,984 - INFO - 127.0.0.1 - - [10/Jun/2025 15:50:50] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:52:35,657 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-10 15:52:35,748 - INFO -  * Restarting with stat
+2025-06-10 15:52:36,491 - WARNING -  * Debugger is active!
+2025-06-10 15:52:36,493 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 15:54:11,956 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-10 15:54:12,116 - INFO -  * Restarting with stat
+2025-06-10 15:54:13,017 - WARNING -  * Debugger is active!
+2025-06-10 15:54:13,021 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 15:54:28,371 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:28] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:54:32,258 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:32] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:54:35,476 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,496 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,501 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,506 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,513 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,516 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,523 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,526 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,535 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,550 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,556 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,563 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:35,570 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,574 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,591 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:35,592 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:54:35,601 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,611 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:35,617 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:35,632 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:35,645 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:35] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:40,253 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:40] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:40,270 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:40] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:40,272 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:40] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:40,295 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:40] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:46,817 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:46] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:54:47,154 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:47] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:54:47,297 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:47] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 15:54:47,304 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:47] "[31m[1mPOST /files/ HTTP/1.0[0m" 401 -
+2025-06-10 15:54:47,332 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:47] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:47,344 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:47] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:54:47,353 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:47] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:54:47,366 - INFO - 127.0.0.1 - - [10/Jun/2025 15:54:47] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:57:43,565 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\auth\\services\\midelwares.py', reloading
+2025-06-10 15:57:43,665 - INFO -  * Restarting with stat
+2025-06-10 15:57:44,459 - WARNING -  * Debugger is active!
+2025-06-10 15:57:44,462 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 15:58:01,940 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:01] "[31m[1mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NTg5MDQ4fQ.kMcNIucPcJzGFkOiZ3smQKtMIuqU7z2U4kAyi1zA-xc HTTP/1.0[0m" 400 -
+2025-06-10 15:58:11,847 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:11] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:58:15,725 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:15] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 15:58:24,560 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:24] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NTg5MjcyfQ.pf-aSrTjAqX1xu9a8zE-KxDIY8mULdQ6zDc_FpvDQiU HTTP/1.0[0m" 302 -
+2025-06-10 15:58:25,327 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:58:25,339 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 15:58:25,347 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:25,350 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:25,361 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:58:25,376 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:25,378 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 15:58:25,388 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:58:25,394 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:25,408 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:58:25,423 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:25] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:58:27,093 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 15:58:27,093 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 15:58:27,106 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 15:58:27,117 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 15:58:27,617 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:27,632 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:27,635 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:58:27,652 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:27] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:58:34,997 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:34] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:58:35,482 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:35] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 15:58:35,660 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:35] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 15:58:35,667 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:35] "[31m[1mPOST /files/ HTTP/1.0[0m" 401 -
+2025-06-10 15:58:35,692 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:35] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:35,705 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:35] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 15:58:35,712 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:35] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 15:58:35,724 - INFO - 127.0.0.1 - - [10/Jun/2025 15:58:35] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:17:38,761 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-10 21:17:38,762 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-10 21:17:38,763 - INFO -  * Restarting with stat
+2025-06-10 21:17:39,501 - WARNING -  * Debugger is active!
+2025-06-10 21:17:39,509 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:18:13,206 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:13] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 21:18:17,918 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:17] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 21:18:37,963 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:37] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NjA4NDczfQ.z9LYn2NnyxtQVg3M-cffbjpI5MCKpR5rYTj8StGLxE4 HTTP/1.0[0m" 302 -
+2025-06-10 21:18:38,370 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:18:38,382 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:18:38,398 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:38,399 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:38,422 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:38,453 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:18:38,454 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:18:38,470 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:38,497 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:18:38,502 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:18:38,536 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:38] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:18:43,853 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:43] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:43,854 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:43] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:43,869 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:43] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:43,879 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:43] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:18:43,892 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:43] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:43,898 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:43] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:18:43,917 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:43] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:18:57,006 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:18:57,425 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:18:57,587 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 21:18:57,599 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "[31m[1mPOST /files/ HTTP/1.0[0m" 401 -
+2025-06-10 21:18:57,628 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:57,645 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:18:57,660 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:18:57,684 - INFO - 127.0.0.1 - - [10/Jun/2025 21:18:57] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:21:59,618 - INFO - 127.0.0.1 - - [10/Jun/2025 21:21:59] "[31m[1mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NjA4NDczfQ.z9LYn2NnyxtQVg3M-cffbjpI5MCKpR5rYTj8StGLxE4 HTTP/1.0[0m" 400 -
+2025-06-10 21:21:59,747 - INFO - 127.0.0.1 - - [10/Jun/2025 21:21:59] "[33mGET /favicon.ico HTTP/1.0[0m" 404 -
+2025-06-10 21:31:55,780 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\auth\\services\\midelwares.py', reloading
+2025-06-10 21:31:55,894 - INFO -  * Restarting with stat
+2025-06-10 21:31:56,627 - WARNING -  * Debugger is active!
+2025-06-10 21:31:56,629 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:32:08,377 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:08] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 21:32:11,606 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:11] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 21:32:40,537 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:40] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NjA5MzA4fQ.-6KBJMa-jRENt6bzG0V0-K20_iW3QUiGOFswSSERre4 HTTP/1.0[0m" 302 -
+2025-06-10 21:32:41,051 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:32:41,134 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:32:41,215 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:32:41,218 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:32:41,247 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:32:41,266 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:32:41,269 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:32:41,292 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:32:41,360 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:32:41,364 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:32:41,382 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:32:41,397 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:41] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:32:44,555 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:44] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:32:44,571 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:44] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:32:44,576 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:44] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:32:44,590 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:44] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:32:47,212 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:47] "OPTIONS /files/1/permissions/users HTTP/1.0" 200 -
+2025-06-10 21:32:47,240 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:47] "GET /files/1/permissions/users HTTP/1.0" 200 -
+2025-06-10 21:32:56,986 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:56] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:32:56,987 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:56] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:32:56,999 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:56] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:32:57,012 - INFO - 127.0.0.1 - - [10/Jun/2025 21:32:57] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:33:07,984 - INFO - 127.0.0.1 - - [10/Jun/2025 21:33:07] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:33:08,008 - INFO - 127.0.0.1 - - [10/Jun/2025 21:33:08] "PUT /users/profile HTTP/1.0" 200 -
+2025-06-10 21:33:08,021 - INFO - 127.0.0.1 - - [10/Jun/2025 21:33:08] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:33:25,293 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\auth\\services\\midelwares.py', reloading
+2025-06-10 21:33:25,388 - INFO -  * Restarting with stat
+2025-06-10 21:33:26,092 - WARNING -  * Debugger is active!
+2025-06-10 21:33:26,095 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:33:36,844 - INFO - 127.0.0.1 - - [10/Jun/2025 21:33:36] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:33:36,878 - INFO - 127.0.0.1 - - [10/Jun/2025 21:33:36] "PUT /users/profile HTTP/1.0" 200 -
+2025-06-10 21:33:36,895 - INFO - 127.0.0.1 - - [10/Jun/2025 21:33:36] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:35:39,742 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\auth\\services\\midelwares.py', reloading
+2025-06-10 21:35:39,926 - INFO -  * Restarting with stat
+2025-06-10 21:35:40,690 - WARNING -  * Debugger is active!
+2025-06-10 21:35:40,692 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:36:56,409 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\auth\\services\\midelwares.py', reloading
+2025-06-10 21:36:56,492 - INFO -  * Restarting with stat
+2025-06-10 21:36:57,213 - WARNING -  * Debugger is active!
+2025-06-10 21:36:57,216 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:36:59,261 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\auth\\services\\midelwares.py', reloading
+2025-06-10 21:36:59,342 - INFO -  * Restarting with stat
+2025-06-10 21:37:00,091 - WARNING -  * Debugger is active!
+2025-06-10 21:37:00,093 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:45:38,181 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-10 21:45:38,181 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-10 21:45:38,182 - INFO -  * Restarting with stat
+2025-06-10 21:45:38,810 - WARNING -  * Debugger is active!
+2025-06-10 21:45:38,813 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:46:21,515 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:21,517 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:21,519 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:21,521 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:21,544 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:21,545 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:21,558 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:21,563 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:21,570 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:21,583 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:21,595 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:21] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:23,836 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:23,839 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:23,856 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:23,858 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:23,880 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:23,881 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:23,895 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:23,899 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:46:23,907 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:23,915 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:23,927 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:23,947 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:23] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:39,477 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:39] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:39,478 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:39] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:39,494 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:39,506 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:39] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:39,514 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:39,526 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:39,545 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:49,247 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:49] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:46:49,633 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:49] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:46:49,651 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:49] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:49,666 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:49] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:46:49,683 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:49] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:46:49,697 - INFO - 127.0.0.1 - - [10/Jun/2025 21:46:49] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:12,948 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:12] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:47:12,950 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:12] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:12,952 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:12] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:47:12,956 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:12] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:12,978 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:12] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:47:12,983 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:12] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:13,001 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:47:13,005 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:13,045 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:13,053 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:13,066 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:47:13,079 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:13,095 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:13,104 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:47:13,124 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:13,130 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:13,144 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:13,160 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:13] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:16,336 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:16] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:16,352 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:16] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:16,358 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:16] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:16,379 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:16] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:27,971 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:27] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:47:28,397 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:28] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:47:28,421 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:28] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:28,435 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:28] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:47:28,442 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:28] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:28,452 - INFO - 127.0.0.1 - - [10/Jun/2025 21:47:28] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:47:48,991 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\auth\\services\\midelwares.py', reloading
+2025-06-10 21:47:49,090 - INFO -  * Restarting with stat
+2025-06-10 21:47:49,823 - WARNING -  * Debugger is active!
+2025-06-10 21:47:49,825 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:47:56,651 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-10 21:47:56,651 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-10 21:47:56,653 - INFO -  * Restarting with stat
+2025-06-10 21:47:57,368 - WARNING -  * Debugger is active!
+2025-06-10 21:47:57,370 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 21:48:27,064 - INFO - 127.0.0.1 - - [10/Jun/2025 21:48:27] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:48:27,524 - INFO - 127.0.0.1 - - [10/Jun/2025 21:48:27] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:48:27,554 - INFO - 127.0.0.1 - - [10/Jun/2025 21:48:27] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:48:27,569 - INFO - 127.0.0.1 - - [10/Jun/2025 21:48:27] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:48:27,578 - INFO - 127.0.0.1 - - [10/Jun/2025 21:48:27] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:48:27,591 - INFO - 127.0.0.1 - - [10/Jun/2025 21:48:27] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:49:59,632 - INFO - 127.0.0.1 - - [10/Jun/2025 21:49:59] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:49:59,648 - INFO - 127.0.0.1 - - [10/Jun/2025 21:49:59] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:49:59,656 - INFO - 127.0.0.1 - - [10/Jun/2025 21:49:59] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:49:59,667 - INFO - 127.0.0.1 - - [10/Jun/2025 21:49:59] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:39,062 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:54:39,064 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:39,068 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:54:39,071 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:39,089 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:54:39,100 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:39,110 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:39,113 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:54:39,124 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:39,133 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:39,139 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:54:39,147 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:39,157 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:54:39,161 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:39,168 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:39,178 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:39,191 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:39] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:40,968 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:40] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:40,981 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:40] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:40,983 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:40] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:40,998 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:40] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:50,338 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:50] "OPTIONS /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:54:50,770 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:50] "POST /files/protect-dw-pdf HTTP/1.1" 200 -
+2025-06-10 21:54:50,945 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:50] "OPTIONS /files/ HTTP/1.0" 200 -
+2025-06-10 21:54:51,436 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "[35m[1mPOST /files/ HTTP/1.0[0m" 201 -
+2025-06-10 21:54:51,448 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:51,454 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:51,465 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:51,473 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:51,475 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:51,488 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:54:51,497 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:51,499 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:51,514 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:54:51,517 - INFO - 127.0.0.1 - - [10/Jun/2025 21:54:51] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:55:22,283 - INFO - 127.0.0.1 - - [10/Jun/2025 21:55:22] "OPTIONS /files/2 HTTP/1.0" 200 -
+2025-06-10 21:55:29,419 - INFO - 127.0.0.1 - - [10/Jun/2025 21:55:29] "GET /files/2 HTTP/1.0" 200 -
+2025-06-10 21:56:02,763 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:02] "OPTIONS /files/verify-signature HTTP/1.0" 200 -
+2025-06-10 21:56:02,830 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:02] "POST /files/verify-signature HTTP/1.0" 200 -
+2025-06-10 21:56:14,192 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:14] "OPTIONS /files/verify-signature HTTP/1.0" 200 -
+2025-06-10 21:56:14,204 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:14] "[33mPOST /files/verify-signature HTTP/1.0[0m" 404 -
+2025-06-10 21:56:21,450 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:21] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:21,457 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:21] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:21,467 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:21] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:21,479 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:21] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:22,162 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:22,163 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:22,176 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:22,189 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:22,193 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:22,197 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:22,211 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:22,230 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:22,232 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:22,250 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:22,251 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:22,832 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:22,842 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:22] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:25,055 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:25] "OPTIONS /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 21:56:25,071 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:25] "GET /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 21:56:30,004 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:30,005 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:56:30,010 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 21:56:30,018 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:30,033 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:30,034 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:56:30,049 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:56:30,052 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:30,053 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:30,057 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:30,071 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:56:30,073 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:30,087 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 21:56:30,097 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:30,124 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:30,127 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:30,135 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:30,142 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:30,164 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:30,165 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:30,188 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:30,190 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:30] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:31,160 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:31] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:31,170 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:31] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:33,995 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:33] "OPTIONS /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 21:56:34,005 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:34] "GET /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 21:56:38,467 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:38,468 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:38,483 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:38,493 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:38,496 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:38,501 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:38,528 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:38,530 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:38,546 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:38,547 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:38] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:45,602 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:45] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:45,603 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:45] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:45,613 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:45] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:45,625 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:45] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 21:56:47,763 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:47] "OPTIONS /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 21:56:47,773 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:47] "GET /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 21:56:57,292 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:57,293 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:57,306 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:57,318 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "OPTIONS /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:57,320 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:56:57,332 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:57,335 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:57,348 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:57,349 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:57,366 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:57,367 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:57] "GET /files/1/download-history HTTP/1.0" 200 -
+2025-06-10 21:56:59,986 - INFO - 127.0.0.1 - - [10/Jun/2025 21:56:59] "OPTIONS /files/1 HTTP/1.0" 200 -
+2025-06-10 21:57:00,006 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:00] "DELETE /files/1 HTTP/1.0" 200 -
+2025-06-10 21:57:00,020 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:00] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:57:00,038 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:00] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:57:03,216 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:03] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:57:03,217 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:03] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:57:03,230 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:03] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:57:03,239 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:03] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:57:03,245 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:03] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 21:57:03,257 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:03] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:57:03,269 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:03] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 21:57:05,147 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:05] "OPTIONS /files/2/view HTTP/1.0" 200 -
+2025-06-10 21:57:09,204 - INFO - 127.0.0.1 - - [10/Jun/2025 21:57:09] "GET /files/2/view HTTP/1.0" 200 -
+2025-06-10 22:00:07,118 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:07] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:07,119 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:07] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:07,129 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:07] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:07,142 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:07] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:09,023 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:09] "OPTIONS /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 22:00:09,033 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:09] "GET /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 22:00:22,142 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:22] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:00:22,143 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:22] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:00:22,157 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:22] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:00:22,166 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:22] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:00:22,172 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:22] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:00:22,183 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:22] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:00:22,197 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:22] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:00:24,218 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:24] "OPTIONS /files/2/permissions/users HTTP/1.0" 200 -
+2025-06-10 22:00:24,233 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:24] "GET /files/2/permissions/users HTTP/1.0" 200 -
+2025-06-10 22:00:30,260 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:30] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:30,260 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:30] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:30,271 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:30] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:30,280 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:30] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:00:35,897 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:35] "OPTIONS /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 22:00:35,908 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:35] "GET /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 22:00:48,638 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:48] "OPTIONS /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 22:00:48,659 - INFO - 127.0.0.1 - - [10/Jun/2025 22:00:48] "GET /audit/file-actions?file_id= HTTP/1.0" 200 -
+2025-06-10 22:01:18,491 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:18] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:18,492 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:18] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:18,506 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:18] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:18,516 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:18] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:18,525 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:18] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:18,533 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:18] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:18,549 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:18] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:19,492 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:19] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:19,507 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:19] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:19,511 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:19] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:19,528 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:19] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:20,522 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:20] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:20,536 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:20] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:20,543 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:20] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:20,558 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:20] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:21,183 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:21] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:01:21,184 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:21] "OPTIONS /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:01:21,195 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:21] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:01:21,205 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:21] "GET /auth/admin/users HTTP/1.0" 200 -
+2025-06-10 22:01:22,293 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:22] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:22,308 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:22] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:22,313 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:22] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:22,327 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:22] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:25,729 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:25] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:25,730 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:25] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:25,741 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:25] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:25,752 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:25] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:25,761 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:25] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:01:25,768 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:25] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:01:25,787 - INFO - 127.0.0.1 - - [10/Jun/2025 22:01:25] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:02:02,410 - INFO - 127.0.0.1 - - [10/Jun/2025 22:02:02] "OPTIONS /register HTTP/1.0" 200 -
+2025-06-10 22:02:02,723 - INFO - 127.0.0.1 - - [10/Jun/2025 22:02:02] "[35m[1mPOST /register HTTP/1.0[0m" 201 -
+2025-06-10 22:02:11,973 - INFO - 127.0.0.1 - - [10/Jun/2025 22:02:11] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 22:02:11,984 - INFO - 127.0.0.1 - - [10/Jun/2025 22:02:11] "[31m[1mPOST /auth/two-factor/request-2fa HTTP/1.0[0m" 403 -
+2025-06-10 22:06:03,586 - INFO -  * Detected change in 'C:\\Users\\Edison\\Documents\\python\\seguridad_proyecto\\repositorio_seguro\\app\\api\\routes\\files.py', reloading
+2025-06-10 22:06:03,701 - INFO -  * Restarting with stat
+2025-06-10 22:06:04,481 - WARNING -  * Debugger is active!
+2025-06-10 22:06:04,484 - INFO -  * Debugger PIN: 670-632-634
+2025-06-10 22:06:16,347 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:16] "OPTIONS /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 22:06:19,350 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:19] "POST /auth/two-factor/request-2fa HTTP/1.0" 200 -
+2025-06-10 22:06:27,874 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:27] "[32mGET /auth/two-factor/verify-link?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im01OTU0ODUyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiIyZmFfdmVyaWZpY2F0aW9uIiwiZXhwIjoxNzQ5NjExMzU2fQ.GGWe3AgwZmyKvwgDZfnPfDDNsBFUlQLxnzoU0Z-tNYg HTTP/1.0[0m" 302 -
+2025-06-10 22:06:28,499 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 22:06:28,500 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:06:28,502 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "OPTIONS /users/profile HTTP/1.0" 200 -
+2025-06-10 22:06:28,505 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "OPTIONS /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:06:28,518 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 22:06:28,534 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:06:28,538 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "GET /users/profile HTTP/1.0" 200 -
+2025-06-10 22:06:28,547 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "GET /files/?page=1&per_page=50 HTTP/1.0" 200 -
+2025-06-10 22:06:28,601 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:06:28,602 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "OPTIONS /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:06:28,622 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:06:28,636 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:28] "GET /files/2/download-history HTTP/1.0" 200 -
+2025-06-10 22:06:33,836 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:33] "OPTIONS /files/2/view HTTP/1.0" 200 -
+2025-06-10 22:06:40,802 - INFO - 127.0.0.1 - - [10/Jun/2025 22:06:40] "GET /files/2/view HTTP/1.0" 200 -

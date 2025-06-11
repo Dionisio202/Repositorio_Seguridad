@@ -8,6 +8,7 @@ def require_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         auth_header = request.headers.get('Authorization')
+
         if not auth_header:
             return jsonify({"error": "Token de autorización requerido."}), 401
 
