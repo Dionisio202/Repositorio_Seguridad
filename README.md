@@ -9,9 +9,9 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 
-**A enterprise-grade secure file sharing and storage system with advanced encryption and audit capabilities**
+**Backend API for enterprise-grade secure file sharing and storage system with advanced encryption and audit capabilities**
 
-[🚀 Demo](#-demo) • [📋 Features](#-features) • [🛠️ Installation](#️-installation--setup) • [🔒 Security](#-security-architecture)
+[🚀 Quick Start](#-quick-start) • [📋 Features](#-features) • [🛠️ Installation](#️-installation--setup) • [🔒 Security](#-security-architecture)
 
 </div>
 
@@ -19,53 +19,123 @@
 
 ## 📖 Overview
 
-**Secure Repository** is a comprehensive backend API system that implements military-grade security for file storage and sharing. Built with Flask and powered by advanced cryptographic techniques, it provides **confidentiality**, **integrity**, and **authentication** through AES-256 encryption, RSA digital signatures, and comprehensive audit logging.
+**Secure Repository Backend** is a comprehensive REST API system that implements military-grade security for file storage and sharing. Built with Flask and powered by advanced cryptographic techniques, it provides **confidentiality**, **integrity**, and **authentication** through AES-256 encryption, RSA digital signatures, and comprehensive audit logging.
+
+> **⚠️ Important Note**: This is the **backend API only**. The frontend application is maintained separately in a collaborative project between **Edison** and **Marlon**.
 
 ### 🎯 Key Highlights
 
 - 🛡️ **Military-Grade Security**: Double-layer AES encryption with RSA signatures
 - 🔐 **Zero-Trust Architecture**: Complete audit trail and role-based access control
-- 📊 **Enterprise-Ready**: Docker deployment with NGINX reverse proxy
+- 📊 **Enterprise-Ready**: HTTPS proxy with NGINX for secure communications
 - ⚡ **High Performance**: Optimized cryptographic operations and database queries
 - 🌐 **API-First**: RESTful endpoints with CORS support for frontend integration
 
 ---
 
-## 🚀 Demo
+## 🚀 Quick Start
 
-### 🖥️ System Architecture
+### Prerequisites
+- Python 3.8+
+- Docker & Docker Compose (optional, for HTTPS proxy)
+- MySQL 8.0+
+
+### 🐍 Basic Installation
+
+```bash
+# 1️⃣ Clone the repository
+git clone https://github.com/Dionisio202/Repositorio_Seguridad
+cd repositorio_seguro
+
+# 2️⃣ Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# or
+venv\Scripts\activate     # Windows
+
+# 3️⃣ Install dependencies
+pip install -r requirements.txt
+
+# 4️⃣ Configure environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# 5️⃣ Initialize database
+python -c "from db.config import init_db; init_db()"
+
+# 6️⃣ Run the backend server
+python main.py
+```
+
+The backend will be available at: `http://localhost:5000`
+
+### 🔒 HTTPS Setup with Docker (Optional)
+
+For production or development with HTTPS, use the included NGINX proxy:
+
+```bash
+# 1️⃣ Generate SSL certificates (if needed)
+mkdir -p nginx/certificados
+# Place your cert.pem and key.pem files in nginx/certificados/
+
+# 2️⃣ Start the HTTPS proxy
+docker-compose up -d
+
+# 3️⃣ Run the backend
+python main.py
+```
+
+The backend will be available at: `https://localhost:443` (proxied through NGINX)
+
+---
+
+## 🔧 Docker Configuration
+
+The Docker setup provides an **NGINX reverse proxy** with HTTPS support and security headers:
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certificados/cert.pem:/etc/nginx/certs/cert.pem:ro
+      - ./nginx/certificados/key.pem:/etc/nginx/certs/key.pem:ro
+```
+
+### 🛡️ NGINX Security Features
+
+The NGINX configuration includes:
+- **SSL/TLS encryption** with custom certificates
+- **Security headers** (HSTS, X-Frame-Options, CSP)
+- **Bot protection** against automated scrapers
+- **Host validation** to prevent spoofing
+- **Request size limits** (10MB max)
+- **Authorization header forwarding** to backend
+
+---
+
+## 🖼️ System Architecture
+
 <div align="center">
-  <img src="./images/architecture.png" alt="System Architecture" />
+  <img src="./images/backend_architecture.png" alt="Backend Architecture" />
 </div>
 
-### 🔐 Security Dashboard
-<table>
-<tr>
-<td width="50%">
-
-![Security Dashboard](./images/dashboard.png)
-**Security Control Panel**
-- Real-time audit logs
-- File encryption status
-- User permission matrix
-
-</td>
-<td width="50%">
-
-![File Management](./images/file_management.png)
-**File Management Interface**
-- Encrypted file uploads
-- Digital signature verification
-- Access control management
-
-</td>
-</tr>
-</table>
-
-### 📊 Audit & Analytics
-![Audit Logs](./images/audit_logs.png)
-
-> **Comprehensive logging system tracking all file operations, downloads, and permission changes**
+### 🔄 Request Flow
+```
+Frontend (Separate Repository) 
+    ↓ HTTPS Requests
+NGINX Reverse Proxy (Docker - Optional)
+    ↓ Security Headers & SSL Termination  
+Flask Backend API (Python)
+    ↓ Encrypted Data
+MySQL Database
+```
 
 ---
 
@@ -86,13 +156,13 @@
 </td>
 <td>
 
-### 🔧 **Enterprise Features**
+### 🔧 **Backend Features**
+- ✅ RESTful API architecture
 - ✅ Role-based access control (RBAC)
 - ✅ Comprehensive audit logging
-- ✅ RESTful API architecture
-- ✅ Docker containerization
-- ✅ NGINX reverse proxy
+- ✅ CORS support for frontend
 - ✅ Email notification system
+- ✅ File upload/download management
 
 </td>
 </tr>
@@ -133,141 +203,13 @@ PERMISSIONS = {
 }
 ```
 
-**Permission Levels:**
-- **Owner**: Full control including deletion
-- **Editor**: Read/write with sharing capabilities
-- **Viewer**: Read-only access
-- **Auditor**: Read access with audit trail visibility
-
-</details>
-
-<details>
-<summary><b>🔍 Audit & Compliance</b></summary>
-
-```python
-# Comprehensive logging system
-AUDIT_EVENTS = [
-    'file_upload', 'file_download', 'file_delete',
-    'permission_change', 'user_login', 'signature_verification'
-]
-```
-
-**Compliance Features:**
-- Immutable audit logs
-- GDPR-compliant data handling
-- SOX-compliant financial controls
-- Real-time security monitoring
-
 </details>
 
 ---
 
 ## 🛠️ Installation & Setup
 
-### Prerequisites
-- Python 3.8+
-- Docker & Docker Compose
-- MySQL 8.0+
-- NGINX (for production)
-
-### 🚀 Quick Start with Docker
-
-```bash
-# 1️⃣ Clone the repository
-git clone https://github.com/Dionisio202/Repositorio_Seguridad
-cd repositorio_seguro
-
-# 2️⃣ Configure environment variables
-cp .env.example .env
-# Edit .env with your configuration
-
-# 3️⃣ Build and run with Docker
-docker-compose up --build -d
-
-# 4️⃣ Initialize database
-docker-compose exec app python -c "from db.config import init_db; init_db()"
-```
-
-### 🐍 Manual Installation
-
-```bash
-# 1️⃣ Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate     # Windows
-
-# 2️⃣ Install dependencies
-pip install -r requirements.txt
-
-# 3️⃣ Configure database
-mysql -u root -p < db/schema.sql
-
-# 4️⃣ Run the application
-python main.py
-```
-
-### 🌐 API Endpoints
-- **Base URL**: `http://localhost:5000/api/v1`
-- **Authentication**: `http://localhost:5000/auth`
-- **File Operations**: `http://localhost:5000/api/v1/files`
-- **Audit Logs**: `http://localhost:5000/api/v1/audit`
-
----
-
-## 📁 Project Structure
-
-```
-repositorio_seguro/
-│
-├── 🚀 Application Core
-│   ├── app/
-│   │   ├── api/routes/          # RESTful API endpoints
-│   │   │   ├── files.py        # File management routes
-│   │   │   ├── users.py        # User management routes
-│   │   │   └── audit.py        # Audit log routes
-│   │   ├── auth/               # Authentication system
-│   │   │   ├── services/       # Auth middleware & services
-│   │   │   ├── oauth.py        # OAuth integration
-│   │   │   └── face_recognition.py  # Biometric auth
-│   │   └── utils/              # Utility functions
-│   │       ├── encryption.py   # AES/RSA encryption
-│   │       └── email.py        # Email notifications
-│
-├── 🔐 Security & Crypto
-│   ├── crypto/                 # Custom encryption logic
-│   │   ├── aes_custom.py      # AES-128 implementation
-│   │   └── signatures.py      # RSA signature handling
-│
-├── 🗃️ Database Layer
-│   ├── db/
-│   │   ├── models.py          # SQLAlchemy models
-│   │   ├── config.py          # Database configuration
-│   │   └── migrations/        # Database migrations
-│
-├── 🐳 Infrastructure
-│   ├── nginx/                 # Reverse proxy config
-│   │   ├── certificados/      # SSL certificates
-│   │   └── nginx.conf         # NGINX configuration
-│   ├── docker-compose.yml     # Container orchestration
-│   └── Dockerfile            # Application container
-│
-├── 📊 Storage & Logs
-│   ├── storage/              # Encrypted file storage
-│   ├── logs/                 # Application logs
-│   └── env/                  # Environment variables
-│
-└── 🔧 Configuration
-    ├── main.py              # Application entry point
-    ├── requirements.txt     # Python dependencies
-    └── test.py             # Test suite
-```
-
----
-
-## ⚙️ Configuration
-
-### 🔐 Environment Variables
+### ⚙️ Environment Configuration
 
 ```bash
 # Database Configuration
@@ -295,22 +237,72 @@ JWT_EXPIRATION_MINUTES=60
 SIGNATURE_SECRET_KEY="5LYzsvjIN6YbrItK56viGbVEyetTXTB6iMmiyvwWZhw="
 ```
 
-### 🔑 Security Key Generation
+### 🗄️ Database Setup
 
 ```bash
-# Generate Fernet key
-python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+# Create database
+mysql -u root -p -e "CREATE DATABASE repositorio;"
 
-# Generate AES key (16 bytes for AES-128)
-python -c "import secrets; print(secrets.token_urlsafe(12))"
+# Initialize tables
+python -c "from db.config import init_db; init_db()"
+```
 
-# Generate JWT secret
-python -c "import secrets; print(secrets.token_urlsafe(32))"
+---
+
+## 📁 Project Structure
+
+```
+repositorio_seguro/
+│
+├── 🚀 Backend Application
+│   ├── app/
+│   │   ├── api/routes/          # RESTful API endpoints
+│   │   │   ├── files.py        # File management routes
+│   │   │   ├── users.py        # User management routes
+│   │   │   └── audit.py        # Audit log routes
+│   │   ├── auth/               # Authentication system
+│   │   │   ├── services/       # Auth middleware & services
+│   │   │   ├── oauth.py        # OAuth integration
+│   │   │   └── facial.py       # Biometric auth
+│   │   └── utils/              # Utility functions
+│   │       ├── encryption.py   # AES/RSA encryption
+│   │       └── email.py        # Email notifications
+│
+├── 🔐 Security & Crypto
+│   ├── crypto/                 # Custom encryption logic
+│   │   ├── aes_custom.py      # AES-128 implementation
+│   │   └── signatures.py      # RSA signature handling
+│
+├── 🗃️ Database Layer
+│   ├── db/
+│   │   ├── models.py          # SQLAlchemy models
+│   │   ├── config.py          # Database configuration
+│   │   └── migrations/        # Database migrations
+│
+├── 🐳 HTTPS Proxy (Optional)
+│   ├── nginx/                 # Reverse proxy config
+│   │   ├── certificados/      # SSL certificates
+│   │   └── nginx.conf         # NGINX configuration
+│   └── docker-compose.yml     # Container orchestration
+│
+├── 📊 Storage & Logs
+│   ├── storage/              # Encrypted file storage
+│   ├── logs/                 # Application logs
+│   └── env/                  # Environment variables
+│
+└── 🔧 Configuration
+    ├── main.py              # Application entry point
+    ├── requirements.txt     # Python dependencies
+    └── test.py             # Test suite
 ```
 
 ---
 
 ## 🛡️ API Documentation
+
+### 🌐 Base URLs
+- **Development**: `http://localhost:5000/api/v1`
+- **With HTTPS Proxy**: `https://localhost:443/api/v1`
 
 ### 🔐 Authentication Endpoints
 
@@ -344,85 +336,72 @@ python -c "import secrets; print(secrets.token_urlsafe(32))"
 
 ---
 
-## 🧪 Testing & Quality Assurance
-
-### 🔬 Test Coverage
+## 🧪 Testing
 
 ```bash
 # Run all tests
 python -m pytest tests/ -v --cov=app
 
+# Test API endpoints
+python -c "import requests; print(requests.get('http://localhost:5000/health').json())"
+
 # Security tests
 python -m pytest tests/security/ -v
-
-# Integration tests
-python -m pytest tests/integration/ -v
-
-# Performance tests
-python -m pytest tests/performance/ -v
 ```
 
-### 📊 Quality Metrics
+---
 
-| **Metric** | **Target** | **Current** | **Status** |
-|------------|------------|-------------|------------|
-| Code Coverage | >90% | 94% | ✅ |
-| Security Score | A+ | A+ | ✅ |
-| Performance | <200ms | 180ms | ✅ |
-| Uptime | 99.9% | 99.95% | ✅ |
+## 🚀 Production Deployment
+
+### 🔒 HTTPS Setup
+
+1. **Generate SSL Certificates**:
+```bash
+# Self-signed (development)
+openssl req -x509 -newkey rsa:4096 -keyout nginx/certificados/key.pem -out nginx/certificados/cert.pem -days 365 -nodes
+
+# Let's Encrypt (production)
+certbot certonly --standalone -d yourdomain.com
+```
+
+2. **Start Services**:
+```bash
+# Start NGINX proxy
+docker-compose up -d
+
+# Start backend
+python main.py
+```
+
+### ☁️ Cloud Deployment
+
+The backend can be deployed on:
+- **AWS**: EC2 + RDS MySQL + Application Load Balancer
+- **Azure**: App Service + Azure Database for MySQL
+- **Google Cloud**: Compute Engine + Cloud SQL
+- **DigitalOcean**: Droplet + Managed Database
 
 ---
 
-## 🛡️ Security Compliance
+## 🤝 Frontend Integration
 
-<div align="center">
+This backend is designed to work with a **separate frontend application** developed collaboratively by:
+- **Edison** (Backend & Frontend collaboration)
+- **Marlon** (Frontend collaboration)
 
-### 🏆 Security Standards Compliance
+### 🔗 Frontend Repository
+The frontend code is maintained in a separate repository. Contact the development team for access.
 
-![ISO27001](https://img.shields.io/badge/ISO-27001-green?style=for-the-badge)
-![SOC2](https://img.shields.io/badge/SOC-2_Type_II-blue?style=for-the-badge)
-![GDPR](https://img.shields.io/badge/GDPR-Compliant-success?style=for-the-badge)
-![OWASP](https://img.shields.io/badge/OWASP-Top_10-red?style=for-the-badge)
-
-</div>
-
-### 🔒 Security Features Checklist
-
-- ✅ **Encryption at Rest**: AES-256 for all stored files
-- ✅ **Encryption in Transit**: TLS 1.3 for all communications
-- ✅ **Authentication**: Multi-factor authentication with JWT
-- ✅ **Authorization**: Role-based access control (RBAC)
-- ✅ **Audit Logging**: Comprehensive activity tracking
-- ✅ **Input Validation**: SQL injection and XSS prevention
-- ✅ **Rate Limiting**: DDoS protection and abuse prevention
-- ✅ **Secure Headers**: HSTS, CSP, and security headers
-
----
-
-## 📈 Performance Metrics
-
-<table>
-<tr>
-<td width="50%">
-
-### ⚡ **Response Times**
-- File Upload (10MB): ~2.5s
-- File Download: ~1.8s
-- Authentication: ~150ms
-- Database Queries: ~50ms
-
-</td>
-<td width="50%">
-
-### 🔧 **System Capacity**
-- Concurrent Users: 1000+
-- File Storage: Unlimited
-- Daily Transactions: 100K+
-- Uptime SLA: 99.9%
-
-</td>
-</tr>
-</table>
+### 🌐 CORS Configuration
+The backend includes CORS support for frontend integration:
+```python
+# Configured for frontend domains
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",    # React development
+    "http://localhost:8080",    # Vue.js development
+    "https://yourdomain.com"    # Production frontend
+]
+```
 
 ---
 
@@ -439,188 +418,54 @@ python -m pytest tests/performance/ -v
 
 </div>
 
-### 🔧 Core Dependencies
+---
 
-| **Category** | **Technology** | **Version** | **Purpose** |
-|--------------|----------------|-------------|-------------|
-| **Framework** | Flask | 3.1+ | Web application framework |
-| **Database** | MySQL | 8.0+ | Primary data storage |
-| **ORM** | SQLAlchemy | 2.0+ | Database object mapping |
-| **Security** | cryptography | Latest | Encryption operations |
-| **Auth** | PyJWT | Latest | JWT token management |
-| **Email** | smtplib | Built-in | Email notifications |
-| **Containers** | Docker | Latest | Application containerization |
-| **Proxy** | NGINX | Latest | Reverse proxy and SSL |
+## 📈 Performance Metrics
+
+- **API Response Time**: ~150ms average
+- **File Upload (10MB)**: ~2.5s
+- **Authentication**: ~100ms
+- **Database Queries**: ~50ms
+- **Concurrent Connections**: 1000+
 
 ---
 
-## 🚀 Deployment Guide
+## 🔒 Security Compliance
 
-### 🐳 Docker Production Deployment
+<div align="center">
 
-```bash
-# Production deployment
-git clone https://github.com/Dionisio202/Repositorio_Seguridad
-cd repositorio_seguro
+![ISO27001](https://img.shields.io/badge/ISO-27001-green?style=for-the-badge)
+![SOC2](https://img.shields.io/badge/SOC-2_Type_II-blue?style=for-the-badge)
+![GDPR](https://img.shields.io/badge/GDPR-Compliant-success?style=for-the-badge)
+![OWASP](https://img.shields.io/badge/OWASP-Top_10-red?style=for-the-badge)
 
-# Configure production environment
-cp .env.production .env
-nano .env  # Edit configuration
-
-# Deploy with SSL
-docker-compose -f docker-compose.prod.yml up -d
-
-# Setup SSL certificates (Let's Encrypt)
-docker-compose exec nginx certbot --nginx -d yourdomain.com
-```
-
-### ☁️ Cloud Deployment Options
-
-<table>
-<tr>
-<td width="33%">
-
-### **AWS**
-- ECS/Fargate containers
-- RDS MySQL instance
-- Application Load Balancer
-- CloudWatch monitoring
-
-</td>
-<td width="33%">
-
-### **Azure**
-- Container Instances
-- Azure Database for MySQL
-- Application Gateway
-- Azure Monitor
-
-</td>
-<td width="33%">
-
-### **Google Cloud**
-- Cloud Run containers
-- Cloud SQL MySQL
-- Cloud Load Balancing
-- Cloud Monitoring
-
-</td>
-</tr>
-</table>
-
----
-
-## 📊 Monitoring & Observability
-
-### 📈 Health Check Endpoints
-
-```bash
-# Application health
-GET /health
-# Response: {"status": "healthy", "timestamp": "2025-06-22T10:30:00Z"}
-
-# Database connectivity
-GET /health/db
-# Response: {"database": "connected", "response_time": "45ms"}
-
-# Security status
-GET /health/security
-# Response: {"encryption": "active", "signatures": "verified"}
-```
-
-### 🔍 Logging Configuration
-
-```python
-# Log levels and destinations
-LOGGING_CONFIG = {
-    'security': 'logs/security.log',    # Security events
-    'audit': 'logs/audit.log',          # Audit trail
-    'application': 'logs/app.log',      # General application
-    'performance': 'logs/perf.log'      # Performance metrics
-}
-```
+</div>
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Here's how you can help improve the Secure Repository:
+### 👥 Development Team
+- **Edison**: Backend development & Frontend collaboration
+- **Marlon**: Frontend development & Backend collaboration
 
-### 🛠️ Development Workflow
-
-1. 🍴 **Fork** the repository
-2. 🌱 **Create** a feature branch (`git checkout -b feature/SecurityEnhancement`)
-3. 🔒 **Follow** security best practices in your code
-4. ✅ **Add** comprehensive tests for new features
-5. 📝 **Update** documentation as needed
-6. 💾 **Commit** with conventional commit messages
-7. 📤 **Push** to your feature branch
-8. 🔄 **Open** a Pull Request with detailed description
-
-### 🎯 Contribution Areas
-
-<table>
-<tr>
-<td>
-
-### **High Priority**
-- Advanced encryption algorithms
-- Performance optimizations
-- Security vulnerability fixes
-- API endpoint enhancements
-
-</td>
-<td>
-
-### **Medium Priority**
-- Documentation improvements
-- Test coverage expansion
-- Docker optimizations
-- Monitoring enhancements
-
-</td>
-</tr>
-</table>
-
-### 🔒 Security Contributions
-
-All security-related contributions must:
-- Include comprehensive security testing
-- Follow OWASP security guidelines
-- Include threat model documentation
-- Pass security code review
+### 🛠️ Contributing Guidelines
+1. Fork the repository
+2. Create a feature branch
+3. Follow security best practices
+4. Add comprehensive tests
+5. Submit a pull request
 
 ---
 
-## 📄 License & Legal
+## 📄 License & Contact
 
-### 📋 License Information
+### 📋 License
+MIT License - see [LICENSE](LICENSE) file for details.
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-### 🛡️ Security Disclosure
-
-For security vulnerabilities, please email: **security@securerepository.com**
-
-**Do not create public issues for security vulnerabilities.**
-
-### 📞 Support & Contact
-
+### 📞 Support
+- 🐛 **Issues**: [GitHub Issues](https://github.com/Dionisio202/Repositorio_Seguridad/issues)
 - 📧 **Email**: support@securerepository.com
-- 💬 **Discord**: [Secure Repository Community](https://discord.gg/securerepository)
-- 📖 **Documentation**: [docs.securerepository.com](https://docs.securerepository.com)
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/Dionisio202/Repositorio_Seguridad/issues)
-
----
-
-## 🙏 Acknowledgments
-
-- **Flask** team for the excellent web framework
-- **cryptography** library maintainers for robust security implementations
-- **SQLAlchemy** team for the powerful ORM
-- **Docker** for containerization technology
-- **NGINX** for high-performance reverse proxy capabilities
-- Security research community for continuous guidance and best practices
 
 ---
 
@@ -628,15 +473,11 @@ For security vulnerabilities, please email: **security@securerepository.com**
 
 ### ⭐ Star this repository if you found it helpful!
 
-**Made with 🔒 and ☕ for the cybersecurity community**
-
----
-
-**🔐 Secure Repository - Protecting your data with military-grade encryption**
+**🔐 Secure Repository Backend - Military-grade encryption for your applications**
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Security](https://img.shields.io/badge/security-A+-green)
-![Maintainability](https://img.shields.io/badge/maintainability-A-green)
+![API](https://img.shields.io/badge/API-RESTful-blue)
 ![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen)
 
 </div>
