@@ -390,7 +390,9 @@ This backend is designed to work with a **separate frontend application** develo
 - **Marlon** (Frontend collaboration)
 
 ### 🔗 Frontend Repository
-The frontend code is maintained in a separate repository. Contact the development team for access.
+📱 **Frontend Application**: [https://github.com/YasArcher/front-seguridad](https://github.com/YasArcher/front-seguridad)
+
+The frontend provides a user-friendly interface for all backend functionalities including file upload, download, user management, and security features.
 
 ### 🌐 CORS Configuration
 The backend includes CORS support for frontend integration:
