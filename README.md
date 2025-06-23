@@ -120,11 +120,6 @@ The NGINX configuration includes:
 
 ---
 
-## 🖼️ System Architecture
-
-<div align="center">
-  <img src="./images/backend_architecture.png" alt="Backend Architecture" />
-</div>
 
 ### 🔄 Request Flow
 ```
@@ -460,22 +455,10 @@ CORS_ALLOWED_ORIGINS = [
 
 ---
 
-## 📄 License & Contact
-
-### 📋 License
-MIT License - see [LICENSE](LICENSE) file for details.
-
-### 📞 Support
-- 🐛 **Issues**: [GitHub Issues](https://github.com/Dionisio202/Repositorio_Seguridad/issues)
-- 📧 **Email**: support@securerepository.com
-
----
 
 <div align="center">
 
 ### ⭐ Star this repository if you found it helpful!
-
-**🔐 Secure Repository Backend - Military-grade encryption for your applications**
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Security](https://img.shields.io/badge/security-A+-green)
